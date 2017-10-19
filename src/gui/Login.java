@@ -24,66 +24,64 @@ public class Login extends Application{
         launch(args);
     }
 
-    public void start(Stage primaryStage){
-        // Set title
-        primaryStage.setTitle("Fx Redo ");
+    public void start(Stage mainStage){
 
-        //setLayout to grid
+        mainStage.setTitle("CYRN");
+
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25,25,25,25));
 
-        //Set text to secene
-
-        Text SceneTitle = new Text("Welcome");
+        Text SceneTitle = new Text("Welcome Back!");
         SceneTitle.setFont(Font.font("Roboto", FontWeight.BOLD,20));
         grid.add(SceneTitle,0,0,2,1);
 
-        //add Label for username
-        Label userName = new Label("Username:");
-        grid.add(userName, 0, 1);
+        Label userName = new Label("Uername: ");
+        userName.setFont(Font.font("Roboto", FontWeight.BOLD,14));
+        grid.add(userName,0,1);
 
-        //Set text field for username label
+
         TextField userTF = new TextField();
         grid.add(userTF,1,1);
 
         //add Label for Pass
         Label pass = new Label("Password:");
+        pass.setFont(Font.font("Roboto", FontWeight.BOLD,14));
         grid.add(pass, 0, 2);
 
         //Set text field for username label
         TextField passTF = new TextField();
         grid.add(passTF,1,2);
 
-        Button btn = new Button("Sign in");
+        Button signIn = new Button("Sign in");
+        signIn.setFont(Font.font("Roboto", FontWeight.BOLD,12));
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_CENTER);
-        hbBtn.getChildren().add(btn);
+        hbBtn.getChildren().add(signIn);
         grid.add(hbBtn, 1, 4);
 
         Button Quit = new Button("Quit");
+        Quit.setFont(Font.font("Roboto", FontWeight.BOLD,12));
         HBox hbQuit = new HBox(20);
         hbQuit.setAlignment(Pos.BOTTOM_RIGHT);
         hbQuit.getChildren().add(Quit);
         grid.add(hbQuit, 1, 4);
 
-        final Text actiontarget = new Text();
-        grid.add(actiontarget, 1, 6);
+        final Text actionTarget = new Text();
+        grid.add(actionTarget,1,6) ;
 
         Quit.setOnAction(new EventHandler<ActionEvent>() {
-
-
             public void handle(ActionEvent e) {
-               primaryStage.close();
+                mainStage.close();
             }
         });
 
         //Add to stage and run
         Scene scene = new Scene(grid, 300, 275);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        mainStage.setScene(scene);
+        mainStage.show();
     }
 
 
