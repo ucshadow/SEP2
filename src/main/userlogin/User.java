@@ -4,20 +4,18 @@ import java.util.ArrayList;
 
 public class User {
     private String user;
+    private String cpr;
     private String password;
     private Role role;
-    private String cpr;
-    private ArrayList<User> allUsers = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String user, String passworld, Role role, String cpr) {
+    public User(String user, String cpr, String password, Role role) {
         this.user = user;
-        password = passworld;
-        this.role = role;
         this.cpr = cpr;
-        allUsers.add(this);
+        this.password = password;
+        this.role = role;
     }
 
     public String getUser() {
@@ -52,11 +50,4 @@ public class User {
         this.cpr = cpr;
     }
 
-    public ArrayList<main.userlogin.User> getAllUsers() {
-        return allUsers;
-    }
-
-    public void setAllUsers(ArrayList<main.userlogin.User> allUsers) {
-        this.allUsers = allUsers;
-    }
 }
