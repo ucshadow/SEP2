@@ -1,4 +1,4 @@
-package main;
+package main.employee;
 
 public class Employee {
     private String firstName, secondName, familyName, cpr, dateOfBirth, address,
@@ -26,71 +26,69 @@ public class Employee {
         this.moreInformation = moreInformation;
     }
 
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    String getSecondName() {
+    public String getSecondName() {
         return secondName;
     }
 
-    String getFamilyName() {
+    public String getFamilyName() {
         return familyName;
     }
 
-    String getCpr() {
+    public String getCpr() {
         return cpr;
     }
 
-    String getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    String getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    String getPostCode() {
+    public String getPostCode() {
         return postCode;
     }
 
-    String getCity() {
+    public String getCity() {
         return city;
     }
 
-    String getMobilePhone() {
+    public String getMobilePhone() {
         return mobilePhone;
     }
 
-    String getHomePhone() {
+    public String getHomePhone() {
         return homePhone;
     }
 
-    String getLicensePlate() {
+    public String getLicensePlate() {
         return licensePlate;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    String getKonto() {
+    public String getKonto() {
         return konto;
     }
 
-    String getRegNumber() {
+    public String getRegNumber() {
         return regNumber;
     }
 
-    String getPrefferd() {
+    public String getPrefferd() {
         return prefferd;
     }
 
-    String getMoreInformation() {
-
+    public String getMoreInformation() {
         return moreInformation;
     }
-
 
     @Override
     public String toString() {

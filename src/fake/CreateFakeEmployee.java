@@ -1,7 +1,7 @@
 package fake;
 
-import main.Employee;
-import main.Handler;
+import main.employee.Employee;
+import main.databasehandlers.EmployeeHandler;
 
 import java.util.*;
 
@@ -128,7 +128,7 @@ public class CreateFakeEmployee {
             Employee employee = new Employee(getAName()[0], getAName()[1], getAName()[2], getCPR(),
                     getDateOfBirth(), getAddress(), getPostCode(), getCity(), getPhone(), getPhone(), getLicensePlate(),
                     getMail(), getKonto(), getCPR(), getComm(), getMore());
-            new Handler().updateEmployee(employee);
+            new EmployeeHandler().updateEmployee(employee);
         }
     }
 

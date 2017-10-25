@@ -1,0 +1,35 @@
+SET SEARCH_PATH = sep2;
+
+CREATE TABLE UserLogIn (
+  Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),
+  cpr      CPR_DOMAIN,
+  Password VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(Password) >= 8) CONSTRAINT password_check CHECK (
+    Password LIKE '%A%' OR PASSWORD LIKE '%B%' OR PASSWORD LIKE '%C%' OR PASSWORD LIKE '%D%' OR PASSWORD LIKE '%E%' OR
+    PASSWORD LIKE '%F%' OR PASSWORD LIKE '%G%' OR PASSWORD LIKE '%H%' OR PASSWORD LIKE '%I%' OR PASSWORD LIKE '%J%'
+    OR PASSWORD LIKE '%K%' OR PASSWORD LIKE '%L%' OR PASSWORD LIKE '%M%' OR PASSWORD LIKE '%N%' OR
+    PASSWORD LIKE '%O%' OR PASSWORD LIKE '%P%' OR PASSWORD LIKE '%Q%' OR PASSWORD LIKE '%R%' OR PASSWORD LIKE '%S%'
+    OR PASSWORD LIKE '%T%' OR PASSWORD LIKE '%U%' OR PASSWORD LIKE '%V%' OR PASSWORD LIKE '%W%' OR PASSWORD LIKE '%X%'
+    OR PASSWORD LIKE '%Y%' OR PASSWORD LIKE '%Z%'),
+  userRole VARCHAR(7) DEFAULT 'Admin' CHECK (userRole IN ('Admin', 'User', 'Manager'))
+);
+
+
+ALTER TABLE UserLogIn
+  ADD PRIMARY KEY (Username, cpr);
+DROP TABLE UserLogIn;
+SELECT *
+FROM UserLogIn;
+
+INSERT INTO UserLogIn VALUES ('Nikolay', '0123456789', '123456789A', 'Admin');
+INSERT INTO UserLogIn VALUES ('Nikoasdsss', '1234567891', 'Abdfjkgbsjdfkj', 'Admin');
+INSERT INTO UserLogIn VALUES ('sdfgfffffff', '1234567821', 'asdasdsAdasd', 'Admin');
+INSERT INTO UserLogIn VALUES ('Niksdfgasdsdfosss', '1234567893', 'sdfgsdgf', 'Admin');
+INSERT INTO UserLogIn VALUES ('sdfgdsfgdsfg', '1234567894', 'asdasdasdaZ', 'Admin');
+INSERT INTO UserLogIn VALUES ('sdfgsdfgsdfg', '1234567895', 'dgsfgsdfg', 'Admin');
+INSERT INTO UserLogIn VALUES ('sdfgdsfgsdgfdfgd', '1234567896', 'asdasdasH', 'Admin');
+INSERT INTO UserLogIn VALUES ('sdfgfdgdd', '1234567897', 'asdasdasdM', 'Admin');
+
+
+SELECT Password
+FROM UserLogIn
+WHERE Username = 'sdfgfffffff';

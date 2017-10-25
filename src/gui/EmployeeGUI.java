@@ -1,20 +1,19 @@
 package gui;
 
-import com.sun.javafx.scene.control.skin.DatePickerSkin;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.DatePickerSkin;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import main.Employee;
-import main.Handler;
+import main.employee.Employee;
+import main.databasehandlers.EmployeeHandler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,10 +21,12 @@ import java.util.Arrays;
 
 /**
  * Employee information GUI
- * @version 1.2 adding Date Picker and Date Picker Skin
+ *
  * @author Nikolay Dimitrov Nikolov
+ * @version 1.2 adding Date Picker and Date Picker Skin
  */
-public class EmployeeGUI extends Application {
+public class EmployeeGUI {
+    private Stage stage;
     private Scene mainScene;
     private BorderPane mainPane;
     private GridPane mainsetPane, buttonPane, datePane, calendarPane;
@@ -54,20 +55,14 @@ public class EmployeeGUI extends Application {
     private static final FontWeight FONT_WEIGHT = FontWeight.NORMAL;
 
     private Employee employeeMain;
-    private Handler handler = new Handler();
 
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start() throws Exception {
+        stage = new Stage();
         preLoad();
-        primaryStage.setTitle("Employee");
-        primaryStage.setScene(mainScene);
-        primaryStage.show();
+        stage.setTitle("Employee");
+        stage.setScene(mainScene);
+        stage.show();
 
 
     }
@@ -87,6 +82,7 @@ public class EmployeeGUI extends Application {
         image.setOnAction(actionHandler);
         addDate.setOnAction(actionHandler);
         cancelDate.setOnAction(actionHandler);
+        cancel.setOnAction(actionHandler);
     }
 
     /**
@@ -288,7 +284,7 @@ public class EmployeeGUI extends Application {
 
                 employeeMain = new Employee(firstNameText.getText(), secondNameText.getText(), familyNameText.getText(), cprText.getText(), dateOfBirthText.getText(), addressText.getText(), postCodeText.getText(), cityText.getText(), mobilePhoneText.getText(), homePhoneText.getText(), licensePlateText.getText(), emailText.getText(), kontoText.getText(), regNumberText.getText(), preferredCommunicationComboBox.getSelectionModel().getSelectedItem().toString(), moreInformationText.getText());
 
-                handler.addNewEmployee(employeeMain);
+                EmployeeHandler.addNewEmployee(employeeMain);
             } else if (event.getSource() == image) {
                 mainPane.setRight(calendarPane);
             } else if (event.getSource() == addDate) {
@@ -298,6 +294,8 @@ public class EmployeeGUI extends Application {
             } else if (event.getSource() == cancelDate) {
                 mainPane.setRight(null);
                 dateOfBirthText.setText("");
+            } else if (event.getSource() == cancel) {
+                stage.close();
             }
         }
     }

@@ -1,3 +1,5 @@
+SET SEARCH_PATH = sep2;
+
 CREATE TABLE Employee (
   firstname              VARCHAR(25),
   secondname             VARCHAR(25),

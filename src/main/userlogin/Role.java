@@ -1,4 +1,4 @@
-package main;
+package main.userlogin;
 
 public class Role {
     private String role;
