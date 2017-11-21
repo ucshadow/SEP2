@@ -2,3 +2,4 @@ CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
 
 CREATE DOMAIN cpr_Domain CHAR(10);
+DROP DOMAIN cpr_Domain;

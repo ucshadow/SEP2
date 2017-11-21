@@ -1,6 +1,6 @@
-package gui;
+package client.gui;
 
-import com.sun.javafx.scene.control.skin.DatePickerSkin;
+//import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -44,7 +44,7 @@ public class EmployeeGUI {
     private Button save, cancel, image, addDate, cancelDate;
 
     private DatePicker datePicker;
-    private DatePickerSkin datePickerSkin;
+//    private DatePickerSkin datePickerSkin;
 
     private ArrayList<Label> allLabels;
     private ArrayList<TextField> allTextFields;
@@ -263,17 +263,17 @@ public class EmployeeGUI {
         //Initializing DatePicker
         datePane = new GridPane();
         datePicker = new DatePicker(LocalDate.now());
-        datePickerSkin = new DatePickerSkin(datePicker);
+//        datePickerSkin = new DatePickerSkin(datePicker);
         image = new Button();
         addDate = new Button("Add date");
         cancelDate = new Button("Cancel");
-        calendarPane.add(datePickerSkin.getPopupContent(), 0, 1);
+//        calendarPane.add(datePickerSkin.getPopupContent(), 0, 1);
         calendarPane.add(addDate, 0, 2);
         calendarPane.add(cancelDate, 1, 2);
 
 
         //Date
-        image.setStyle("-fx-background-image: url('/gui/images/download.png')");
+        image.setStyle("-fx-background-image: url('/client/gui/images/download.png')");
         datePicker.setShowWeekNumbers(false);
         datePane.add(dateOfBirthText, 0, 0);
         datePane.add(image, 1, 0);
