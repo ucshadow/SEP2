@@ -12,20 +12,34 @@ public class Connection implements Runnable, OurObserver {
     private Server server;
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
+    private DBAdapter adapter;
 
-    public Connection(Socket socket, Server server) {
+    public Connection(Socket socket, Server server, DBAdapter adapter) {
         this.server = server;
+        this.adapter = adapter;
         try {
             inFromClient = new ObjectInputStream(socket.getInputStream());
             outToClient = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     @Override
     public void run() {
-
+        while (true) {
+           String s;
+            try {
+                Object temp = inFromClient.readObject();
+                s = (String) temp;
+                outToClient.writeObject(s);
+                System.out.println(adapter.getUser(s));
+            } catch (Exception e) {
+                server.removeObserver(this);
+            }
+        }
     }
 
     public ObjectOutputStream getOutputStream() {

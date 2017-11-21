@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 public class Server  extends OurObservable {
     private ServerSocket serverSocket;
     private final int PORT = 6789;
-
+    private DBAdapter adapter;
 
     public Server() {
 
@@ -17,14 +17,14 @@ public class Server  extends OurObservable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        adapter = new DBAdapter();
     }
 
     public void startServer() {
         System.out.println("Server starting ...");
         while (true) {
             try {
-                Connection newClient = new Connection(serverSocket.accept(), this);
+                Connection newClient = new Connection(serverSocket.accept(), this, adapter);
                 addObserver(newClient);
                 new Thread(newClient).start();
                 System.out.println("client connected");
@@ -33,7 +33,5 @@ public class Server  extends OurObservable {
             }
         }
     }
-
-
 
 }
