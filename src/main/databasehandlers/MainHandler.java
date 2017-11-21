@@ -48,6 +48,7 @@ public class MainHandler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("MainHandler" + temp);
         closeDataBase();
         return temp;
 

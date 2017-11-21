@@ -30,12 +30,12 @@ public class Connection implements Runnable, OurObserver {
     @Override
     public void run() {
         while (true) {
-           String s;
+            String s;
             try {
                 Object temp = inFromClient.readObject();
                 s = (String) temp;
-                outToClient.writeObject(s);
-                System.out.println(adapter.getUser(s));
+                String a = adapter.getUser(s);
+                outToClient.writeObject("From db " + a);
             } catch (Exception e) {
                 server.removeObserver(this);
             }
@@ -45,7 +45,6 @@ public class Connection implements Runnable, OurObserver {
     public ObjectOutputStream getOutputStream() {
         return outToClient;
     }
-
 
 
     private OurObserver getMe() {
