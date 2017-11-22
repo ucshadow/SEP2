@@ -1,4 +1,4 @@
-package client.gui;
+package old.gui;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.databasehandlers.LogInMethod;
+import old.main.databasehandlers.LogInMethod;
 
 public class Login extends Application {
 

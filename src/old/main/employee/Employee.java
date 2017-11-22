@@ -1,4 +1,4 @@
-package main.employee;
+package old.main.employee;
 
 public class Employee {
     private String firstName, secondName, familyName, cpr, dateOfBirth, address,

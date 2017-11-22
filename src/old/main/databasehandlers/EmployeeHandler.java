@@ -1,8 +1,7 @@
-package main.databasehandlers;
+package old.main.databasehandlers;
 
-import main.employee.Employee;
+import old.main.employee.Employee;
 
-import java.sql.*;
 import java.util.ArrayList;
 
 public class EmployeeHandler {

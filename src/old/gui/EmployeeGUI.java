@@ -1,4 +1,4 @@
-package client.gui;
+package old.gui;
 
 //import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import javafx.event.ActionEvent;
@@ -13,8 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import main.employee.Employee;
-import main.databasehandlers.EmployeeHandler;
+import old.main.employee.Employee;
+import old.main.databasehandlers.EmployeeHandler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -273,7 +273,7 @@ public class EmployeeGUI {
 
 
         //Date
-        image.setStyle("-fx-background-image: url('/client/gui/images/download.png')");
+        image.setStyle("-fx-background-image: url('/old/gui/images/download.png')");
         datePicker.setShowWeekNumbers(false);
         datePane.add(dateOfBirthText, 0, 0);
         datePane.add(image, 1, 0);

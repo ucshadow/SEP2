@@ -1,7 +1,7 @@
-package fake;
+package old.fake;
 
-import main.employee.Employee;
-import main.databasehandlers.EmployeeHandler;
+import old.main.employee.Employee;
+import old.main.databasehandlers.EmployeeHandler;
 
 import java.util.*;
 
