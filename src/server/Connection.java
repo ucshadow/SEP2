@@ -48,7 +48,7 @@ public class Connection implements Runnable, OurObserver {
             try {
                 Object temp = inFromClient.readObject();
                 s = (String) temp;
-                String a = adapter.getUser(s);
+                String a = adapter.getUserPassword(s);
                 outToClient.writeObject("From db " + a);
             } catch (Exception e) {
                 server.removeObserver(this);

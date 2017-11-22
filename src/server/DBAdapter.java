@@ -41,7 +41,7 @@ public class DBAdapter implements IDBAdapter {
         return temp;
     }
 
-    @Override
+
     public void createUser(String username, String CPR, String password, String userRole) {
         DBHandler.executeStatements("INSERT INTO UserLogIn VALUES (" +
                 "'" + username + "'," +
