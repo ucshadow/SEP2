@@ -11,15 +11,23 @@ public class DBAdapter implements IDBAdapter {
 
     }
 
-
+    /**
+     *
+     * @param username
+     * @return true if username exists.
+     */
     @Override
     public boolean checkUsername(String username) {
-
-
         ArrayList temp = MainHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
         return temp.size() >= 1;
     }
 
+    /**
+     *
+     * @param username
+     * @return user after checkUsername returns true to user.
+     *
+     */
     @Override
     public String getUser(String username) {
         if (checkUsername(username)) {

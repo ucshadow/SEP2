@@ -14,6 +14,14 @@ public class Connection implements Runnable, OurObserver {
     private ObjectOutputStream outToClient;
     private DBAdapter adapter;
 
+    /**
+     * Constructor.
+     * Instantiates streams.
+     *
+     * @param socket
+     * @param server
+     * @param adapter
+     */
     public Connection(Socket socket, Server server, DBAdapter adapter) {
         this.server = server;
         this.adapter = adapter;
@@ -28,6 +36,12 @@ public class Connection implements Runnable, OurObserver {
     }
 
     @Override
+
+    /**
+     * Run method from runnable interface.
+     *
+     * Reads object and returns username  //ToDO -- unfinished.
+     */
     public void run() {
         while (true) {
             String s;
@@ -51,6 +65,10 @@ public class Connection implements Runnable, OurObserver {
         return this;
     }
 
+    /**
+     * Abstract methpd for writing response to observer.
+     * @param response
+     */
     public void writeObject(Response response) {
         new Thread(() -> {
             try {

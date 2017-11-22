@@ -11,7 +11,6 @@ public class Server  extends OurObservable {
     private DBAdapter adapter;
 
     public Server() {
-
         try {
             serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
@@ -19,6 +18,7 @@ public class Server  extends OurObservable {
         }
         adapter = new DBAdapter();
     }
+
 
     public void startServer() {
         System.out.println("Server starting ...");
