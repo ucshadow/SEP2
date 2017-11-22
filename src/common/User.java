@@ -2,19 +2,29 @@ package common;
 
 public class User {
 
-    private String username, firstName, secondName, lastName, CPR, dob, address, postcode, city, mobile, landline,
-            email, konto, recnumber, licencePlate, prefferedCommunication, moreInfo;
+    private String username, password, firstName, secondName, lastName, cpr, dob, address, postcode, city, mobile, landline,
+            email, konto, recnumber, licencePlate, prefferedCommunication, moreInfo, userRole;
 
-    public User(){}
-
-    public User(String username, String firstName, String secondName, String lastName, String CPR, String dob,
-                String address, String postcode, String city, String mobile, String landline, String email,
-                String konto, String regNumber, String licencePlate, String preferredCommunication, String moreInfo) {
+    /**
+     * for inserting a new user in the UserLogIn
+     **/
+    public User(String username, String password, String cpr, String userRole) {
         this.username = username;
+        this.password = password;
+        this.cpr = cpr;
+        this.userRole = userRole;
+    }
+
+    /**
+     * for GUI employee insertion
+     **/
+    public User(String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo) {
+        this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.secondName = secondName;
         this.lastName = lastName;
-        this.CPR = CPR;
+        this.cpr = cpr;
         this.dob = dob;
         this.address = address;
         this.postcode = postcode;
@@ -23,9 +33,9 @@ public class User {
         this.landline = landline;
         this.email = email;
         this.konto = konto;
-        this.recnumber = regNumber;
+        this.recnumber = recnumber;
         this.licencePlate = licencePlate;
-        this.prefferedCommunication = preferredCommunication;
+        this.prefferedCommunication = prefferedCommunication;
         this.moreInfo = moreInfo;
     }
 
@@ -35,6 +45,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -61,12 +79,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getCPR() {
-        return CPR;
+    public String getCpr() {
+        return cpr;
     }
 
-    public void setCPR(String CPR) {
-        this.CPR = CPR;
+    public void setCpr(String cpr) {
+        this.cpr = cpr;
     }
 
     public String getDob() {
@@ -165,6 +183,14 @@ public class User {
         this.moreInfo = moreInfo;
     }
 
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -173,10 +199,11 @@ public class User {
         User user = (User) o;
 
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
         if (secondName != null ? !secondName.equals(user.secondName) : user.secondName != null) return false;
         if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (CPR != null ? !CPR.equals(user.CPR) : user.CPR != null) return false;
+        if (cpr != null ? !cpr.equals(user.cpr) : user.cpr != null) return false;
         if (dob != null ? !dob.equals(user.dob) : user.dob != null) return false;
         if (address != null ? !address.equals(user.address) : user.address != null) return false;
         if (postcode != null ? !postcode.equals(user.postcode) : user.postcode != null) return false;
@@ -196,10 +223,11 @@ public class User {
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", CPR='" + CPR + '\'' +
+                ", cpr='" + cpr + '\'' +
                 ", dob='" + dob + '\'' +
                 ", address='" + address + '\'' +
                 ", postcode='" + postcode + '\'' +

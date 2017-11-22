@@ -1,6 +1,6 @@
 package server;
 
-import old.main.databasehandlers.MainHandler;
+import common.User;
 
 import java.util.ArrayList;
 
@@ -41,13 +41,13 @@ public class DBAdapter implements IDBAdapter {
         return temp;
     }
 
-
-    public void createUser(String username, String CPR, String password, String userRole) {
+    public void createUser(User user) {
         DBHandler.executeStatements("INSERT INTO UserLogIn VALUES (" +
-                "'" + username + "'," +
-                "'" + CPR + "'," +
-                "'" + password + "'," +
-                "'" + userRole + "'" +
+                "'" + user.getUsername() + "'," +
+                "'" + user.getCpr() + "'," +
+                "'" + user.getPassword() + "'," +
+                "'" + user.getUserRole() + "'" +
                 ")");
     }
 }
+

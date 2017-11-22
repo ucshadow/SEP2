@@ -2,39 +2,36 @@ package common;
 
 import java.io.Serializable;
 
-public class Request implements Serializable {
-    private String request;
+public class Request<T> implements Serializable {
+    private T requestObject;
+    private T[] requestObjects;
+    private String requestText;
 
-
-    public Request(String request) {
-        this.request = request;
-
+    public Request(String requestText, T requestObject) {
+        this.requestText = requestText;
+        this.requestObject = requestObject;
     }
 
-    public Request(String request, boolean isArray) {
-        this.request = request;
-
-    }
+//    public Request(String requestText, T[] requestObjects) {
+//        this.requestText = requestText;
+//        this.requestObjects = requestObjects;
+//    }
 
     public String getType() {
-        return request;
+        return requestText;
     }
 
-//    public Reservation getParameter() {
-//        return parameter;
-//    }
-//
-//    public Reservation[] getReservations() {
-//        return reservations;
-//    }
+    public T getRequestObject() {
+        return requestObject;
+    }
 
-
-
+    // ToDo: modify toString to print out based on whether the requestObject is a single element or an array
     @Override
     public String toString() {
         return "common.Request{" +
-                "request='" + request + '\'' +
-                ", parameter=" +"placeholder text"+
+                "requestText='" + requestText + '\'' +
+                "requestObject'" + requestObject.toString() + '\'' +
+                ", parameter=" + "placeholder text" +
                 '}';
     }
 }

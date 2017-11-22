@@ -1,7 +1,9 @@
 package server;
 
 
+import common.Request;
 import common.Response;
+import common.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,8 +33,6 @@ public class Connection implements Runnable, OurObserver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -44,12 +44,16 @@ public class Connection implements Runnable, OurObserver {
      */
     public void run() {
         while (true) {
-            String s;
+            Request s;
             try {
                 Object temp = inFromClient.readObject();
-                s = (String) temp;
-                String a = adapter.getUserPassword(s);
-                outToClient.writeObject("From db " + a);
+                s = (Request) temp;
+                String requestText = s.getType();
+                if (requestText.equalsIgnoreCase("createuser")) {
+                    adapter.createUser((User) s.getRequestObject());
+                }
+//                String a = adapter.getUserPassword(s.getType());
+//                outToClient.writeObject("From db " + a);
             } catch (Exception e) {
                 server.removeObserver(this);
             }
@@ -67,6 +71,7 @@ public class Connection implements Runnable, OurObserver {
 
     /**
      * Abstract method for writing response to observer.
+     *
      * @param response
      */
     public void writeObject(Response response) {
