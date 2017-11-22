@@ -1,6 +1,8 @@
 package common;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String username, password, firstName, secondName, lastName, cpr, dob, address, postcode, city, mobile, landline,
             email, konto, recnumber, licencePlate, prefferedCommunication, moreInfo, userRole;
