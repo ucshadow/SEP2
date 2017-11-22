@@ -9,9 +9,9 @@ public class DBHandler {
     private static Connection connection = null;
     private static Statement statement = null;
     private static final String DRIVER = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres?currentSchema=sep2";
+    private static final String URL = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
     private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "1q2w3e";
+    private static final String PASSWORD = "1234";
 
 
     public static void executeStatements(String sql) {
@@ -49,7 +49,35 @@ public class DBHandler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("DBHandler" + temp);
+//        System.out.println("DBHandler" + temp);
+        closeDataBase();
+        return temp;
+
+    }
+
+    public static ArrayList getSingleRow(String statement) {
+        ArrayList<String> temp = new ArrayList<>();
+        try {
+            Class.forName(DRIVER);
+            String sql = statement;
+            openDataBase();
+
+            DBHandler.statement = connection.createStatement();
+            ResultSet resultSet = DBHandler.statement.executeQuery(sql);
+            while(resultSet.next()) {
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                    temp.add(resultSet.getString(i));
+                }
+            }
+//            while (resultSet.next()) {
+//                if (resultSet.getString(1).length() > 1) {
+//                    temp.add(resultSet.getString(1));
+//                }
+//            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+//        System.out.println("DBHandler" + temp);
         closeDataBase();
         return temp;
 

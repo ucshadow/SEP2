@@ -23,44 +23,45 @@ public class Client {
             System.out.println(e.getMessage());
         }
         System.out.println("              Connected");
+        get();
 
     }
 
-    public void sendRequest(String request) {
-        while (true) {
-            try {
-                System.out.println("Sending...." + request);
-                if (out == null) {
-                    out = new ObjectOutputStream(clientSocket.getOutputStream());
-                }
-
-                out.writeObject(request);
-                System.out.println("Sent");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println(get());
-        }
-
-
-    }
-
-    public String get() {
-        String b = "Receiving                    =       ";
-        if (in == null) {
-            try {
-                in = new ObjectInputStream(clientSocket.getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void sendRequest(Request request) {
         try {
-            b += (String) in.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            System.out.println("Sending...." + request);
+            if (out == null) {
+                out = new ObjectOutputStream(clientSocket.getOutputStream());
+            }
+
+            out.writeObject(request);
+            System.out.println("Sent");
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return b;
+    }
+
+    public void get() {
+        if (in == null) {
+            new Thread(() -> {
+                try {
+                    in = new ObjectInputStream(clientSocket.getInputStream());
+                    while (true) {
+                        Response response;
+                        response = (Response) in.readObject();
+
+                        System.out.println("response from server: " + response.getResponse());
+
+//                        if (response.getResponse().toLowerCase().equals("update reservation")) {
+//                            model.updateReservation(response.getAllParameters());
+//                        }
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 }
