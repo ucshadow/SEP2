@@ -66,7 +66,7 @@ public class Connection implements Runnable, OurObserver {
     }
 
     /**
-     * Abstract methpd for writing response to observer.
+     * Abstract method for writing response to observer.
      * @param response
      */
     public void writeObject(Response response) {
