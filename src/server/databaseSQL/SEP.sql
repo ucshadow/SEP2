@@ -93,3 +93,16 @@ CREATE TRIGGER passChange
 AFTER UPDATE OF passEmp
   ON Employee
 EXECUTE PROCEDURE empPassword();
+
+CREATE TABLE department (
+  dno       CHAR(4),
+  dname     VARCHAR,
+  dlocation VARCHAR,
+  dManager  CHAR(10),
+  DEmployee CPR_DOMAIN
+
+);
+
+ALTER TABLE department
+  ADD PRIMARY KEY (dno, DEmployee);
+DROP TABLE department;

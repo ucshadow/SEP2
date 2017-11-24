@@ -16,3 +16,14 @@ WHERE cpr = '0123656789';
 
 DELETE FROM userlogin
 WHERE cpr = '0123656789';
+
+SELECT *
+FROM department;
+INSERT INTO department VALUES ('d001', 'Ice', 'London', '0123456789', '0123456789');
+SET SEARCH_PATH = sep2;
+
+
+
+UPDATE department
+SET dno = 'D001'
+WHERE dno = 'D003';

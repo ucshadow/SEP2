@@ -12,10 +12,10 @@ public class Request<T> implements Serializable {
         this.requestObject = requestObject;
     }
 
-//    public Request(String requestText, T[] requestObjects) {
-//        this.requestText = requestText;
-//        this.requestObjects = requestObjects;
-//    }
+    public Request(String requestText, T[] requestObjects) {
+        this.requestText = requestText;
+        this.requestObjects = requestObjects;
+    }
 
     public String getType() {
         return requestText;
@@ -23,6 +23,10 @@ public class Request<T> implements Serializable {
 
     public T getRequestObject() {
         return requestObject;
+    }
+
+    public T[] getRequestObjects() {
+        return requestObjects;
     }
 
     // ToDo: modify toString to print out based on whether the requestObject is a single element or an array

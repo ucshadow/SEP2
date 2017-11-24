@@ -1,6 +1,7 @@
 package server;
 
 
+import common.Department;
 import common.Request;
 import common.Response;
 import common.User;
@@ -14,7 +15,7 @@ public class Connection implements Runnable, OurObserver {
     private Server server;
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
-    private DBAdapter adapter;
+    private IDBAdapter adapter;
 
     /**
      * Constructor.
@@ -51,16 +52,18 @@ public class Connection implements Runnable, OurObserver {
                 String requestText = s.getType();
                 if (requestText.equalsIgnoreCase("createuser")) {
                     System.out.println(s.getRequestObject());
-                    adapter.createUser((User) s.getRequestObject());
-                }else if (requestText.equalsIgnoreCase("removeuser")) {
+                    adapter.createAccount((User) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("removeuser")) {
                     System.out.println(s.getRequestObject());
-                    adapter.removeUser((User) s.getRequestObject());
-                }else if (requestText.equalsIgnoreCase("submitedit")) {
+                    adapter.removeAccount((User) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("submitedit")) {
                     System.out.println(s.getRequestObject());
-                    adapter.submitEdit((User) s.getRequestObject());
+                    adapter.editAccount((User) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("createDepartment")) {
+                    adapter.createDepartment((Department) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("editDepartment")) {
+                    adapter.editDepartment((Department) s.getRequestObjects()[0], (Department) s.getRequestObjects()[1]);
                 }
-//                String a = adapter.getUserPassword(s.getType());
-//                outToClient.writeObject("From db " + a);
             } catch (Exception e) {
                 server.removeObserver(this);
             }

@@ -1,5 +1,6 @@
 package client;
 
+import common.Department;
 import common.Request;
 import common.User;
 
@@ -14,6 +15,7 @@ public class Controller {
         Request<User> createUserRequest = new Request<>("createuser", user);
         client.sendRequest(createUserRequest);
     }
+
     public void removeUser(User user) {
         Request<User> removeUserRequest = new Request<>("removeuser", user);
         client.sendRequest(removeUserRequest);
@@ -22,6 +24,19 @@ public class Controller {
     public void submitEdit(User user) {
         Request<User> submitEditRequest = new Request<>("submitedit", user);
         client.sendRequest(submitEditRequest);
+    }
+
+    public void createDepartment(Department department) {
+        Request<Department> submitEditRequest = new Request<>("createDepartment", department);
+        client.sendRequest(submitEditRequest);
+
+    }
+
+    public void editDepartment(Department department, Department departmentold) {
+        Department[] d = {department, departmentold};
+        Request<Department> submitEditRequest = new Request<>("editDepartment", d);
+        client.sendRequest(submitEditRequest);
+
     }
 
 }

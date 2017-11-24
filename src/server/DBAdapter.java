@@ -1,5 +1,6 @@
 package server;
 
+import common.Department;
 import common.User;
 
 import java.util.ArrayList;
@@ -35,13 +36,38 @@ public class DBAdapter implements IDBAdapter {
         return null;
     }
 
-    public ArrayList getUserByCPR(String CPR) {
+    @Override
+    public void createDepartment(Department department) {
+        String sql = "INSERT INTO department VALUES ('" + department.getdNumber() + "','" + department.getdName() + "','" + department.getdLocation() + "','" + department.getdManager() + "','" + department.getdEmployees() + "');";
+        DBHandler.executeStatements(sql);
+
+    }
+
+    @Override
+    public void editDepartment(Department department, Department oldDepartment) {
+        String sql = "Update department set dno = " + department.getdNumber() + ", dname =" + department.getdName() + ",dlocation = " + department.getdLocation() + ",dmanager =" + department.getdManager() +
+                "where dno = " + oldDepartment.getdNumber() + ";";
+        DBHandler.executeStatements(sql);
+    }
+
+    @Override
+    public Department viewDepartment() {
+        return null;
+    }
+
+    @Override
+    public void deleteDepartment(Department department) {
+
+    }
+
+    private ArrayList getUserByCPR(String CPR) {
         String sql = "SELECT * from UserLogIn WHERE CPR = '" + CPR + "';";
         ArrayList temp = DBHandler.getSingleRow(sql);
         return temp;
     }
 
-    public void createUser(User user) {
+    @Override
+    public void createAccount(User user) {
         DBHandler.executeStatements("INSERT INTO UserLogIn VALUES (" +
                 "'" + user.getUsername() + "'," +
                 "'" + user.getCpr() + "'," +
@@ -50,31 +76,13 @@ public class DBAdapter implements IDBAdapter {
                 ")");
     }
 
-    public void removeUser(User user) {
-        DBHandler.executeStatements( "DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';");
-
+    @Override
+    public void removeAccount(User user) {
+        DBHandler.executeStatements("DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';");
     }
 
-    public void submitEdit(User user) {
-
-        DBHandler.executeStatements( "update userlogin set username = '"  + user.getUsername() + "', cpr = '" + user.getCpr() +  "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
-
-
-
-                /*"UPDATE userlogin set"
-                        + " username = " +
-                        "'" + user.getUsername() + "',"
-                        + " cpr = " +
-                "'" + user.getCpr() + "',"
-                + " password = " +
-                "'" + user.getPassword() + "',"
-                + " user-role = " +
-                "'" + user.getUserRole() + "'"
-                + " where cpr = " +
-                "'" + user.getCpr() + "'");
-
-    */
-
+    public void editAccount(User user) {
+        DBHandler.executeStatements("update userlogin set username = '" + user.getUsername() + "', cpr = '" + user.getCpr() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
     }
 }
 
