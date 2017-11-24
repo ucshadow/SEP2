@@ -20,6 +20,7 @@ public class TTT {
 //        c.createUser(u);
 //        c.editUser(j);
 
-         c.submitEdit(tt);
+        // c.submitEdit(tt);
+         c.removeUser(tt);
     }
 }
