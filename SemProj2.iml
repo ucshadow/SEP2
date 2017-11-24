@@ -17,5 +17,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="postgresql-9.4.1211.jre64" level="project" />
   </component>
 </module>

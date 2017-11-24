@@ -52,6 +52,12 @@ public class Connection implements Runnable, OurObserver {
                 if (requestText.equalsIgnoreCase("createuser")) {
                     System.out.println(s.getRequestObject());
                     adapter.createUser((User) s.getRequestObject());
+                }else if (requestText.equalsIgnoreCase("edituser")) {
+                    System.out.println(s.getRequestObject());
+                    adapter.editUser((User) s.getRequestObject());
+                }else if (requestText.equalsIgnoreCase("submitedit")) {
+                    System.out.println(s.getRequestObject());
+                    adapter.submitEdit((User) s.getRequestObject());
                 }
 //                String a = adapter.getUserPassword(s.getType());
 //                outToClient.writeObject("From db " + a);

@@ -49,5 +49,30 @@ public class DBAdapter implements IDBAdapter {
                 "'" + user.getUserRole() + "'" +
                 ")");
     }
+
+    public String editUser(User user) {
+//        System.out.println(getUserByCPR(user.getCpr()));
+        return (String) getUserByCPR(user.getCpr()).get(0);
+    }
+
+    public void submitEdit(User user) {
+
+        DBHandler.executeStatements( "update userlogin set username = '"  + user.getUsername() + "', cpr = '" + user.getCpr() +  "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
+
+
+
+                /*"UPDATE userlogin set"
+                        + " username = " +
+                        "'" + user.getUsername() + "',"
+                        + " cpr = " +
+                "'" + user.getCpr() + "',"
+                + " password = " +
+                "'" + user.getPassword() + "',"
+                + " user-role = " +
+                "'" + user.getUserRole() + "'"
+                + " where cpr = " +
+                "'" + user.getCpr() + "'");
+
+    */}
 }
 

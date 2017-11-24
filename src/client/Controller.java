@@ -14,4 +14,14 @@ public class Controller {
         Request<User> createUserRequest = new Request<>("createuser", user);
         client.sendRequest(createUserRequest);
     }
+    public void editUser(User user) {
+        Request<User> editUserRequest = new Request<>("edituser", user);
+        client.sendRequest(editUserRequest);
+    }
+
+    public void submitEdit(User user) {
+        Request<User> submitEditRequest = new Request<>("submitedit", user);
+        client.sendRequest(submitEditRequest);
+    }
+
 }
