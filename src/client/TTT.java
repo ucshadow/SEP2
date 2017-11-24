@@ -15,11 +15,12 @@ public class TTT {
         User t = new User("Check","123456789A", "1213141517","Manager");
         User tt = new User("Check12","123456789A", "1213141517","Admin");
 
-//         c.createUser(t);
+//         c.createUser(tt);
 
 //        c.createUser(u);
 //        c.editUser(j);
 
-         c.submitEdit(tt);
+        // c.submitEdit(tt);
+//         c.removeUser(tt);
     }
 }

@@ -14,9 +14,9 @@ public class Controller {
         Request<User> createUserRequest = new Request<>("createuser", user);
         client.sendRequest(createUserRequest);
     }
-    public void editUser(User user) {
-        Request<User> editUserRequest = new Request<>("edituser", user);
-        client.sendRequest(editUserRequest);
+    public void removeUser(User user) {
+        Request<User> removeUserRequest = new Request<>("removeuser", user);
+        client.sendRequest(removeUserRequest);
     }
 
     public void submitEdit(User user) {

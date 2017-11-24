@@ -50,9 +50,9 @@ public class DBAdapter implements IDBAdapter {
                 ")");
     }
 
-    public String editUser(User user) {
-//        System.out.println(getUserByCPR(user.getCpr()));
-        return (String) getUserByCPR(user.getCpr()).get(0);
+    public void removeUser(User user) {
+        DBHandler.executeStatements( "DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';");
+
     }
 
     public void submitEdit(User user) {
@@ -73,6 +73,8 @@ public class DBAdapter implements IDBAdapter {
                 + " where cpr = " +
                 "'" + user.getCpr() + "'");
 
-    */}
+    */
+
+    }
 }
 
