@@ -41,6 +41,8 @@ public class Connection implements Runnable, OurObserver {
                 } else if (requestText.equalsIgnoreCase("editAccount")) {
                     System.out.println(s.getRequestObject());
                     adapter.editAccount((User) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("changeUserInfo")) {
+                    adapter.changeUserInformation((User) s.getRequestObject());
                 } else if (requestText.equalsIgnoreCase("createDepartment")) {
                     adapter.createDepartment((Department) s.getRequestObject());
                 } else if (requestText.equalsIgnoreCase("editDepartment")) {
