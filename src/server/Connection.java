@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Connection implements Runnable, OurObserver {
     private Server server;
@@ -63,6 +64,14 @@ public class Connection implements Runnable, OurObserver {
                     adapter.createDepartment((Department) s.getRequestObject());
                 } else if (requestText.equalsIgnoreCase("editDepartment")) {
                     adapter.editDepartment((Department) s.getRequestObjects()[0], (Department) s.getRequestObjects()[1]);
+                } else if (requestText.equalsIgnoreCase("getDepartment")) {
+                    Department department = (Department) adapter.viewDepartment((Department) s.getRequestObject());
+                    getOutputStream().writeObject(new Response<>("viewDepartment", department));
+                } else if (requestText.equalsIgnoreCase("deleteDepartment")) {
+                    adapter.deleteDepartment((Department) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("getAllDepartments")) {
+                    ArrayList<Department> department = adapter.getAllDepartments();
+                    getOutputStream().writeObject(new Response<>("getAllDepartments", department));
                 }
             } catch (Exception e) {
                 server.removeObserver(this);

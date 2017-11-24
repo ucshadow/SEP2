@@ -25,6 +25,7 @@ public class DBHandler {
                 System.out.println("CPR exists");
             } else {
                 System.out.println(e.getSQLState());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -36,11 +37,10 @@ public class DBHandler {
         ArrayList<String> temp = new ArrayList<>();
         try {
             Class.forName(DRIVER);
-            String sql = statment;
             openDataBase();
 
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(statment);
             while (resultSet.next()) {
                 if (resultSet.getString(1).length() > 1) {
                     temp.add(resultSet.getString(1));
@@ -64,7 +64,7 @@ public class DBHandler {
 
             DBHandler.statement = connection.createStatement();
             ResultSet resultSet = DBHandler.statement.executeQuery(sql);
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                     temp.add(resultSet.getString(i));
                 }
@@ -83,6 +83,33 @@ public class DBHandler {
 
     }
 
+    public static ArrayList<String[]> getAllRows(String statement) {
+        ArrayList<String[]> temp = new ArrayList<>();
+        String[] temp2 = null;
+        try {
+            Class.forName(DRIVER);
+            openDataBase();
+            DBHandler.statement = connection.createStatement();
+            ResultSet resultSet = DBHandler.statement.executeQuery(statement);
+            while (resultSet.next()) {
+                temp2 = new String[resultSet.getMetaData().getColumnCount()];
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                    temp2[i - 1] = resultSet.getString(i);
+                }
+                temp.add(temp2);
+            }
+//            while (resultSet.next()) {
+//                if (resultSet.getString(1).length() > 1) {
+//                    temp.add(resultSet.getString(1));
+//                }
+//            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+//        System.out.println("DBHandler" + temp);
+        closeDataBase();
+        return temp;
+    }
 
 
     private static void closeDataBase() {

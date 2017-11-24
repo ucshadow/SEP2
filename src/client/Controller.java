@@ -36,7 +36,23 @@ public class Controller {
         Department[] d = {department, departmentold};
         Request<Department> submitEditRequest = new Request<>("editDepartment", d);
         client.sendRequest(submitEditRequest);
+    }
 
+    public void viewDepartment(Department department) {
+        Request<Department> submitEditRequest = new Request<>("getDepartment", department);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void deleteDepartment(Department department) {
+
+        Request<Department> submitEditRequest = new Request<>("deleteDepartment", department);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getAllDepartments() {
+
+        Request submitEditRequest = new Request<>("getAllDepartments", null);
+        client.sendRequest(submitEditRequest);
     }
 
 }

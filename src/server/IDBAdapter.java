@@ -3,6 +3,8 @@ package server;
 import common.Department;
 import common.User;
 
+import java.util.ArrayList;
+
 public interface IDBAdapter {
 
     boolean checkUsername(String username);
@@ -13,7 +15,7 @@ public interface IDBAdapter {
 
     void editDepartment(Department department, Department oldDepartment);
 
-    Department viewDepartment();
+    Department viewDepartment(Department department);
 
     void deleteDepartment(Department department);
 
@@ -23,5 +25,6 @@ public interface IDBAdapter {
 
     void editAccount(User user);
 
+    ArrayList<Department> getAllDepartments();
 }
 

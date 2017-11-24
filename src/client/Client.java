@@ -29,7 +29,7 @@ public class Client {
 
     public void sendRequest(Request request) {
         try {
-            System.out.println("Sending...." + request);
+//            System.out.println("Sending...." + request);
             if (out == null) {
                 out = new ObjectOutputStream(clientSocket.getOutputStream());
             }
@@ -41,6 +41,7 @@ public class Client {
         }
     }
 
+
     public void get() {
         if (in == null) {
             new Thread(() -> {
@@ -50,7 +51,7 @@ public class Client {
                         Response response;
                         response = (Response) in.readObject();
 
-                        System.out.println("response from server: " + response.getResponse());
+                        System.out.println("response from server: " + response);
 
 //                        if (response.getResponse().toLowerCase().equals("update reservation")) {
 //                            model.updateReservation(response.getAllParameters());

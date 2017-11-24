@@ -95,14 +95,14 @@ AFTER UPDATE OF passEmp
 EXECUTE PROCEDURE empPassword();
 
 CREATE TABLE department (
-  dno       CHAR(4),
+  dno       CHAR(4) UNIQUE ,
   dname     VARCHAR,
   dlocation VARCHAR,
-  dManager  CHAR(10),
+  dManager  CHAR(10) UNIQUE ,
   DEmployee CPR_DOMAIN
 
 );
 
 ALTER TABLE department
-  ADD PRIMARY KEY (dno, DEmployee);
-DROP TABLE department;
+  ADD PRIMARY KEY (dno, dManager);
+-- DROP TABLE department;

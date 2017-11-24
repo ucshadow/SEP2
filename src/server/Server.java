@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 
-public class Server  extends OurObservable {
+public class Server extends OurObservable {
     private ServerSocket serverSocket;
     private final int PORT = 6789;
-    private DBAdapter adapter;
+    private IDBAdapter adapter;
 
     public Server() {
         try {

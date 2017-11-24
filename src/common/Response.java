@@ -3,11 +3,16 @@ package common;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Response implements Serializable {
+public class Response<T> implements Serializable {
+
+    private T respnoseObject;
+    private T[] responseObjects;
     private String response;
 
-    public Response(String response) {
+    public Response(String response, T respnoseObject) {
         this.response = response;
+        this.respnoseObject = respnoseObject;
+
     }
 
     public String getResponse() {
@@ -38,8 +43,8 @@ public class Response implements Serializable {
     public String toString() {
         return "common.Response{" +
                 "response='" + response + '\'' +
-                ", parameter=" + "temp param" +
-                ", allParameters=" +  "temp array"+
+                ", parameter=" + respnoseObject +
+                ", allParameters=" + "temp array" +
                 '}';
     }
 }

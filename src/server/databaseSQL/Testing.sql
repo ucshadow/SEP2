@@ -19,9 +19,11 @@ WHERE cpr = '0123656789';
 
 SELECT *
 FROM department;
+SELECT *
+FROM department
+WHERE dno = 'D003';
 INSERT INTO department VALUES ('d001', 'Ice', 'London', '0123456789', '0123456789');
 SET SEARCH_PATH = sep2;
-
 
 
 UPDATE department

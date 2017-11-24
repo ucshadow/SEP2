@@ -1,6 +1,7 @@
 package common;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Request<T> implements Serializable {
     private T requestObject;
@@ -38,4 +39,6 @@ public class Request<T> implements Serializable {
                 ", parameter=" + "placeholder text" +
                 '}';
     }
+
+   
 }

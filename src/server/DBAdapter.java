@@ -45,19 +45,23 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public void editDepartment(Department department, Department oldDepartment) {
-        String sql = "Update department set dno = " + department.getdNumber() + ", dname =" + department.getdName() + ",dlocation = " + department.getdLocation() + ",dmanager =" + department.getdManager() +
-                "where dno = " + oldDepartment.getdNumber() + ";";
+        String sql = "Update department set dno ='" + department.getdNumber() + "', dname ='" + department.getdName() + "',dlocation = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
+                "' where dno = '" + oldDepartment.getdNumber() + "';";
         DBHandler.executeStatements(sql);
     }
 
     @Override
-    public Department viewDepartment() {
-        return null;
+    public Department viewDepartment(Department department) {
+        String sql = "Select * from department where dno = '" + department.getdNumber().toUpperCase() + "';";
+        ArrayList temp = DBHandler.getSingleRow(sql);
+        Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(2), (String) temp.get(3), (String) temp.get(4));
+        return d;
     }
 
     @Override
     public void deleteDepartment(Department department) {
-
+        String sql = " Delete from department where dno='" + department.getdNumber() + "';";
+        DBHandler.executeStatements(sql);
     }
 
     private ArrayList getUserByCPR(String CPR) {
@@ -83,6 +87,20 @@ public class DBAdapter implements IDBAdapter {
 
     public void editAccount(User user) {
         DBHandler.executeStatements("update userlogin set username = '" + user.getUsername() + "', cpr = '" + user.getCpr() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
+    }
+
+    @Override
+    public ArrayList<Department> getAllDepartments() {
+        System.out.println("I am hereeee");
+        String sql = "Select * from department;";
+        ArrayList<String[]> temp = DBHandler.getAllRows(sql);
+        ArrayList<Department> departments = new ArrayList<>();
+        for (String[] item : temp) {
+            Department department = new Department(item[0], item[1], item[2], item[3], item[4]);
+            departments.add(department);
+        }
+        System.out.println(departments);
+        return departments;
     }
 }
 
