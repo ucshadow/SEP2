@@ -26,6 +26,11 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
+    public void changeUserInformation(User user) {
+        Request<User> changeUserInformation = new Request<>("changeUserInfo", user);
+        client.sendRequest(changeUserInformation);
+    }
+
     public void createDepartment(Department department) {
         Request<Department> submitEditRequest = new Request<>("createDepartment", department);
         client.sendRequest(submitEditRequest);

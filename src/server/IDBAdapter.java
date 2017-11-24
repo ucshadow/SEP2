@@ -25,6 +25,9 @@ public interface IDBAdapter {
 
     void editAccount(User user);
 
+    void changeUserInformation(User user);
+
     ArrayList<Department> getAllDepartments();
+
 }
 

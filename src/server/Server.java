@@ -24,7 +24,7 @@ public class Server extends OurObservable {
         System.out.println("Server starting ...");
         while (true) {
             try {
-                Connection newClient = new Connection(serverSocket.accept(), this, adapter);
+                Connection newClient = new Connection(serverSocket.accept(), this);
                 addObserver(newClient);
                 new Thread(newClient).start();
                 System.out.println("client connected");

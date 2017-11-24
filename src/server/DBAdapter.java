@@ -36,6 +36,26 @@ public class DBAdapter implements IDBAdapter {
         return null;
     }
 
+    public void changeUserInformation(User user) {
+        DBHandler.executeStatements("update Employee set password = '" + user.getPassword() +
+                "', firstName = '" + user.getFirstName() +
+                "', secondName = '" + user.getSecondName() +
+                "', lastName = '" + user.getLastName() +
+                "', dob = '" + user.getDob() +
+                "', address = '" + user.getAddress() +
+                "', postcode = '" + user.getPostcode() +
+                "', city = '" + user.getCity() + "', " +
+                "', mobile = '" + user.getMobile() +
+                "', landline = '" + user.getLandline() +
+                "', email = '" + user.getEmail() +
+                "', konto = '" + user.getKonto() +
+                "', recnumber = '" + user.getRecnumber() +
+                "', licencePlate = '" + user.getLicencePlate() +
+                "', prefferedCommunication = '" + user.getPrefferedCommunication() +
+                "', moreInfo = '" + user.getMoreInfo());
+
+    }
+
     @Override
     public void createDepartment(Department department) {
         String sql = "INSERT INTO department VALUES ('" + department.getdNumber() + "','" + department.getdName() + "','" + department.getdLocation() + "','" + department.getdManager() + "','" + department.getdEmployees() + "');";

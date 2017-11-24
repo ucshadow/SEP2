@@ -18,25 +18,6 @@ public class Connection implements Runnable, OurObserver {
     private ObjectOutputStream outToClient;
     private IDBAdapter adapter;
 
-    /**
-     * Constructor.
-     * Instantiates streams.
-     *
-     * @param socket
-     * @param server
-     * @param adapter
-     */
-    public Connection(Socket socket, Server server, DBAdapter adapter) {
-        this.server = server;
-        this.adapter = adapter;
-        try {
-            inFromClient = new ObjectInputStream(socket.getInputStream());
-            outToClient = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
 
     /**
@@ -76,6 +57,24 @@ public class Connection implements Runnable, OurObserver {
             } catch (Exception e) {
                 server.removeObserver(this);
             }
+        }
+    }
+
+    /**
+     * Constructor.
+     * Instantiates streams.
+     *
+     * @param socket
+     * @param server
+     */
+    public Connection(Socket socket, Server server) {
+        this.server = server;
+        this.adapter = adapter;
+        try {
+            inFromClient = new ObjectInputStream(socket.getInputStream());
+            outToClient = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
