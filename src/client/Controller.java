@@ -12,17 +12,17 @@ public class Controller {
     }
 
     public void createUser(User user) {
-        Request<User> createUserRequest = new Request<>("createuser", user);
+        Request<User> createUserRequest = new Request<>("createAccount", user);
         client.sendRequest(createUserRequest);
     }
 
     public void removeUser(User user) {
-        Request<User> removeUserRequest = new Request<>("removeuser", user);
+        Request<User> removeUserRequest = new Request<>("removeAccount", user);
         client.sendRequest(removeUserRequest);
     }
 
     public void submitEdit(User user) {
-        Request<User> submitEditRequest = new Request<>("submitedit", user);
+        Request<User> submitEditRequest = new Request<>("editAccount", user);
         client.sendRequest(submitEditRequest);
     }
 
