@@ -11,7 +11,7 @@ public class DBHandler {
     private static final String DRIVER = "org.postgresql.Driver";
     private static final String URL = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
     private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "postgres";
+    private static final String PASSWORD = "aev123";
 
 
     public static void executeStatements(String sql) {

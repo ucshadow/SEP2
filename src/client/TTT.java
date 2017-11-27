@@ -1,12 +1,11 @@
 package client;
 
-import common.Department;
 import common.User;
 
 public class TTT {
     public static void main(String[] args) {
         Controller c = new Controller();
-        User u = new User("ABSDASDASDASD", "Asdsa12345678", "1213421213", "Admin");
+//        User u = new User("ABSDASDASDASD", "Asdsa12345678", "1213421213", "Admin");
 //        User n = new User("James", "Asd12345678", "1212121213", "Admin");
 //
 //
@@ -19,7 +18,7 @@ public class TTT {
 ////         c.createUser(tt);
 //
 //        c.createUser(u);
-        User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
+//        User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
 
 ////        c.editUser(j);
 //1234567890
@@ -36,9 +35,13 @@ public class TTT {
 //        c.createDepartment(d2);
 //        c.createDepartment(d3);
 //        c.createDepartment(d4);
-        c.getAllDepartments();
-        c.getWorkingSchedule(user);
+//        c.getAllDepartments();
+//        c.getWorkingSchedule(user);
 ////        c.viewDepartment(d4);
 //        c.deleteDepartment(d4);
+//        User username1 = new User("usernameTest", "passwordTest", "0123456969", "Admin");
+//        c.createUser(username1);
+        User usernameChanged = new User("usernameTest", "passwordChange", "abcdef", "secondChange", "familyChange", "0123456969", "12/12/2012", "addressChange", "1000", "city1", "1234567", "1235", "mailChange", "1674", "123455", "12352463356", "Email", "morenfo");
+        c.changeUserInformation(usernameChanged);
     }
 }

@@ -40,10 +40,10 @@ public class DBAdapter implements IDBAdapter {
     }
 
     public void changeUserInformation(User user) {
-        DBHandler.executeStatements("update Employee set passEmp = '" + user.getPassword() +
+        DBHandler.executeStatements("UPDATE Employee SET passEmp = '" + user.getPassword() +
                 "', firstName = '" + user.getFirstName() +
                 "', secondName = '" + user.getSecondName() +
-                "', familyname = '" + user.getLastName() +
+                "', familyName = '" + user.getLastName() +
                 "', dateOfBirth = '" + user.getDob() +
                 "', address = '" + user.getAddress() +
                 "', postcode = '" + user.getPostcode() +
@@ -52,11 +52,10 @@ public class DBAdapter implements IDBAdapter {
                 "', landline = '" + user.getLandline() +
                 "', email = '" + user.getEmail() +
                 "', konto = '" + user.getKonto() +
-                "', regnumber = '" + user.getRecnumber() +
+                "', regNumber = '" + user.getRecnumber() +
                 "', licencePlate = '" + user.getLicencePlate() +
                 "', preferredCommunication = '" + user.getPrefferedCommunication() +
-                "', moreInfo = '" + user.getMoreInfo() + "' where cpr = '" + user.getCpr() + "';");
-
+                "', moreInfo = '" + user.getMoreInfo() + "' where cpr = '" + user.getCpr() + "'");
     }
 
     @Override
