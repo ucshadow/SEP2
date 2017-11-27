@@ -15,12 +15,6 @@ public class DBAdapter implements IDBAdapter {
         calendar = Calendar.getInstance();
     }
 
-    public static void main(String[] args) {
-        User user = new User("1234567890", "3333.20");
-        new DBAdapter().changeWagePerHours(user);
-        System.out.println(new DBAdapter().getWagePerHour(user));
-    }
-
     /**
      * @param username
      * @return true if username exists.
@@ -96,37 +90,6 @@ public class DBAdapter implements IDBAdapter {
         String sql = "SELECT * from UserLogIn WHERE CPR = '" + CPR + "';";
         ArrayList temp = DBHandler.getSingleRow(sql);
         return temp;
-    }
-
-    public User logIn(User user) {
-        String sql = "SELECT * from UserLogIn WHERE Username = '" + user.getUsername() + "' and Password = '" +
-                user.getPassword() + "';";
-        ArrayList temp = DBHandler.getSingleRow(sql);
-//        System.out.println(temp);
-        if (temp.isEmpty()) {
-            return new User("", "", "", "");
-        }
-        String sql2 = "SELECT * from Employee WHERE cpr = '" + temp.get(1) + "';";
-        ArrayList t = DBHandler.getSingleRow(sql2);
-        return new User((String)t.get(0),
-                (String)t.get(1),
-                (String)t.get(2),
-                (String)t.get(3),
-                (String)t.get(4),
-                (String)t.get(5),
-                (String)t.get(6),
-                (String)t.get(7),
-                (String)t.get(8),
-                (String)t.get(9),
-                (String)t.get(10),
-                (String)t.get(11),
-                (String)t.get(12),
-                (String)t.get(13),
-                (String)t.get(14),
-                (String)t.get(15),
-                (String)t.get(16),
-                (String)t.get(17),
-                (String)t.get(18));
     }
 
     @Override
@@ -205,7 +168,33 @@ public class DBAdapter implements IDBAdapter {
     }
 
     @Override
-    public ArrayList<User> getWorkingCollegues(User user) {
+    public ArrayList<User> getWorkingColleagues(User user) {
+        String sql = "SELECT dno FROM department where demployee ='" + user.getCpr() + "';";
+        ArrayList<String> forReturn = DBHandler.getResultSet(sql);
+        ArrayList<User> users = null;
+        for (String item2 : forReturn) {
+            sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
+            ArrayList<String[]> temp = DBHandler.getAllRows(sql);
+            users = new ArrayList<>();
+            for (String[] item : temp) {
+                User user1 = new User(item[0], item[1], item[2], item[3], item[4]);
+                System.out.println(user1);
+                users.add(user1);
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public ArrayList<String> getWorkingDepartments(User user) {
+        String sql = "SELECT dno FROM department where demployee ='" + user.getCpr() + "';";
+        System.out.println(sql);
+        ArrayList<String> forReturn = DBHandler.getResultSet(sql);
+        return forReturn;
+    }
+
+    @Override
+    public ArrayList<User> getAllColleagues(User user) {
         String sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
@@ -215,6 +204,43 @@ public class DBAdapter implements IDBAdapter {
             users.add(user1);
         }
         return users;
+    }
+
+    @Override
+    public User logIn(User user) {
+        String sql = "SELECT * from UserLogIn WHERE Username = '" + user.getUsername() + "' and pass = '" +
+                user.getPassword() + "';";
+        ArrayList temp = DBHandler.getSingleRow(sql);
+//        System.out.println(temp);
+        if (temp.isEmpty()) {
+            return new User("", "", "", "");
+        }
+        String sql2 = "SELECT * from Employee WHERE cpr = '" + temp.get(1) + "';";
+        ArrayList t = DBHandler.getSingleRow(sql2);
+        return new User((String) t.get(0),
+                (String) t.get(1),
+                (String) t.get(2),
+                (String) t.get(3),
+                (String) t.get(4),
+                (String) t.get(5),
+                (String) t.get(6),
+                (String) t.get(7),
+                (String) t.get(8),
+                (String) t.get(9),
+                (String) t.get(10),
+                (String) t.get(11),
+                (String) t.get(12),
+                (String) t.get(13),
+                (String) t.get(14),
+                (String) t.get(15),
+                (String) t.get(16),
+                (String) t.get(17),
+                (String) t.get(18), (String) t.get(19), (String) t.get(20));
+    }
+
+    public static void main(String[] args) {
+        User user = new User("0123456789", "3333.20");
+        System.out.println(new DBAdapter().getWorkingDepartments(user));
     }
     //TODO USER WAGE GUI
 }

@@ -27,8 +27,6 @@ public interface IDBAdapter {
 
     void editAccount(User user);
 
-    User logIn(User user);
-
     void changeUserInformation(User user);
 
     ArrayList<Department> getAllDepartments();
@@ -39,7 +37,12 @@ public interface IDBAdapter {
 
     void changeWagePerHours(User user);
 
-    ArrayList<User> getWorkingCollegues(User user);
+    ArrayList<User> getWorkingColleagues(User user);
 
+    ArrayList<String> getWorkingDepartments(User user);
+
+    ArrayList<User> getAllColleagues(User user);
+
+    User logIn(User user);
 }
 

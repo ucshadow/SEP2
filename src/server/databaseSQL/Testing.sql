@@ -58,6 +58,18 @@ FROM userlogin where cpr = '1234567890';
 
 SELECT *
 FROM department;
+
+INSERT INTO department VALUES ('d001', 'Ice', 'London', '0123456789', '0123456789');
+INSERT INTO department VALUES ('d002', 'Free', 'London', '3535353535', '0123456789');
+INSERT INTO department VALUES ('d003', 'Taken', 'London', '0987654321', '9876543210');
+INSERT INTO department VALUES ('d002', 'Free', 'London', '3535353535', '0876541329');
+INSERT INTO department VALUES ('d001', 'Ice', 'London', '0123456789', '3232323232');
+
+
+SELECT dno FROM department where demployee ='0123456789';
+
+
+
 SELECT firstname,familyname,mobile,email,username from employee where cpr is DISTINCT FROM '2234567890';
 SELECT * FROM  employee;
 SELECT * FROM wageperhour;

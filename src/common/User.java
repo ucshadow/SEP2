@@ -33,7 +33,7 @@ public class User implements Serializable {
     /**
      * for GUI employee insertion
      **/
-    public User(String picture, String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo) {
+    public User(String picture, String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo, String wage, String userRole) {
         this.picture = picture;
         this.username = username;
         this.password = password;
@@ -53,6 +53,8 @@ public class User implements Serializable {
         this.licencePlate = licencePlate;
         this.prefferedCommunication = prefferedCommunication;
         this.moreInfo = moreInfo;
+        this.wage = wage;
+        this.userRole = userRole;
     }
 
     public String getPicture() {

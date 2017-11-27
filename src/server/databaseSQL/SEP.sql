@@ -41,7 +41,9 @@ CREATE TABLE Employee (
   regNumber              CHAR(10),
   licencePlate           VARCHAR,
   preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email')),
-  moreInfo               VARCHAR
+  moreInfo               VARCHAR,
+  wage                   VARCHAR,
+  userRole               VARCHAR
 
 
 );
@@ -57,7 +59,9 @@ BEGIN
   IF (tg_op = 'INSERT')
   THEN
     INSERT INTO Employee
-    VALUES (new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '');
+    VALUES
+      ('', new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '', new.wage,
+                                                                          new.userRole);
     RETURN new;
   ELSIF (tg_op = 'DELETE')
     THEN
@@ -99,16 +103,16 @@ AFTER UPDATE OF passEmp
 EXECUTE PROCEDURE empPassword();
 
 CREATE TABLE department (
-  dno       DNO_DOMAIN UNIQUE,
+  dno       DNO_DOMAIN,
   dname     VARCHAR,
   dlocation VARCHAR,
-  dManager  CHAR(10) UNIQUE,
-  DEmployee CPR_DOMAIN
+  dManager  CHAR(10)
 
 );
 
 ALTER TABLE department
-  ADD PRIMARY KEY (dno, dManager);
+  ADD PRIMARY KEY (dno);
+
 DROP TABLE department;
 
 CREATE TABLE workingSchedule (
