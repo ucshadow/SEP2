@@ -1,4 +1,4 @@
-package GuiTests;
+package gui;
 
 import client.Controller;
 import common.User;

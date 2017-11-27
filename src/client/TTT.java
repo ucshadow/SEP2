@@ -18,7 +18,7 @@ public class TTT {
 //
 ////         c.createUser(tt);
 //
-//        c.createUser(u);
+        c.createUser(u);
 ////        c.editUser(j);
 //
 //        // c.editUser(tt);

@@ -1,4 +1,4 @@
-package GuiTests;
+package gui;
 
 public class Controller {
 }
