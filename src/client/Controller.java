@@ -9,7 +9,7 @@ public class Controller {
 
     public Controller() {
 //        client = new Client("localhost", 6789);
-        client = new Client("localhost", 6789);
+        client = new Client("10.152.204.109", 6789);
 
     }
 
@@ -90,6 +90,11 @@ public class Controller {
 
     public void logIn(User user) {
         Request submitEditRequest = new Request<>("login", user);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getAllColleagues(User user) {
+        Request submitEditRequest = new Request<>("getAllColleagues", user);
         client.sendRequest(submitEditRequest);
     }
 

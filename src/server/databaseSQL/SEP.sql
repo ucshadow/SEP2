@@ -49,8 +49,32 @@ CREATE TABLE Employee (
 );
 ALTER TABLE Employee
   RENAME COLUMN password TO passEmp;
+CREATE TABLE department (
+  dno       DNO_DOMAIN,
+  dname     VARCHAR,
+  dlocation VARCHAR,
+  dManager  CHAR(10)
+
+);
+
+ALTER TABLE department
+  ADD PRIMARY KEY (dno);
 
 
+CREATE TABLE workingSchedule (
+  id         SERIAL PRIMARY KEY,
+  dno        DNO_DOMAIN,
+  employecpr CPR_DOMAIN,
+  workingDay DATE,
+  startHours TIME,
+  endHours   TIME
+);
+
+CREATE TABLE wagePerHour (
+  employeeCPR CPR_DOMAIN,
+  wage        NUMERIC(6, 2)
+);
+--Functions
 -- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER
 -- Trigger function that deletes employee data one employee is deleted
 CREATE OR REPLACE FUNCTION newEmployee()
@@ -60,7 +84,8 @@ BEGIN
   THEN
     INSERT INTO Employee
     VALUES
-      ('', new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '', new.wage,
+      ('', new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '',
+                                                                          '',
                                                                           new.userRole);
     RETURN new;
   ELSIF (tg_op = 'DELETE')
@@ -74,12 +99,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE TRIGGER newEmp
-BEFORE INSERT OR DELETE ON userlogin
-FOR EACH ROW
-EXECUTE PROCEDURE newEmployee();
-
+CREATE OR REPLACE FUNCTION addWage()
+  RETURNS TRIGGER AS $$
+BEGIN
+  IF (tg_op = 'INSERT')
+  THEN
+    UPDATE Employee
+    SET wage = new.wage
+    WHERE cpr = new.employeeCPR;
+    RETURN new;
+  END IF;
+  RETURN old;
+END;
+$$ LANGUAGE plpgsql;
 
 --Trigger function created to update password upon change from employee table to userlogin table
 CREATE OR REPLACE FUNCTION empPassword()
@@ -95,6 +127,8 @@ BEGIN
   RETURN new;
 END;
 $$ LANGUAGE plpgsql;
+--FUNCTION END
+-- TRIGGERS
 
 
 CREATE TRIGGER passChange
@@ -102,29 +136,16 @@ AFTER UPDATE OF passEmp
   ON Employee
 EXECUTE PROCEDURE empPassword();
 
-CREATE TABLE department (
-  dno       DNO_DOMAIN,
-  dname     VARCHAR,
-  dlocation VARCHAR,
-  dManager  CHAR(10)
 
-);
+CREATE TRIGGER newEmp
+BEFORE INSERT OR DELETE ON userlogin
+FOR EACH ROW
+EXECUTE PROCEDURE newEmployee();
 
-ALTER TABLE department
-  ADD PRIMARY KEY (dno);
 
-DROP TABLE department;
+CREATE TRIGGER newEmpWage
+BEFORE INSERT ON wagePerHour
+FOR EACH ROW
+EXECUTE PROCEDURE addWage();
 
-CREATE TABLE workingSchedule (
-  id         SERIAL PRIMARY KEY,
-  dno        DNO_DOMAIN,
-  employecpr CPR_DOMAIN,
-  workingDay DATE,
-  startHours TIME,
-  endHours   TIME
-);
-
-CREATE TABLE wagePerHour (
-  employee CPR_DOMAIN,
-  wage     NUMERIC(6, 2)
-);
+--TRIGGERS END

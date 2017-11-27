@@ -10,7 +10,6 @@ public class Department implements Serializable {
         this.dName = dName;
         this.dLocation = dLocation;
         this.dManager = dManager;
-
     }
 
     public String getdNumber() {

@@ -17,6 +17,14 @@ public class User implements Serializable {
         this.userRole = userRole;
     }
 
+    public User(String picture, String firstName, String lastName, String mobile, String email, boolean a) {
+        this.picture = picture;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobile = mobile;
+        this.email = email;
+    }
+
     public User(String username, String password, String cpr, String userRole, String wage) {
         this.username = username;
         this.password = password;
@@ -56,8 +64,6 @@ public class User implements Serializable {
         this.wage = wage;
         this.userRole = userRole;
     }
-
-
 
     public String getPicture() {
         return picture;
@@ -258,7 +264,8 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "picture='" + picture + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
@@ -276,6 +283,8 @@ public class User implements Serializable {
                 ", licencePlate='" + licencePlate + '\'' +
                 ", prefferedCommunication='" + prefferedCommunication + '\'' +
                 ", moreInfo='" + moreInfo + '\'' +
+                ", userRole='" + userRole + '\'' +
+                ", wage='" + wage + '\'' +
                 '}';
     }
 }

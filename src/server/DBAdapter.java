@@ -76,7 +76,7 @@ public class DBAdapter implements IDBAdapter {
     public Department viewDepartment(Department department) {
         String sql = "Select * from department where dno = '" + department.getdNumber().toUpperCase() + "';";
         ArrayList temp = DBHandler.getSingleRow(sql);
-        Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(2), (String) temp.get(3), (String) temp.get(4));
+        Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(2), (String) temp.get(3));
         return d;
     }
 
@@ -120,7 +120,7 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<Department> departments = new ArrayList<>();
         for (String[] item : temp) {
-            Department department = new Department(item[0], item[1], item[2], item[3], item[4]);
+            Department department = new Department(item[0], item[1], item[2], item[3]);
             departments.add(department);
         }
         System.out.println(departments);
@@ -169,16 +169,23 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<User> getWorkingColleagues(User user) {
-        String sql = "SELECT dno FROM department where demployee ='" + user.getCpr() + "';";
+        String sql = "SELECT  DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
         ArrayList<String> forReturn = DBHandler.getResultSet(sql);
         ArrayList<User> users = null;
         for (String item2 : forReturn) {
-            sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
+            sql = "SELECT\n" +
+                    "  picture,\n" +
+                    "  firstname,\n" +
+                    "  familyname,\n" +
+                    "  mobile,\n" +
+                    "  email\n" +
+                    "FROM employee\n" +
+                    "  Left OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)\n" +
+                    "WHERE workingschedule.employecpr IS DISTINCT FROM'" + user.getCpr() + "' AND workingSchedule.dno = '" + item2 + "';";
             ArrayList<String[]> temp = DBHandler.getAllRows(sql);
             users = new ArrayList<>();
             for (String[] item : temp) {
                 User user1 = new User(item[0], item[1], item[2], item[3], item[4]);
-                System.out.println(user1);
                 users.add(user1);
             }
         }
@@ -187,7 +194,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<String> getWorkingDepartments(User user) {
-        String sql = "SELECT dno FROM department where demployee ='" + user.getCpr() + "';";
+        String sql = "SELECT DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
         System.out.println(sql);
         ArrayList<String> forReturn = DBHandler.getResultSet(sql);
         return forReturn;
@@ -199,8 +206,8 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : temp) {
-            User user1 = new User(item[0], item[1], item[2], item[3], item[4]);
-            System.out.println(user1);
+            User user1 = new User(item[0], item[1], item[2], item[3], item[4], false);
+            System.out.println(user1.toString());
             users.add(user1);
         }
         return users;
@@ -211,7 +218,6 @@ public class DBAdapter implements IDBAdapter {
         String sql = "SELECT * from UserLogIn WHERE Username = '" + user.getUsername() + "' and pass = '" +
                 user.getPassword() + "';";
         ArrayList temp = DBHandler.getSingleRow(sql);
-//        System.out.println(temp);
         if (temp.isEmpty()) {
             return new User("", "", "", "");
         }
@@ -239,8 +245,8 @@ public class DBAdapter implements IDBAdapter {
     }
 
     public static void main(String[] args) {
-        User user = new User("0123456789", "3333.20");
-        System.out.println(new DBAdapter().getWorkingDepartments(user));
+        User user = new User("9087654321", "3333.20");
+        System.out.println(new DBAdapter().getWorkingColleagues(user));
     }
     //TODO USER WAGE GUI
 }
