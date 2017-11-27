@@ -18,7 +18,16 @@ public class TTT {
 ////         c.createUser(tt);
 //
 //        c.createUser(u);
-//        User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
+            User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
+        for (int i = 0; i < 1000; i++) {
+            c.getAllDepartments();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            c.getWorkingSchedule(user);
+        }
 
 ////        c.editUser(j);
 //1234567890
@@ -35,13 +44,12 @@ public class TTT {
 //        c.createDepartment(d2);
 //        c.createDepartment(d3);
 //        c.createDepartment(d4);
-//        c.getAllDepartments();
-//        c.getWorkingSchedule(user);
+
 ////        c.viewDepartment(d4);
 //        c.deleteDepartment(d4);
 //        User username1 = new User("usernameTest", "passwordTest", "0123456969", "Admin");
 //        c.createUser(username1);
-        User usernameChanged = new User("usernameTest", "passwordChange", "abcdef", "secondChange", "familyChange", "0123456969", "12/12/2012", "addressChange", "1000", "city1", "1234567", "1235", "mailChange", "1674", "123455", "12352463356", "Email", "morenfo");
-        c.changeUserInformation(usernameChanged);
+//        User usernameChanged = new User("usernameTest", "passwordChange", "abcdef", "secondChange", "familyChange", "0123456969", "12/12/2012", "addressChange", "1000", "city1", "1234567", "1235", "mailChange", "1674", "123455", "12352463356", "Email", "morenfo");
+//        c.changeUserInformation(usernameChanged);
     }
 }

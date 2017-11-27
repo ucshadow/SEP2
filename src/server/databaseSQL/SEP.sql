@@ -23,6 +23,7 @@ ALTER TABLE UserLogIn
   ADD PRIMARY KEY (Username, cpr);
 
 CREATE TABLE Employee (
+  picture                VARCHAR,
   username               VARCHAR,
   password               VARCHAR,
   firstName              VARCHAR(25),
@@ -62,6 +63,8 @@ BEGIN
     THEN
       DELETE FROM employee
       WHERE old.cpr = cpr;
+      DELETE FROM wagePerHour
+      WHERE old.cpr = employee;
   END IF;
   RETURN old;
 END;
@@ -72,6 +75,7 @@ CREATE TRIGGER newEmp
 BEFORE INSERT OR DELETE ON userlogin
 FOR EACH ROW
 EXECUTE PROCEDURE newEmployee();
+
 
 --Trigger function created to update password upon change from employee table to userlogin table
 CREATE OR REPLACE FUNCTION empPassword()
@@ -114,4 +118,9 @@ CREATE TABLE workingSchedule (
   workingDay DATE,
   startHours TIME,
   endHours   TIME
+);
+
+CREATE TABLE wagePerHour (
+  employee CPR_DOMAIN,
+  wage     NUMERIC(6, 2)
 );

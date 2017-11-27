@@ -55,6 +55,14 @@ public class Connection implements Runnable, OurObserver {
                 } else if (requestText.equalsIgnoreCase("getWorkingSchedule")) {
                     ArrayList<WorkingSchedule> workingSchedules = adapter.workingSchedulePerWeek((User) s.getRequestObject());
                     getOutputStream().writeObject(new Response<>("getWorkingSchedule", workingSchedules));
+                } else if (requestText.equalsIgnoreCase("getWagePerHours")) {
+                    String wage = adapter.getWagePerHour((User) s.getRequestObject());
+                    getOutputStream().writeObject(new Response<>("getWagePerHours", wage));
+                } else if (requestText.equalsIgnoreCase("changeWagePerHour")) {
+                    adapter.changeWagePerHours((User) s.getRequestObject());
+                } else if (requestText.equalsIgnoreCase("getWorkingColleagues")) {
+                    ArrayList<User> workingCollegues = adapter.getWorkingCollegues((User) s.getRequestObject());
+                    getOutputStream().writeObject(new Response<>("getWorkingColleagues", workingCollegues));
                 }
             } catch (Exception e) {
                 server.removeObserver(this);

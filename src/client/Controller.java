@@ -8,7 +8,9 @@ public class Controller {
     private Client client;
 
     public Controller() {
-        client = new Client("localhost", 6789);
+//        client = new Client("localhost", 6789);
+        client = new Client("10.152.204.109", 6789);
+
     }
 
     public void createUser(User user) {
@@ -62,6 +64,21 @@ public class Controller {
 
     public void getWorkingSchedule(User user) {
         Request submitEditRequest = new Request<>("getWorkingSchedule", user);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getWagePerHour(User user) {
+        Request submitEditRequest = new Request<>("getWagePerHours", user);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void changeWagePerHours(User user) {
+        Request submitEditRequest = new Request<>("changeWagePerHour", user);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getWorkingColleagues(User user) {
+        Request submitEditRequest = new Request<>("getWorkingColleagues", user);
         client.sendRequest(submitEditRequest);
     }
 

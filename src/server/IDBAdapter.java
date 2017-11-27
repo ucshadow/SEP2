@@ -33,5 +33,11 @@ public interface IDBAdapter {
 
     ArrayList<WorkingSchedule> workingSchedulePerWeek(User user);
 
+    String getWagePerHour(User user);
+
+    void changeWagePerHours(User user);
+
+    ArrayList<User> getWorkingCollegues(User user);
+
 }
 

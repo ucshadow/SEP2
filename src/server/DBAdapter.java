@@ -100,6 +100,8 @@ public class DBAdapter implements IDBAdapter {
                 "'" + user.getPassword() + "'," +
                 "'" + user.getUserRole() + "'" +
                 ")");
+        String sql = " INSERT INTO wageperhour VALUES ('" + user.getCpr() + "','" + user.getWage() + "');";
+        DBHandler.executeStatements(sql);
     }
 
     @Override
@@ -145,26 +147,44 @@ public class DBAdapter implements IDBAdapter {
         return workingSchedules;
     }
 
-//    private void getToday() {
-//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//        String firstDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
-//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-//        String lastDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
-//        String sql = "SELECT *\n" +
-//                "FROM workingschedule\n" +
-//                "WHERE employecpr = '1234567890' AND workingday >='" + firstDayOfWeek + "' AND workingday <= '" + lastDayOfWeek + "';";
-//        ArrayList<String[]> temp = DBHandler.getAllRows(sql);
-//        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
-//        for (String[] item : temp) {
-//            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
-//            workingSchedules.add(workingSchedule);
-//        }
-//        System.out.println(workingSchedules);
-////        return workingSchedules;
-//    }
-//
-//    public static void main(String[] args) {
-//        new DBAdapter().getToday();
-//    }
+    @Override
+    public String getWagePerHour(User user) {
+        String sql = "Select wage from wagePerHour where employee = '" + user.getCpr() + "';";
+        ArrayList<String> temp = DBHandler.getResultSet(sql);
+        String forReturn = null;
+        try {
+            forReturn = temp.get(0);
+        } catch (Exception e) {
+            //Do nothing
+            System.out.println(e.getMessage());
+        }
+        return forReturn;
+    }
+
+    @Override
+    public void changeWagePerHours(User user) {
+        String sql = "Update wagePerHour set wage ='" + user.getWage() + "' where employee ='" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+    }
+
+    @Override
+    public ArrayList<User> getWorkingCollegues(User user) {
+        String sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
+        ArrayList<String[]> temp = DBHandler.getAllRows(sql);
+        ArrayList<User> users = new ArrayList<>();
+        for (String[] item : temp) {
+            User user1 = new User(item[0], item[1], item[2], item[3], item[4]);
+            System.out.println(user1);
+            users.add(user1);
+        }
+        return users;
+    }
+
+    public static void main(String[] args) {
+        User user = new User("1234567890", "3333.20");
+        new DBAdapter().changeWagePerHours(user);
+        System.out.println(new DBAdapter().getWagePerHour(user));
+    }
+    //TODO USER WAGE GUI
 }
 

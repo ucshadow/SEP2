@@ -58,3 +58,9 @@ FROM userlogin where cpr = '1234567890';
 
 SELECT *
 FROM department;
+SELECT firstname,familyname,mobile,email,username from employee where cpr is DISTINCT FROM '2234567890';
+SELECT * FROM  employee;
+SELECT * FROM wageperhour;
+INSERT INTO wageperhour VALUES ('1234567890','121.00');
+SELECT * from userlogin;
+DELETE from userlogin where cpr = '1234567890';

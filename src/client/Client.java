@@ -57,7 +57,7 @@ public class Client {
 //                            model.updateReservation(response.getAllParameters());
 //                        }
 
-
+                        Thread.sleep(10);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

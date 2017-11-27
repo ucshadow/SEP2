@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String username, password, firstName, secondName, lastName, cpr, dob, address, postcode, city, mobile, landline,
-            email, konto, recnumber, licencePlate, prefferedCommunication, moreInfo, userRole;
+    private String picture, username, password, firstName, secondName, lastName, cpr, dob, address, postcode, city, mobile, landline,
+            email, konto, recnumber, licencePlate, prefferedCommunication, moreInfo, userRole, wage;
 
     /**
      * for inserting a new user in the UserLogIn
@@ -17,10 +17,24 @@ public class User implements Serializable {
         this.userRole = userRole;
     }
 
+    public User(String username, String password, String cpr, String userRole, String wage) {
+        this.username = username;
+        this.password = password;
+        this.cpr = cpr;
+        this.userRole = userRole;
+        this.wage = wage;
+    }
+
+    public User(String cpr, String wage) {
+        this.cpr = cpr;
+        this.wage = wage;
+    }
+
     /**
      * for GUI employee insertion
      **/
-    public User(String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo) {
+    public User(String picture, String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo) {
+        this.picture = picture;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -39,6 +53,14 @@ public class User implements Serializable {
         this.licencePlate = licencePlate;
         this.prefferedCommunication = prefferedCommunication;
         this.moreInfo = moreInfo;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public String getUsername() {
@@ -191,6 +213,14 @@ public class User implements Serializable {
 
     public void setUserRole(String userRole) {
         this.userRole = userRole;
+    }
+
+    public String getWage() {
+        return wage;
+    }
+
+    public void setWage(String wage) {
+        this.wage = wage;
     }
 
     @Override
