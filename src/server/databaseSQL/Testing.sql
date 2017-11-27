@@ -52,4 +52,9 @@ VALUES ('d001', '1234567890', '1/12/2017', '08:00', '18:00');
 
 SELECT *
 FROM workingschedule
-WHERE employecpr = '1234567890' AND workingday >= '25/11/2017' AND workingday <= '29/11/2017';
+WHERE employecpr = '1234567890' AND workingday >= '27/11/2017' AND workingday <= '3/12/2017';
+SELECT *
+FROM userlogin where cpr = '1234567890';
+
+SELECT *
+FROM department;

@@ -18,9 +18,11 @@ public class TTT {
 //
 ////         c.createUser(tt);
 //
-        c.createUser(u);
+//        c.createUser(u);
+        User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
+
 ////        c.editUser(j);
-//
+//1234567890
 //        // c.editUser(tt);
 //         c.removeUser(tt);
 //        Department d = new Department("D001", "Freezer0", "London", "0123456789", "0123456789");
@@ -35,6 +37,7 @@ public class TTT {
 //        c.createDepartment(d3);
 //        c.createDepartment(d4);
         c.getAllDepartments();
+        c.getWorkingSchedule(user);
 ////        c.viewDepartment(d4);
 //        c.deleteDepartment(d4);
     }

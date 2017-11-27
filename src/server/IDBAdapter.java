@@ -2,8 +2,10 @@ package server;
 
 import common.Department;
 import common.User;
+import common.WorkingSchedule;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IDBAdapter {
 
@@ -28,6 +30,8 @@ public interface IDBAdapter {
     void changeUserInformation(User user);
 
     ArrayList<Department> getAllDepartments();
+
+    ArrayList<WorkingSchedule> workingSchedulePerWeek(User user);
 
 }
 

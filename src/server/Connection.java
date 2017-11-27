@@ -1,10 +1,7 @@
 package server;
 
 
-import common.Department;
-import common.Request;
-import common.Response;
-import common.User;
+import common.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -55,6 +52,9 @@ public class Connection implements Runnable, OurObserver {
                 } else if (requestText.equalsIgnoreCase("getAllDepartments")) {
                     ArrayList<Department> department = adapter.getAllDepartments();
                     getOutputStream().writeObject(new Response<>("getAllDepartments", department));
+                } else if (requestText.equalsIgnoreCase("getWorkingSchedule")) {
+                    ArrayList<WorkingSchedule> workingSchedules = adapter.workingSchedulePerWeek((User) s.getRequestObject());
+                    getOutputStream().writeObject(new Response<>("getWorkingSchedule", workingSchedules));
                 }
             } catch (Exception e) {
                 server.removeObserver(this);
@@ -69,7 +69,7 @@ public class Connection implements Runnable, OurObserver {
      * @param socket
      * @param server
      */
-    public Connection(Socket socket, Server server , IDBAdapter adapter) {
+    public Connection(Socket socket, Server server, IDBAdapter adapter) {
         this.server = server;
         this.adapter = adapter;
         try {

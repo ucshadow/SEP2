@@ -2,14 +2,17 @@ package server;
 
 import common.Department;
 import common.User;
+import common.WorkingSchedule;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DBAdapter implements IDBAdapter {
+    private Calendar calendar;
     //TODO if set is not found return empty array
 
     public DBAdapter() {
-
+        calendar = Calendar.getInstance();
     }
 
     /**
@@ -122,5 +125,47 @@ public class DBAdapter implements IDBAdapter {
         System.out.println(departments);
         return departments;
     }
+
+    @Override
+    public ArrayList<WorkingSchedule> workingSchedulePerWeek(User user) {
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        String firstDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        String lastDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+        String sql = "SELECT * FROM workingschedule WHERE employecpr = '" + user.getCpr() + "' AND workingday >='" + firstDayOfWeek + "' AND workingday <= '" + lastDayOfWeek + "';";
+        System.out.println(sql);
+        ArrayList<String[]> temp = DBHandler.getAllRows(sql);
+        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
+        for (String[] item : temp) {
+            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
+            System.out.println(workingSchedule.toString());
+            workingSchedules.add(workingSchedule);
+        }
+        System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
+        System.out.println(workingSchedules);
+        return workingSchedules;
+    }
+
+//    private void getToday() {
+//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//        String firstDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+//        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+//        String lastDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+//        String sql = "SELECT *\n" +
+//                "FROM workingschedule\n" +
+//                "WHERE employecpr = '1234567890' AND workingday >='" + firstDayOfWeek + "' AND workingday <= '" + lastDayOfWeek + "';";
+//        ArrayList<String[]> temp = DBHandler.getAllRows(sql);
+//        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
+//        for (String[] item : temp) {
+//            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
+//            workingSchedules.add(workingSchedule);
+//        }
+//        System.out.println(workingSchedules);
+////        return workingSchedules;
+//    }
+//
+//    public static void main(String[] args) {
+//        new DBAdapter().getToday();
+//    }
 }
 

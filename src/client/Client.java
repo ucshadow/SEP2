@@ -51,7 +51,7 @@ public class Client {
                         Response response;
                         response = (Response) in.readObject();
 
-                        System.out.println("response from server: " + response);
+                        System.out.println("response from server: " + response.toString());
 
 //                        if (response.getResponse().toLowerCase().equals("update reservation")) {
 //                            model.updateReservation(response.getAllParameters());

@@ -44,7 +44,7 @@ public class Response<T> implements Serializable {
         return "common.Response{" +
                 "response='" + response + '\'' +
                 ", parameter=" + respnoseObject +
-                ", allParameters=" + "temp array" +
+                ", allParameters=" + responseObjects +
                 '}';
     }
 }

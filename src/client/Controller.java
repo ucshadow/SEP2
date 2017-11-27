@@ -60,4 +60,9 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
+    public void getWorkingSchedule(User user) {
+        Request submitEditRequest = new Request<>("getWorkingSchedule", user);
+        client.sendRequest(submitEditRequest);
+    }
+
 }
