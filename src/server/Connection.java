@@ -63,6 +63,9 @@ public class Connection implements Runnable, OurObserver {
                 } else if (requestText.equalsIgnoreCase("getWorkingColleagues")) {
                     ArrayList<User> workingCollegues = adapter.getWorkingCollegues((User) s.getRequestObject());
                     getOutputStream().writeObject(new Response<>("getWorkingColleagues", workingCollegues));
+                } else if (requestText.equalsIgnoreCase("logIn")) {
+                    getOutputStream().writeObject(new Response<>("login",
+                            adapter.logIn((User) s.getRequestObject())));
                 }
             } catch (Exception e) {
                 server.removeObserver(this);
