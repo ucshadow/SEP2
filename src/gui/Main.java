@@ -20,10 +20,12 @@ public class Main extends Application {
 //        primaryStage.setScene(new Scene(root, 1280, 800));
 //        primaryStage.show();
 
+
+
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("MainGUIWindow.fxml"));
-            loader.setController(new GUIController());
+//            loader.setController(new GUIController());
             Pane root = loader.load();
             Scene scene = new Scene(root,1280,800);
             primaryStage.setScene(scene);

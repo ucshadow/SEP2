@@ -9,7 +9,7 @@ public class Controller {
 
     public Controller() {
 //        client = new Client("localhost", 6789);
-        client = new Client("10.152.204.109", 6789);
+        client = new Client("localhost", 6789);
 
     }
 

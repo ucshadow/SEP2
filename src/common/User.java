@@ -57,6 +57,8 @@ public class User implements Serializable {
         this.userRole = userRole;
     }
 
+
+
     public String getPicture() {
         return picture;
     }
