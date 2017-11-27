@@ -2,7 +2,7 @@ CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
 
 CREATE DOMAIN cpr_Domain CHAR(10);
-
+CREATE DOMAIN dno_Domain CHAR(4);
 
 CREATE TABLE UserLogIn (
   Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),
@@ -95,14 +95,23 @@ AFTER UPDATE OF passEmp
 EXECUTE PROCEDURE empPassword();
 
 CREATE TABLE department (
-  dno       CHAR(4) UNIQUE ,
+  dno       DNO_DOMAIN UNIQUE,
   dname     VARCHAR,
   dlocation VARCHAR,
-  dManager  CHAR(10) UNIQUE ,
+  dManager  CHAR(10) UNIQUE,
   DEmployee CPR_DOMAIN
 
 );
 
 ALTER TABLE department
   ADD PRIMARY KEY (dno, dManager);
--- DROP TABLE department;
+DROP TABLE department;
+
+CREATE TABLE workingSchedule (
+  id         SERIAL PRIMARY KEY,
+  dno        DNO_DOMAIN,
+  employecpr CPR_DOMAIN,
+  workingDay DATE,
+  startHours TIME,
+  endHours   TIME
+);

@@ -6,7 +6,7 @@ import common.User;
 public class TTT {
     public static void main(String[] args) {
         Controller c = new Controller();
-//        User u = new User("Yusufs", "Asd12345678", "1212121213", "Admin");
+        User u = new User("ABSDASDASDASD", "Asdsa12345678", "1213421213", "Admin");
 //        User n = new User("James", "Asd12345678", "1212121213", "Admin");
 //
 //
@@ -18,7 +18,7 @@ public class TTT {
 //
 ////         c.createUser(tt);
 //
-////        c.createUser(u);
+//        c.createUser(u);
 ////        c.editUser(j);
 //
 //        // c.editUser(tt);
@@ -35,7 +35,7 @@ public class TTT {
 //        c.createDepartment(d3);
 //        c.createDepartment(d4);
         c.getAllDepartments();
-//        c.viewDepartment(d4);
+////        c.viewDepartment(d4);
 //        c.deleteDepartment(d4);
     }
 }

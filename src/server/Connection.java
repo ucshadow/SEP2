@@ -69,7 +69,7 @@ public class Connection implements Runnable, OurObserver {
      * @param socket
      * @param server
      */
-    public Connection(Socket socket, Server server) {
+    public Connection(Socket socket, Server server , IDBAdapter adapter) {
         this.server = server;
         this.adapter = adapter;
         try {

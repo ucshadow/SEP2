@@ -1,3 +1,4 @@
+set SEARCH_PATH =sep2;
 SELECT *
 FROM employee;
 SELECT *
@@ -29,3 +30,26 @@ SET SEARCH_PATH = sep2;
 UPDATE department
 SET dno = 'D001'
 WHERE dno = 'D003';
+DROP TABLE workingschedule;
+SELECT *
+FROM workingschedule;
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '24/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '25/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '26/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '27/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '28/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '29/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '30/11/2017', '08:00', '18:00');
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('d001', '1234567890', '1/12/2017', '08:00', '18:00');
+
+SELECT *
+FROM workingschedule
+WHERE employecpr = '1234567890' AND workingday >= '25/11/2017' AND workingday <= '29/11/2017';

@@ -37,22 +37,22 @@ public class DBAdapter implements IDBAdapter {
     }
 
     public void changeUserInformation(User user) {
-        DBHandler.executeStatements("update Employee set password = '" + user.getPassword() +
+        DBHandler.executeStatements("update Employee set passEmp = '" + user.getPassword() +
                 "', firstName = '" + user.getFirstName() +
                 "', secondName = '" + user.getSecondName() +
-                "', lastName = '" + user.getLastName() +
-                "', dob = '" + user.getDob() +
+                "', familyname = '" + user.getLastName() +
+                "', dateOfBirth = '" + user.getDob() +
                 "', address = '" + user.getAddress() +
                 "', postcode = '" + user.getPostcode() +
-                "', city = '" + user.getCity() + "', " +
+                "', city = '" + user.getCity() +
                 "', mobile = '" + user.getMobile() +
                 "', landline = '" + user.getLandline() +
                 "', email = '" + user.getEmail() +
                 "', konto = '" + user.getKonto() +
-                "', recnumber = '" + user.getRecnumber() +
+                "', regnumber = '" + user.getRecnumber() +
                 "', licencePlate = '" + user.getLicencePlate() +
-                "', prefferedCommunication = '" + user.getPrefferedCommunication() +
-                "', moreInfo = '" + user.getMoreInfo());
+                "', preferredCommunication = '" + user.getPrefferedCommunication() +
+                "', moreInfo = '" + user.getMoreInfo() + "' where cpr = '" + user.getCpr() + "';");
 
     }
 
