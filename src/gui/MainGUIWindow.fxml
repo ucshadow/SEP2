@@ -5,13 +5,15 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
     <children>
         <TabPane prefHeight="794.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -29,14 +31,33 @@
                                                         <TextField fx:id="CPRFieldCreate" layoutX="40.0" layoutY="75.0" promptText="CPR" />
                                                         <TextField fx:id="passwordFieldCreate" layoutX="40.0" layoutY="113.0" promptText="password" />
                                                         <TextField fx:id="userRoleCreate" layoutX="40.0" layoutY="149.0" promptText="User Role" />
-                                                        <Button fx:id="adminPanelCreateButton" layoutX="40.0" layoutY="189.0" mnemonicParsing="false" onAction="#handleCreateUserAdminPanel" text="Create" />
+                                                        <TextField fx:id="userWageCreate" layoutX="40.0" layoutY="183.0" promptText="Wage" />
+                                                        <Button fx:id="adminPanelCreateButton" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" onAction="#handleCreateUserAdminPanel" text="Create" />
                                                     </children>
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
-                                        <Tab text="Untitled Tab 2">
+                                        <Tab text="Create Department">
                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
+                                                    <children>
+                                                        <TextField fx:id="deptNoCreate" layoutX="50.0" layoutY="40.0" promptText="DeptNo" />
+                                                        <TextField fx:id="deptNameCreate" layoutX="50.0" layoutY="73.0" promptText="DeptName" />
+                                                        <TextField fx:id="deptLocationCreate" layoutX="50.0" layoutY="107.0" promptText="DeptLocation" />
+                                                        <TextField fx:id="deptManagerCreate" layoutX="50.0" layoutY="143.0" promptText="DeptManager" />
+                                                        <TableView layoutX="250.0" layoutY="22.0" prefHeight="313.0" prefWidth="350.0">
+                                                            <columns>
+                                                                <TableColumn prefWidth="75.0" text="DeptNo" />
+                                                                <TableColumn prefWidth="75.0" text="DeptName" />
+                                                                <TableColumn prefWidth="75.0" text="DeptLocation" />
+                                                                <TableColumn prefWidth="75.0" text="DeptManager" />
+                                                            </columns>
+                                                        </TableView>
+                                                        <Button fx:id="departmentCreateButton" layoutX="50.0" layoutY="188.0" mnemonicParsing="false" onAction="#createDept" text="Create" />
+                                                        <Button fx:id="departmentSearchButton" layoutX="154.0" layoutY="188.0" mnemonicParsing="false" text="Search" />
+                                                        <Button fx:id="departmentEditButton" layoutX="50.0" layoutY="234.0" mnemonicParsing="false" text="Edit" />
+                                                        <Button fx:id="departmentRemoveButton" layoutX="151.0" layoutY="234.0" mnemonicParsing="false" text="Remove" />
+                                                    </children></AnchorPane>
                                             </content>
                                         </Tab>
                                     </tabs>

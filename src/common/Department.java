@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Department implements Serializable {
     private String dNumber, dName, dLocation, dManager, dEmployees;
 
-    public Department(String dNumber, String dName, String dLocation, String dManager, String dEmployees) {
+    public Department(String dNumber, String dName, String dLocation, String dManager) {
         this.dNumber = dNumber;
         this.dName = dName;
         this.dLocation = dLocation;
         this.dManager = dManager;
-        this.dEmployees = dEmployees;
+
     }
 
     public String getdNumber() {

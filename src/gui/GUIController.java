@@ -24,6 +24,7 @@ public class GUIController {
     @FXML private TextField CPRFieldCreate;
     @FXML private TextField passwordFieldCreate;
     @FXML private TextField userRoleCreate;
+    @FXML private TextField userWageCreate;
 
 //    Controller c = new Controller();
 
@@ -34,8 +35,8 @@ public class GUIController {
         String cpr = CPRFieldCreate.getText();
         String pass = passwordFieldCreate.getText();
         String role = userRoleCreate.getText();
-        User u = new User(name, pass, cpr, role);
-//        c.createUser(u);
+        String wage =  userWageCreate.getText();
+        User u = new User(name, pass, cpr, role, wage);
     }
 
     /**
