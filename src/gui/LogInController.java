@@ -25,7 +25,14 @@ public class LogInController {
     @FXML
     private void handleLogIn(ActionEvent event) {
 
-        c.logIn(new User(username.getText(), password.getText()));
+//        System.out.println(username.getText());
+//        System.out.println(password.getText());
+
+        User u = new User(username.getText(), password.getText(), true);
+
+        System.out.println(u);
+
+        c.logIn(u);
 
         final Response[] res = {null};
 

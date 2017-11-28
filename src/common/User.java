@@ -38,6 +38,11 @@ public class User implements Serializable {
         this.wage = wage;
     }
 
+    public User(String username, String password, boolean logIn) {
+        this.username = username;
+        this.password = password;
+    }
+
     /**
      * for GUI employee insertion
      **/
