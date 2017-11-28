@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainWindowStarter extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -24,10 +24,10 @@ public class Main extends Application {
 
         try {
             FXMLLoader loader = new
-                    FXMLLoader(getClass().getResource("Login.fxml"));
+                    FXMLLoader(getClass().getResource("MainGUIWindow.fxml"));
 //            loader.setController(new GUIController());
             Pane root = loader.load();
-            Scene scene = new Scene(root,600,400);
+            Scene scene = new Scene(root,1280,800);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch(Exception e) {

@@ -2,6 +2,7 @@ package client;
 
 import common.Department;
 import common.Request;
+import common.Response;
 import common.User;
 
 public class Controller {
@@ -9,8 +10,15 @@ public class Controller {
 
     public Controller() {
 //        client = new Client("localhost", 6789);
-        client = new Client("10.152.204.109", 6789);
+        client = new Client("10.152.192.107", 6789);
 
+    }
+
+    public Response getLastResponse() {
+        if(client.isStackEmpty()) {
+            return null;
+        }
+        return client.getLastResponse();
     }
 
     public void createUser(User user) {

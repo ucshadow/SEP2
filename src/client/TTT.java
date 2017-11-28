@@ -5,7 +5,8 @@ import common.User;
 public class TTT {
     public static void main(String[] args) {
         Controller c = new Controller();
-//        User u = new User("ABSDASDASDASD", "Asdsa12345678", "1213421213", "Admin");
+        User u = new User("MomoLand", "Pass123456", "1213421213", "Admin", "1234");
+        c.createUser(u);
 //        User n = new User("James", "Asd12345678", "1212121213", "Admin");
 //
 //
@@ -18,16 +19,16 @@ public class TTT {
 ////         c.createUser(tt);
 //
 //        c.createUser(u);
-            User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
-        for (int i = 0; i < 1000; i++) {
-            c.getAllDepartments();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            c.getWorkingSchedule(user);
-        }
+//            User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
+//        for (int i = 0; i < 1000; i++) {
+//            c.getAllDepartments();
+//            try {
+//                Thread.sleep(500);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            c.getWorkingSchedule(user);
+//        }
 
 ////        c.editUser(j);
 //1234567890

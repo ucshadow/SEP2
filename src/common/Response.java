@@ -19,6 +19,10 @@ public class Response<T> implements Serializable {
         return response;
     }
 
+    public T getRespnoseObject() {
+        return respnoseObject;
+    }
+
     public void setResponse(String response) {
         this.response = response;
     }

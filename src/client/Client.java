@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Stack;
 
 public class Client {
 
     private Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+
+    private Stack<Response> responses = new Stack<>();
 
 
     public Client(String url, int port) {
@@ -52,6 +55,7 @@ public class Client {
                         response = (Response) in.readObject();
 
                         System.out.println("response from server: " + response.toString());
+                        responses.push(response);
 
 //                        if (response.getResponse().toLowerCase().equals("update reservation")) {
 //                            model.updateReservation(response.getAllParameters());
@@ -64,5 +68,13 @@ public class Client {
                 }
             }).start();
         }
+    }
+
+    public Response getLastResponse() {
+        return responses.pop();
+    }
+
+    public boolean isStackEmpty() {
+        return responses.isEmpty();
     }
 }

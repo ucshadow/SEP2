@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LogInController">
     <children>
         <AnchorPane prefHeight="375.0" prefWidth="587.0">
             <children>
@@ -23,9 +23,9 @@
                         <Font name="Calibri" size="19.0" />
                     </font>
                 </Label>
-                <Button layoutX="355.0" layoutY="228.0" mnemonicParsing="false" text="Log in" />
-                <TextField layoutX="255.0" layoutY="175.0" />
-                <TextField layoutX="255.0" layoutY="110.0" />
+                <Button layoutX="355.0" layoutY="228.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />
+                <TextField fx:id="password" layoutX="255.0" layoutY="175.0" />
+                <TextField fx:id="username" layoutX="255.0" layoutY="110.0" />
                 <Label layoutX="180.0" layoutY="33.0" text="Welcome Back">
                     <font>
                         <Font size="27.0" />
