@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class LogInController {
 
-    Controller c = new Controller();
+    private Controller c = new Controller();
 
     @FXML private TextField username;
     @FXML private TextField password;
@@ -66,7 +66,7 @@ public class LogInController {
 
         while(true) {
             if(res[0] != null) {
-                createMainWindow(res);
+                createMainWindow(res[0]);
                 ((Node) (event.getSource())).getScene().getWindow().hide();
                 return;
             }
@@ -74,13 +74,14 @@ public class LogInController {
 
     }
 
-    private void createMainWindow(Object r) {
+    private void createMainWindow(Response r) {
         Parent root;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainGUIWindow.fxml"));
             root = fxmlLoader.load();
             GUIController controller = fxmlLoader.getController();
             controller.setUser(r);
+            controller.setClientController(c);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Manager");

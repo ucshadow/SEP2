@@ -16,6 +16,7 @@ import java.util.Random;
 public class GUIController {
 
     User user;
+    Controller c;
 
 
     /**
@@ -147,9 +148,14 @@ public class GUIController {
     public void createDept() {
     }
 
-    public void setUser(Object x) {
-        Response r = (Response) x;
-        user = (User) r.getRespnoseObject();
+    public void setUser(Response x) {
+        System.out.println(x.getRespnoseObject());
+        user = (User) x.getRespnoseObject();
         System.out.println(user);
+        System.out.println(x);
+    }
+
+    public void setClientController(Controller c) {
+        this.c = c;
     }
 }
