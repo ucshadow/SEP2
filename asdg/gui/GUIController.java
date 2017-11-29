@@ -2,7 +2,6 @@ package gui;
 
 import client.Controller;
 import common.Department;
-import common.Response;
 import common.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,9 +11,6 @@ import javafx.scene.control.TextField;
 import java.util.Random;
 
 public class GUIController {
-
-    User user;
-    Controller c;
 
 
     /**
@@ -32,6 +28,19 @@ public class GUIController {
     private TextField userRoleCreate;
     @FXML
     private TextField userWageCreate;
+
+//    Controller c = new Controller();
+
+
+    @FXML
+    private void handleCreateUserAdminPanel(ActionEvent event) {
+        String name = userNameFieldCreate.getText();
+        String cpr = CPRFieldCreate.getText();
+        String pass = passwordFieldCreate.getText();
+        String role = userRoleCreate.getText();
+        String wage = userWageCreate.getText();
+        User u = new User(name, pass, cpr, role, wage);
+    }
 
     /**
      * Author: Yusuf Farah
@@ -80,6 +89,8 @@ public class GUIController {
     private TextField profileWage;
     @FXML
     private TextField profileMoreInfo;
+
+
     @FXML
     private Label profileCprLabel;
     @FXML
@@ -87,29 +98,6 @@ public class GUIController {
     @FXML
     private Label profileUsernameLabel;
 
-    /**
-     * Author: Radu Orleanu
-     * <p>
-     * Create user functionality for admin for creating departments.
-     */
-    @FXML
-    private TextField departmentNumberCreate;
-    @FXML
-    private TextField departmentNameCreate;
-    @FXML
-    private TextField departmentLocationCreate;
-    @FXML
-    private TextField departmentManagerCreate;
-
-    @FXML
-    private void handleCreateUserAdminPanel(ActionEvent event) {
-        String name = userNameFieldCreate.getText();
-        String cpr = CPRFieldCreate.getText();
-        String pass = passwordFieldCreate.getText();
-        String role = userRoleCreate.getText();
-        String wage = userWageCreate.getText();
-        User u = new User(name, pass, cpr, role, wage);
-    }
 
     @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
@@ -146,6 +134,22 @@ public class GUIController {
         this.profileUsernameLabel.setText("Yusuf AJ Farah");
     }
 
+    /**
+     * Author: Radu Orleanu
+     * <p>
+     * Create department controller
+     */
+    @FXML
+    private TextField departmentNumberCreate;
+    @FXML
+    private TextField departmentNameCreate;
+    @FXML
+    private TextField departmentLocationCreate;
+    @FXML
+    private TextField departmentManagerCreate;
+
+    Controller c = new Controller();
+
     @FXML
     private void createDept(ActionEvent event) {
         String dNumber = departmentNumberCreate.getText();
@@ -156,14 +160,10 @@ public class GUIController {
         c.createDepartment(d);
     }
 
-    public void setUser(Response x) {
-        System.out.println(x.getRespnoseObject());
-        user = (User) x.getRespnoseObject();
-        System.out.println(user);
-        System.out.println(x);
-    }
+//    @FXML
+//    private void searchDept(ActionEvent event) {
+//        String dName = departmentNameCreate.getText();
+//        Request request  = new Request();
+//    }
 
-    public void setClientController(Controller c) {
-        this.c = c;
-    }
 }

@@ -5,26 +5,11 @@ SELECT *
 FROM userlogin;
 INSERT INTO UserLogIn VALUES ('nikolays', '0123656789', '123456789A', 'Admin');
 INSERT INTO UserLogIn VALUES ('Nikoasdsss', '1234567891', 'Abdfjkgbsjdfkj', 'Admin');
-SELECT
-  picture,
-  firstname,
-  familyname,
-  mobile,
-  email
-FROM employee
-WHERE cpr IS DISTINCT FROM '1213421213';
+
 SELECT *
 FROM UserLogIn;
 SELECT *
 FROM Employee;
-
-SELECT *
-FROM department;
-
--- WHERE dno = 'd001';
--- UPDATE department
--- SET dno = 'd001', dname = 'Ice', dlocation = 'London', dmanager = '1212121213'
--- WHERE dno = 'D001';
 
 UPDATE employee
 SET passEmp = 'AssHole2'
@@ -116,18 +101,5 @@ SELECT
   mobile,
   email
 FROM employee
-  LEFT OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)
+  Left OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)
 WHERE workingschedule.employecpr IS DISTINCT FROM '1234567890' AND workingSchedule.dno = 'd001';
-DROP SCHEMA sep2;
-DROP FUNCTION newemployee();
-DROP FUNCTION addwage();
-DROP FUNCTION emppassword();
-DROP TABLE department;
-
-DROP DOMAIN cpr_domain;
-DROP DOMAIN dno_domain;
-DROP TABLE userlogin;
-DROP TABLE employee;
-DROP TABLE workingschedule;
-DROP TABLE wageperhour;
-SET SEARCH_PATH = sep2
