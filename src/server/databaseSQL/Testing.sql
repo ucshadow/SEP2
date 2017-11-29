@@ -1,4 +1,4 @@
-SET SEARCH_PATH = sep2;
+SET SEARCH_PATH = sep3;
 SELECT *
 FROM employee;
 SELECT *
@@ -103,3 +103,16 @@ SELECT
 FROM employee
   Left OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)
 WHERE workingschedule.employecpr IS DISTINCT FROM '1234567890' AND workingSchedule.dno = 'd001';
+drop SCHEMA sep2;
+drop FUNCTION newemployee();
+drop FUNCTION addwage();
+drop FUNCTION emppassword();
+drop table department;
+
+drop DOMAIN cpr_domain;
+drop domain dno_domain;
+drop table userlogin;
+drop table employee;
+drop table workingschedule;
+drop table wageperhour;
+set SEARCH_PATH =sep2

@@ -1,8 +1,16 @@
 CREATE SCHEMA sep2;
-SET SEARCH_PATH = sep2;
+
+
+
 
 CREATE DOMAIN cpr_Domain CHAR(10);
 CREATE DOMAIN dno_Domain CHAR(4);
+
+
+
+
+
+
 
 CREATE TABLE UserLogIn (
   Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),
@@ -16,11 +24,18 @@ CREATE TABLE UserLogIn (
     OR PASSWORD LIKE '%Y%' OR PASSWORD LIKE '%Z%'),
   userRole VARCHAR(7) DEFAULT 'Admin' CHECK (userRole IN ('Admin', 'User', 'Manager'))
 );
-
 ALTER TABLE UserLogIn
   RENAME COLUMN Password TO pass;
 ALTER TABLE UserLogIn
   ADD PRIMARY KEY (Username, cpr);
+
+
+
+
+
+
+
+
 
 CREATE TABLE Employee (
   picture                VARCHAR,
@@ -49,6 +64,11 @@ CREATE TABLE Employee (
 );
 ALTER TABLE Employee
   RENAME COLUMN password TO passEmp;
+
+
+
+
+
 CREATE TABLE department (
   dno       DNO_DOMAIN,
   dname     VARCHAR,
@@ -56,9 +76,19 @@ CREATE TABLE department (
   dManager  CHAR(10)
 
 );
-
 ALTER TABLE department
   ADD PRIMARY KEY (dno);
+
+
+
+
+
+
+
+
+
+
+
 
 
 CREATE TABLE workingSchedule (
@@ -70,10 +100,23 @@ CREATE TABLE workingSchedule (
   endHours   TIME
 );
 
+
+
+
+
+
 CREATE TABLE wagePerHour (
-  employeeCPR CPR_DOMAIN,
+  employeeCPR CPR_DOMAIN PRIMARY KEY ,
   wage        NUMERIC(6, 2)
 );
+
+
+
+
+
+
+
+
 --Functions
 -- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER
 -- Trigger function that deletes employee data one employee is deleted
@@ -99,6 +142,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
+
+
 CREATE OR REPLACE FUNCTION addWage()
   RETURNS TRIGGER AS $$
 BEGIN
@@ -112,6 +159,11 @@ BEGIN
   RETURN old;
 END;
 $$ LANGUAGE plpgsql;
+
+
+
+
+
 
 --Trigger function created to update password upon change from employee table to userlogin table
 CREATE OR REPLACE FUNCTION empPassword()
@@ -128,6 +180,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --FUNCTION END
+
+
+
+
+
 -- TRIGGERS
 
 
