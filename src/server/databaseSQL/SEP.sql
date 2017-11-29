@@ -136,7 +136,7 @@ BEGIN
       DELETE FROM employee
       WHERE old.cpr = cpr;
       DELETE FROM wagePerHour
-      WHERE old.cpr = employee;
+      WHERE old.cpr = employeecpr;
   END IF;
   RETURN old;
 END;

@@ -1,16 +1,28 @@
-SET SEARCH_PATH = sep3;
+SET SEARCH_PATH = sep2;
 SELECT *
 FROM employee;
 SELECT *
 FROM userlogin;
 INSERT INTO UserLogIn VALUES ('nikolays', '0123656789', '123456789A', 'Admin');
 INSERT INTO UserLogIn VALUES ('Nikoasdsss', '1234567891', 'Abdfjkgbsjdfkj', 'Admin');
-
+SELECT
+  picture,
+  firstname,
+  familyname,
+  mobile,
+  email
+FROM employee
+WHERE cpr IS DISTINCT FROM '1213421213';
 SELECT *
 FROM UserLogIn;
 SELECT *
 FROM Employee;
-
+SELECT *
+FROM department
+WHERE dno = 'd001';
+UPDATE department
+SET dno = 'd001', dname = 'Ice', dlocation = 'London', dmanager = '1212121213'
+WHERE dno = 'D001';
 UPDATE employee
 SET passEmp = 'AssHole2'
 WHERE cpr = '0123656789';
@@ -101,18 +113,18 @@ SELECT
   mobile,
   email
 FROM employee
-  Left OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)
+  LEFT OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)
 WHERE workingschedule.employecpr IS DISTINCT FROM '1234567890' AND workingSchedule.dno = 'd001';
-drop SCHEMA sep2;
-drop FUNCTION newemployee();
-drop FUNCTION addwage();
-drop FUNCTION emppassword();
-drop table department;
+DROP SCHEMA sep2;
+DROP FUNCTION newemployee();
+DROP FUNCTION addwage();
+DROP FUNCTION emppassword();
+DROP TABLE department;
 
-drop DOMAIN cpr_domain;
-drop domain dno_domain;
-drop table userlogin;
-drop table employee;
-drop table workingschedule;
-drop table wageperhour;
-set SEARCH_PATH =sep2
+DROP DOMAIN cpr_domain;
+DROP DOMAIN dno_domain;
+DROP TABLE userlogin;
+DROP TABLE employee;
+DROP TABLE workingschedule;
+DROP TABLE wageperhour;
+SET SEARCH_PATH = sep2

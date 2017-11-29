@@ -5,6 +5,7 @@ import common.User;
 import common.WorkingSchedule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class DBAdapter implements IDBAdapter {
@@ -60,29 +61,32 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public void createDepartment(Department department) {
-        String sql = "INSERT INTO department VALUES ('" + department.getdNumber() + "','" + department.getdName() + "','" + department.getdLocation() + "','" + department.getdManager() + "','" + department.getdEmployees() + "');";
+        String sql = "INSERT INTO department VALUES ('" + department.getdNumber().toLowerCase() + "','" + department.getdName() + "','" + department.getdLocation() + "','" + department.getdManager() + "');";
         DBHandler.executeStatements(sql);
 
     }
 
     @Override
     public void editDepartment(Department department, Department oldDepartment) {
-        String sql = "Update department set dno ='" + department.getdNumber() + "', dname ='" + department.getdName() + "',dlocation = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
-                "' where dno = '" + oldDepartment.getdNumber() + "';";
+        String sql = "Update department set dno ='" + department.getdNumber().toLowerCase() + "', dname ='" + department.getdName() + "',dlocation = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
+                "' where dno = '" + oldDepartment.getdNumber().toLowerCase() + "';";
+        System.out.println(sql);
         DBHandler.executeStatements(sql);
     }
 
     @Override
     public Department viewDepartment(Department department) {
-        String sql = "Select * from department where dno = '" + department.getdNumber().toUpperCase() + "';";
+        String sql = "Select * from department where dno = '" + department.getdNumber().toLowerCase() + "';";
+        System.out.println(department.getdNumber());
         ArrayList temp = DBHandler.getSingleRow(sql);
+        System.out.println(temp);
         Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(2), (String) temp.get(3));
         return d;
     }
 
     @Override
     public void deleteDepartment(Department department) {
-        String sql = " Delete from department where dno='" + department.getdNumber() + "';";
+        String sql = " Delete from department where dno='" + department.getdNumber().toLowerCase() + "';";
         DBHandler.executeStatements(sql);
     }
 
@@ -115,7 +119,6 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<Department> getAllDepartments() {
-        System.out.println("I am hereeee");
         String sql = "Select * from department;";
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<Department> departments = new ArrayList<>();
@@ -123,7 +126,6 @@ public class DBAdapter implements IDBAdapter {
             Department department = new Department(item[0], item[1], item[2], item[3]);
             departments.add(department);
         }
-        System.out.println(departments);
         return departments;
     }
 
@@ -149,7 +151,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public String getWagePerHour(User user) {
-        String sql = "Select wage from wagePerHour where employee = '" + user.getCpr() + "';";
+        String sql = "Select wage from wagePerHour where employeecpr = '" + user.getCpr() + "';";
         ArrayList<String> temp = DBHandler.getResultSet(sql);
         String forReturn = null;
         try {
@@ -163,7 +165,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public void changeWagePerHours(User user) {
-        String sql = "Update wagePerHour set wage ='" + user.getWage() + "' where employee ='" + user.getCpr() + "';";
+        String sql = "Update wagePerHour set wage ='" + user.getWage() + "' where employeecpr ='" + user.getCpr() + "';";
         DBHandler.executeStatements(sql);
     }
 
@@ -203,10 +205,12 @@ public class DBAdapter implements IDBAdapter {
     @Override
     public ArrayList<User> getAllColleagues(User user) {
         String sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
+        System.out.println(sql);
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : temp) {
-            User user1 = new User(item[0], item[1], item[2], item[3], item[4], false);
+            System.out.println(Arrays.toString(item));
+            User user1 = new User(item[0], item[1], item[2], item[3], item[4], true);
             System.out.println(user1.toString());
             users.add(user1);
         }
@@ -244,10 +248,10 @@ public class DBAdapter implements IDBAdapter {
                 (String) t.get(18), (String) t.get(19), (String) t.get(20));
     }
 
-    public static void main(String[] args) {
-        User user = new User("9087654321", "3333.20");
-        System.out.println(new DBAdapter().getWorkingColleagues(user));
-    }
+//    public static void main(String[] args) {
+//        User user = new User("9087654321", "3333.20");
+//        System.out.println(new DBAdapter().getWorkingColleagues(user));
+//    }
     //TODO USER WAGE GUI
 }
 
