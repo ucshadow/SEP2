@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -19,26 +20,21 @@ public class LogInController {
 
     private Controller c = new Controller();
 
-    @FXML private TextField username;
-    @FXML private TextField password;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField password;
+    @FXML
+    private Label errorText;
 
     @FXML
     private void handleLogIn(ActionEvent event) {
 
-//        System.out.println(username.getText());
-//        System.out.println(password.getText());
-
-        User u = new User(username.getText(), password.getText(), true);
-
-        System.out.println(u);
-
-        c.logIn(u);
+        c.logIn(username.getText(), password.getText());
 
         final Response[] res = {null};
 
-
         try {
-
             Task task = new Task<Void>() {
                 @Override
                 public Void call() {
@@ -48,7 +44,7 @@ public class LogInController {
 
                         Response r = c.getLastResponse();
 
-                        if(r != null) {
+                        if (r != null) {
                             res[0] = r;
                             return null;
                         }
@@ -63,22 +59,30 @@ public class LogInController {
                     return null;
                 }
             };
-
             new Thread(task).start();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        while(true) {
-            if(res[0] != null) {
-                createMainWindow(res[0]);
-                ((Node) (event.getSource())).getScene().getWindow().hide();
-                return;
+        while (true) {
+            if (res[0] != null) {
+                if (handleLoginFailure(res[0])) {
+                    errorText.setText("Wrong username or password");
+                    return;
+                } else {
+                    createMainWindow(res[0]);
+                    ((Node) (event.getSource())).getScene().getWindow().hide();
+                    return;
+                }
+
             }
         }
 
+    }
+
+    private boolean handleLoginFailure(Response r) {
+        User u = (User) r.getRespnoseObject();
+        return u.getUsername() == null;
     }
 
     private void createMainWindow(Response r) {

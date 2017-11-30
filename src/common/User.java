@@ -14,6 +14,30 @@ public class User implements Serializable {
 
     }
 
+    public User(String picture, String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo, String wage, String userRole) {
+        this.picture = picture;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.cpr = cpr;
+        this.dob = dob;
+        this.address = address;
+        this.postcode = postcode;
+        this.city = city;
+        this.mobile = mobile;
+        this.landline = landline;
+        this.email = email;
+        this.konto = konto;
+        this.recnumber = recnumber;
+        this.licencePlate = licencePlate;
+        this.prefferedCommunication = prefferedCommunication;
+        this.moreInfo = moreInfo;
+        this.wage = wage;
+        this.userRole = userRole;
+    }
+
 
     public String getPicture() {
         return picture;
