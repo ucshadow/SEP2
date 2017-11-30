@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GUIController {
@@ -39,11 +40,9 @@ public class GUIController {
      * My profile implementation.
      */
     @FXML
-    private TextField profileUsername;
+    private TextField profileUsernameLabel;
     @FXML
     private TextField profilePassword;
-    @FXML
-    private TextField profileCPR;
     @FXML
     private TextField profileUserRole;
     @FXML
@@ -77,16 +76,11 @@ public class GUIController {
     @FXML
     private TextField profilePicture;
     @FXML
-    private TextField profileWage;
-    @FXML
     private TextField profileMoreInfo;
     @FXML
     private Label profileCprLabel;
     @FXML
     private Label profileWageLabel;
-    @FXML
-    private Label profileUsernameLabel;
-
     /**
      * Author: Radu Orleanu
      * <p>
@@ -113,28 +107,31 @@ public class GUIController {
 
     @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
-        String userName = profileUsername.getText();
-        String pass = profilePassword.getText();
-        String cpr = profileCPR.getText();
-        String role = profileUserRole.getText();
-        String firstName = profileFirstName.getText();
-        String secondName = profileSecondName.getText();
-        String lastName = profileLastName.getText();
-        String dob = profileDOB.getText();
-        String address = profileAddress.getText();
-        String postcode = profilePostcode.getText();
-        String city = profileCity.getText();
-        String mobile = profileMobile.getText();
-        String landline = profileLandline.getText();
-        String email = profileEmail.getText();
-        String konto = profileKonto.getText();
-        String recNumber = profileRecNumber.getText();
-        String licence = profileLicencePlate.getText();
-        String preferredcomm = profilePreferredCommunication.getText();
-        String picture = profilePicture.getText();
-        String wage = profileWage.getText();
-        String moreInfo = profileMoreInfo.getText();
-        User u = new User(picture, userName, pass, cpr, role, firstName, secondName, lastName, dob, address, postcode, city, mobile, landline, email, konto, recNumber, licence, preferredcomm, wage, moreInfo);
+        ArrayList<String> newUserInformation = new ArrayList<>();
+        String s0 = profilePicture.getText();
+        String s1 = profileUsernameLabel.getText();
+        String s2 = profilePassword.getText();
+        String s3 = profileFirstName.getText();
+        String s4 = profileSecondName.getText();
+        String s5 = profileLastName.getText();
+        String s6 = profileCprLabel.getText();
+        String s7 = profileDOB.getText();
+        String s8 = profileAddress.getText();
+        String s9 = profilePostcode.getText();
+        String s10 = profileCity.getText();
+        String s11 = profileMobile.getText();
+        String s12 = profileLandline.getText();
+        String s13 = profileEmail.getText();
+        String s14 = profileKonto.getText();
+        String s15 = profileRecNumber.getText();
+        String s16 = profileLicencePlate.getText();
+        String s17 = profilePreferredCommunication.getText();
+        String s18 = profileMoreInfo.getText();
+        String s19 = profileWageLabel.getText();
+        String s20 = profileUserRole.getText();
+        for (int i = 0; i < 21; i++) {
+            newUserInformation.add("s" + i);
+        }
     }
 
     public void setText(ActionEvent event) {

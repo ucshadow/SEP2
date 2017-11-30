@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -13,7 +18,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
     <children>
         <TabPane prefHeight="794.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -144,77 +149,77 @@
                                              <font>
                                                 <Font name="Calibri" size="16.0" />
                                              </font></Label>
-                                          <TextField layoutX="1001.0" layoutY="226.0">
+                                          <TextField fx:id="profileMobile" layoutX="1001.0" layoutY="226.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="1001.0" layoutY="291.0">
+                                          <TextField fx:id="profileLandline" layoutX="1001.0" layoutY="291.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="395.0">
+                                          <TextField fx:id="profileDOB" layoutX="211.0" layoutY="395.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="501.0">
+                                          <TextField fx:id="profileRecNumber" layoutX="211.0" layoutY="501.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="664.0" layoutY="345.0">
+                                          <TextField fx:id="profileCity" layoutX="664.0" layoutY="345.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="664.0" layoutY="395.0">
+                                          <TextField fx:id="profilePostcode" layoutX="664.0" layoutY="395.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="664.0" layoutY="447.0">
+                                          <TextField fx:id="profileMoreInfo" layoutX="664.0" layoutY="447.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="290.0">
+                                          <TextField fx:id="profileSecondName" layoutX="211.0" layoutY="290.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="345.0">
+                                          <TextField fx:id="profileLastName" layoutX="211.0" layoutY="345.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="447.0">
+                                          <TextField fx:id="profileKonto" layoutX="211.0" layoutY="447.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="227.0">
+                                          <TextField fx:id="profileFirstName" layoutX="211.0" layoutY="227.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="211.0" layoutY="557.0">
+                                          <TextField fx:id="profileLicencePlate" layoutX="211.0" layoutY="557.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="664.0" layoutY="226.0">
+                                          <TextField fx:id="profileEmail" layoutX="664.0" layoutY="226.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <TextField layoutX="664.0" layoutY="290.0">
+                                          <TextField fx:id="profileAddress" layoutX="664.0" layoutY="290.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
                                           </TextField>
-                                          <ImageView fitHeight="84.0" fitWidth="113.0" layoutX="146.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="profilePicture" fitHeight="84.0" fitWidth="113.0" layoutX="146.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
                                           <Separator layoutX="6.0" layoutY="134.0" prefHeight="16.0" prefWidth="1271.0" />
                                           <Label layoutX="15.0" layoutY="14.0" text="Account-Information">
                                              <font>
@@ -226,7 +231,7 @@
                                                 <Font name="Calibri" size="16.0" />
                                              </font>
                                           </Label>
-                                          <TextField layoutX="490.0" layoutY="87.0">
+                                          <TextField fx:id="profilePassword" layoutX="490.0" layoutY="87.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
@@ -272,7 +277,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField layoutX="1001.0" layoutY="422.0">
+                                          <TextField fx:id="profilePreferredCommunication" layoutX="1001.0" layoutY="422.0">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font>
@@ -282,6 +287,16 @@
                                                 <Font name="System Bold Italic" size="31.0" />
                                              </font>
                                           </Label>
+                                          <Label layoutX="891.0" layoutY="349.0" text="UserRole">
+                                             <font>
+                                                <Font name="Calibri" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="profileUserRole" layoutX="1001.0" layoutY="345.0">
+                                             <font>
+                                                <Font name="Calibri" size="14.0" />
+                                             </font>
+                                          </TextField>
                                        </children></AnchorPane>
                               </content>
                             </Tab>
