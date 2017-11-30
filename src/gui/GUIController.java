@@ -102,36 +102,35 @@ public class GUIController {
         String pass = passwordFieldCreate.getText();
         String role = userRoleCreate.getText();
         String wage = userWageCreate.getText();
-        c.createUser(name,pass,cpr,role,wage);
+        c.createUser(name, pass, cpr, role, wage);
     }
 
     @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
-        String s0 = profilePicture.getText();
-        String s1 = profileUsernameLabel.getText();
-        String s2 = profilePassword.getText();
-        String s3 = profileFirstName.getText();
-        String s4 = profileSecondName.getText();
-        String s5 = profileLastName.getText();
-        String s6 = profileCprLabel.getText();
-        String s7 = profileDOB.getText();
-        String s8 = profileAddress.getText();
-        String s9 = profilePostcode.getText();
-        String s10 = profileCity.getText();
-        String s11 = profileMobile.getText();
-        String s12 = profileLandline.getText();
-        String s13 = profileEmail.getText();
-        String s14 = profileKonto.getText();
-        String s15 = profileRecNumber.getText();
-        String s16 = profileLicencePlate.getText();
-        String s17 = profilePreferredCommunication.getText();
-        String s18 = profileMoreInfo.getText();
-        String s19 = profileWageLabel.getText();
-        String s20 = profileUserRole.getText();
-        for (int i = 0; i < 21; i++) {
-            newUserInformation.add("s" + i);
-        }
+
+        newUserInformation.add(profilePicture.getText());
+        newUserInformation.add(profileUsernameLabel.getText());
+        newUserInformation.add(profilePassword.getText());
+        newUserInformation.add(profileFirstName.getText());
+        newUserInformation.add(profileSecondName.getText());
+        newUserInformation.add(profileLastName.getText());
+        newUserInformation.add(profileCprLabel.getText());
+        newUserInformation.add(profileDOB.getText());
+        newUserInformation.add(profileAddress.getText());
+        newUserInformation.add(profilePostcode.getText());
+        newUserInformation.add(profileCity.getText());
+        newUserInformation.add(profileMobile.getText());
+        newUserInformation.add(profileLandline.getText());
+        newUserInformation.add(profileEmail.getText());
+        newUserInformation.add(profileKonto.getText());
+        newUserInformation.add(profileRecNumber.getText());
+        newUserInformation.add(profileLicencePlate.getText());
+        newUserInformation.add(profilePreferredCommunication.getText());
+        newUserInformation.add(profileMoreInfo.getText());
+        newUserInformation.add(profileWageLabel.getText());
+        newUserInformation.add(profileUserRole.getText());
+
         c.changeUserInformation(newUserInformation);
     }
 
