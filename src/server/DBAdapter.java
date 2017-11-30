@@ -10,59 +10,134 @@ import java.util.Calendar;
 
 public class DBAdapter implements IDBAdapter {
     private Calendar calendar;
-    //TODO if set is not found return empty array
 
-    public DBAdapter() {
+    DBAdapter() {
         calendar = Calendar.getInstance();
     }
 
-//    @Override
-//    public boolean checkUsername(String username) {
-//        ArrayList temp = DBHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
-//        return temp.size() >= 1;
-//    }
 
-    //    @Override
-//    public String getUserPassword(String username) {
-//        if (checkUsername(username)) {
-//            String sql = "SELECT password from UserLogIn WHERE username = '" + username + "';";
-//            ArrayList temp = DBHandler.getResultSet(sql);
-//            return (String) temp.get(0);
-//        }
-//        return null;
-//    }
     @Override
-    public void changeUserInformation(User user) {
-        DBHandler.executeStatements("UPDATE Employee SET passEmp = '" + user.getPassword() +
-                "', firstName = '" + user.getFirstName() +
-                "', secondName = '" + user.getSecondName() +
-                "', familyName = '" + user.getLastName() +
-                "', dateOfBirth = '" + user.getDob() +
-                "', address = '" + user.getAddress() +
-                "', postcode = '" + user.getPostcode() +
-                "', city = '" + user.getCity() +
-                "', mobile = '" + user.getMobile() +
-                "', landline = '" + user.getLandline() +
-                "', email = '" + user.getEmail() +
-                "', konto = '" + user.getKonto() +
-                "', regNumber = '" + user.getRecnumber() +
-                "', licencePlate = '" + user.getLicencePlate() +
-                "', preferredCommunication = '" + user.getPrefferedCommunication() +
-                "', moreInfo = '" + user.getMoreInfo() + "' where cpr = '" + user.getCpr() + "'");
+    public void createAccount(User user) {
+        String sql = "INSERT INTO UserLogIn VALUES (" + "'" + user.getCpr() + "'," + "'" + user.getUsername() + "'," + "'" + user.getPassword() + "'," + "'" + user.getUserRole() + "'" + ")";
+        DBHandler.executeStatements(sql);
+        sql = " INSERT INTO wageperhour (wage) VALUES ('" + user.getWage() + "') where employeecpr='" + user.getCpr() + "' ;";
+        DBHandler.executeStatements(sql);
     }
 
     @Override
-    public void createDepartment(Department department) {
-        String sql = "INSERT INTO department VALUES ('" + department.getdNumber().toLowerCase() + "','" + department.getdName() + "','" + department.getdLocation() + "','" + department.getdManager() + "');";
+    public void editAccount(User user) {
+        String sql = "update userlogin set username = '" + user.getUsername() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+    }
+
+    @Override
+    public void removeAccount(User user) {
+        String sql = "DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+    }
+
+    //    @Override
+    //    public boolean checkUsername(String username) {
+    //        ArrayList temp = DBHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
+    //        return temp.size() >= 1;
+    //    }
+
+    //    @Override
+    //    public String getUserPassword(String username) {
+    //        if (checkUsername(username)) {
+    //            String sql = "SELECT password from UserLogIn WHERE username = '" + username + "';";
+    //            ArrayList temp = DBHandler.getResultSet(sql);
+    //            return (String) temp.get(0);
+    //        }
+    //        return null;
+    //    }
+
+    @Override
+    public void changeUserInformation(User user) {
+        String sql = "Update userlogin set pass ='" + user.getPassword() + "' where cpr ='" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+        sql = "Update communication set mobile ='" + user.getMobile() + "',landline='" + user.getLandline() + "',email='" + user.getEmail() + "', preferredCommunication ='" + user.getPrefferedCommunication() + "' where cpr ='" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+        sql = "update bankinfodk set konto ='" + user.getKonto() + "', regnumber ='" + user.getRecnumber() + "' where cpr ='" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+        sql = "Insert into city values ('" + user.getPostcode() + "','" + user.getCity() + "');";
+        DBHandler.executeStatements(sql);
+        sql = "Update Employee set picture ='" + user.getPicture() + "',dataofbirth='" + user.getDob() + "',address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenseplate='" +
+                user.getLicencePlate() + "',moreinfo ='" + user.getMoreInfo() + "',firstname ='" + user.getFirstName() + "',secondName ='" + user.getSecondName() + "',familyName='" + user.getLastName() + "' where cpr ='" + user.getCpr() + "';";
         DBHandler.executeStatements(sql);
 
     }
 
     @Override
+    public void changeWagePerHours(User user) {
+        String sql = "Update wagePerHour set wage ='" + user.getWage() + "' where employeecpr ='" + user.getCpr() + "';";
+        DBHandler.executeStatements(sql);
+    }
+
+    @Override
+    public String getWagePerHour(User user) {
+        String sql = "Select wage from wagePerHour where employeecpr = '" + user.getCpr() + "';";
+        ArrayList<String> temp = DBHandler.getResultSet(sql);
+        String forReturn = null;
+        try {
+            forReturn = temp.get(0);
+        } catch (Exception e) {
+            //Do nothing
+        }
+        return forReturn;
+    }
+
+    @Override
+    public User logIn(User user) {
+        String sql = "SELECT * from UserLogIn WHERE Username = '" + user.getUsername() + "' and pass = '" +
+                user.getPassword() + "';";
+        ArrayList temp = DBHandler.getSingleRow(sql);
+        if (temp.isEmpty()) {
+            return new User();
+        }
+        String sql2 = "REFRESH MATERIALIZED VIEW employeeinformation;";
+        DBHandler.executeStatements(sql2);
+        sql2 = "SELECT * from employeeinformation WHERE cpr = '" + temp.get(0) + "';";
+        ArrayList<String> arrayList = DBHandler.getSingleRow(sql2);
+        int i = 0;
+        User user1 = new User(arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++));
+//        user1.setPicture(arrayList.get(i++));
+//        user1.setUsername(arrayList.get(i++));
+//        user1.setPassword(arrayList.get(i++));
+//        user1.setFirstName(arrayList.get(i++));
+//        user1.setSecondName(arrayList.get(i++));
+//        user1.setLastName(arrayList.get(i++));
+//        user1.setCpr(arrayList.get(i++));
+//        user1.setDob(arrayList.get(i++));
+//        user1.setAddress(arrayList.get(i++));
+//        user1.setPostcode(arrayList.get(i++));
+//        user1.setCity(arrayList.get(i++));
+//        user1.setMobile(arrayList.get(i++));
+//        user1.setLandline(arrayList.get(i++));
+//        user1.setEmail(arrayList.get(i++));
+//        user1.setKonto(arrayList.get(i++));
+//        user1.setRecnumber(arrayList.get(i++));
+//        user1.setLicencePlate(arrayList.get(i++));
+//        user1.setPrefferedCommunication(arrayList.get(i++));
+//        user1.setMoreInfo(arrayList.get(i++));
+//        user1.setWage(arrayList.get(i++));
+//        user1.setUserRole(arrayList.get(i++));
+        return user1;
+    }
+
+    //TODO d city
+    @Override
+    public void createDepartment(Department department) {
+        String sql = "Insert into city values ('" + department.getdLocation() + "','" + null + "');";
+        DBHandler.executeStatements(sql);
+        sql = "INSERT INTO department VALUES ('" + department.getdNumber().toLowerCase() + "','" + department.getdName() + "','" + department.getdManager() + "','" + department.getdLocation() + "','now()');";
+        DBHandler.executeStatements(sql);
+    }
+
+    @Override
     public void editDepartment(Department department, Department oldDepartment) {
-        String sql = "Update department set dno ='" + department.getdNumber().toLowerCase() + "', dname ='" + department.getdName() + "',dlocation = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
+        String sql = "Update department set dno ='" + department.getdNumber().toLowerCase() + "', dname ='" + department.getdName() + "',dpostcode = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
                 "' where dno = '" + oldDepartment.getdNumber().toLowerCase() + "';";
-        System.out.println(sql);
         DBHandler.executeStatements(sql);
     }
 
@@ -88,28 +163,7 @@ public class DBAdapter implements IDBAdapter {
 //        return temp;
 //    }
 
-    @Override
-    public void createAccount(User user) {
-        DBHandler.executeStatements("INSERT INTO UserLogIn VALUES (" +
-                "'" + user.getUsername() + "'," +
-                "'" + user.getCpr() + "'," +
-                "'" + user.getPassword() + "'," +
-                "'" + user.getUserRole() + "'" +
-                ")");
-        String sql = " INSERT INTO wageperhour VALUES ('" + user.getCpr() + "','" + user.getWage() + "');";
-        DBHandler.executeStatements(sql);
-    }
-
-    @Override
-    public void removeAccount(User user) {
-        DBHandler.executeStatements("DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';");
-    }
-
-    @Override
-    public void editAccount(User user) {
-        DBHandler.executeStatements("update userlogin set username = '" + user.getUsername() + "', cpr = '" + user.getCpr() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
-    }
-
+    //TODO DStartDate
     @Override
     public ArrayList<Department> getAllDepartments() {
         String sql = "Select * from department;";
@@ -142,25 +196,6 @@ public class DBAdapter implements IDBAdapter {
         return workingSchedules;
     }
 
-    @Override
-    public String getWagePerHour(User user) {
-        String sql = "Select wage from wagePerHour where employeecpr = '" + user.getCpr() + "';";
-        ArrayList<String> temp = DBHandler.getResultSet(sql);
-        String forReturn = null;
-        try {
-            forReturn = temp.get(0);
-        } catch (Exception e) {
-            //Do nothing
-            System.out.println(e.getMessage());
-        }
-        return forReturn;
-    }
-
-    @Override
-    public void changeWagePerHours(User user) {
-        String sql = "Update wagePerHour set wage ='" + user.getWage() + "' where employeecpr ='" + user.getCpr() + "';";
-        DBHandler.executeStatements(sql);
-    }
 
     @Override
     public ArrayList<User> getWorkingColleagues(User user) {
@@ -168,15 +203,11 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<String> forReturn = DBHandler.getResultSet(sql);
         ArrayList<User> users = null;
         for (String item2 : forReturn) {
-            sql = "SELECT\n" +
-                    "  picture,\n" +
-                    "  firstname,\n" +
-                    "  familyname,\n" +
-                    "  mobile,\n" +
-                    "  email\n" +
-                    "FROM employee\n" +
-                    "  Left OUTER JOIN workingSchedule ON (employee.cpr = workingschedule.employecpr)\n" +
-                    "WHERE workingschedule.employecpr IS DISTINCT FROM'" + user.getCpr() + "' AND workingSchedule.dno = '" + item2 + "';";
+            sql = "REFRESH MATERIALIZED VIEW workingcolleagues;";
+            DBHandler.executeStatements(sql);
+            sql = "SELECT * from workingcolleagues " +
+                    "WHERE cpr IS DISTINCT FROM'"
+                    + user.getCpr() + "' AND dno = '" + item2 + "';";
             ArrayList<String[]> temp = DBHandler.getAllRows(sql);
             users = new ArrayList<>();
             for (String[] item : temp) {
@@ -195,14 +226,14 @@ public class DBAdapter implements IDBAdapter {
     @Override
     public ArrayList<String> getWorkingDepartments(User user) {
         String sql = "SELECT DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
-        System.out.println(sql);
-        ArrayList<String> forReturn = DBHandler.getResultSet(sql);
-        return forReturn;
+        return DBHandler.getResultSet(sql);
     }
 
     @Override
     public ArrayList<User> getAllColleagues(User user) {
-        String sql = "SELECT picture, firstname,familyname,mobile,email from employee where cpr is DISTINCT FROM '" + user.getCpr() + "';";
+        String sql = "REFRESH MATERIALIZED VIEW allcolleagues;";
+        DBHandler.executeStatements(sql);
+        sql = "SELECT * from allcolleagues where cpr is DISTINCT FROM '" + user.getCpr() + "';";
         System.out.println(sql);
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
@@ -219,41 +250,6 @@ public class DBAdapter implements IDBAdapter {
         return users;
     }
 
-    @Override
-    public User logIn(User user) {
-        String sql = "SELECT * from UserLogIn WHERE Username = '" + user.getUsername() + "' and pass = '" +
-                user.getPassword() + "';";
-        ArrayList temp = DBHandler.getSingleRow(sql);
-        if (temp.isEmpty()) {
-            return new User();
-        }
-        String sql2 = "SELECT * from Employee WHERE cpr = '" + temp.get(1) + "';";
-        ArrayList<String> arrayList = DBHandler.getSingleRow(sql2);
-        User user1 = new User();
-        int i = 0;
-        user1.setPicture(arrayList.get(i++));
-        user1.setUsername(arrayList.get(i++));
-        user1.setPassword(arrayList.get(i++));
-        user1.setFirstName(arrayList.get(i++));
-        user1.setSecondName(arrayList.get(i++));
-        user1.setLastName(arrayList.get(i++));
-        user1.setCpr(arrayList.get(i++));
-        user1.setDob(arrayList.get(i++));
-        user1.setAddress(arrayList.get(i++));
-        user1.setPostcode(arrayList.get(i++));
-        user1.setCity(arrayList.get(i++));
-        user1.setMobile(arrayList.get(i++));
-        user1.setLandline(arrayList.get(i++));
-        user1.setEmail(arrayList.get(i++));
-        user1.setKonto(arrayList.get(i++));
-        user1.setRecnumber(arrayList.get(i++));
-        user1.setLicencePlate(arrayList.get(i++));
-        user1.setPrefferedCommunication(arrayList.get(i++));
-        user1.setMoreInfo(arrayList.get(i++));
-        user1.setWage(arrayList.get(i++));
-        user1.setUserRole(arrayList.get(i++));
-        return user1;
-    }
 
 //    public static void main(String[] args) {
 //        User user = new User("9087654321", "3333.20");

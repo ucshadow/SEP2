@@ -1,15 +1,7 @@
 CREATE SCHEMA sep2;
 
-
-
-
 CREATE DOMAIN cpr_Domain CHAR(10);
 CREATE DOMAIN dno_Domain CHAR(4);
-
-
-
-
-
 
 
 CREATE TABLE UserLogIn (
@@ -30,35 +22,28 @@ ALTER TABLE UserLogIn
   ADD PRIMARY KEY (Username, cpr);
 
 
-
-
-
-
-
-
-
 CREATE TABLE Employee (
-  picture                VARCHAR,
-  username               VARCHAR,
-  password               VARCHAR,
-  firstName              VARCHAR(25),
-  secondName             VARCHAR(25),
-  familyName             VARCHAR(25),
-  cpr                    CPR_DOMAIN PRIMARY KEY,
-  dateOfBirth            DATE,
-  address                VARCHAR(25),
-  postcode               VARCHAR(10),
-  city                   VARCHAR(25),
-  mobile                 CHAR(8),
-  landline               CHAR(8),
-  email                  VARCHAR,
-  konto                  CHAR(4),
-  regNumber              CHAR(10),
-  licencePlate           VARCHAR,
-  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email')),
-  moreInfo               VARCHAR,
-  wage                   VARCHAR,
-  userRole               VARCHAR
+  picture      VARCHAR,
+  --   username     VARCHAR,
+  --   password     VARCHAR,
+  --   firstName    VARCHAR(25),
+  --   secondName   VARCHAR(25),
+  --   familyName   VARCHAR(25),
+  cpr          CPR_DOMAIN PRIMARY KEY,
+  dateOfBirth  DATE,
+  address      VARCHAR(25),
+  postcode     VARCHAR(10),
+  --   city                   VARCHAR(25),
+  --   mobile                 CHAR(8),
+  --   landline               CHAR(8),
+  --   email                  VARCHAR,
+  --   konto        CHAR(4),
+  --   regNumber    CHAR(10),
+  licencePlate VARCHAR,
+  --   preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email')),
+  moreInfo     VARCHAR
+  --   wage                   VARCHAR,
+  --   userRole               VARCHAR
 
 
 );
@@ -66,7 +51,32 @@ ALTER TABLE Employee
   RENAME COLUMN password TO passEmp;
 
 
+CREATE TABLE names (
+  cpr        CPR_DOMAIN PRIMARY KEY,
+  firstName  VARCHAR(25),
+  secondName VARCHAR(25),
+  familyName VARCHAR(25)
+)
+CREATE TABLE city (
+  postcode VARCHAR(10) PRIMARY KEY,
+  city     VARCHAR(25)
+);
 
+CREATE TABLE communication (
+  cpr                    CPR_DOMAIN PRIMARY KEY,
+  mobile                 CHAR(8),
+  landline               CHAR(8),
+  email                  VARCHAR,
+  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))
+
+);
+
+CREATE TABLE bankInfo (
+  cpr       CPR_DOMAIN PRIMARY KEY,
+  konto     CHAR(4),
+  regNumber CHAR(10)
+
+);
 
 
 CREATE TABLE department (
@@ -80,17 +90,6 @@ ALTER TABLE department
   ADD PRIMARY KEY (dno);
 
 
-
-
-
-
-
-
-
-
-
-
-
 CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
   dno        DNO_DOMAIN,
@@ -101,20 +100,10 @@ CREATE TABLE workingSchedule (
 );
 
 
-
-
-
-
 CREATE TABLE wagePerHour (
-  employeeCPR CPR_DOMAIN PRIMARY KEY ,
+  employeeCPR CPR_DOMAIN PRIMARY KEY,
   wage        NUMERIC(6, 2)
 );
-
-
-
-
-
-
 
 
 --Functions
@@ -143,9 +132,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-
-
 CREATE OR REPLACE FUNCTION addWage()
   RETURNS TRIGGER AS $$
 BEGIN
@@ -159,10 +145,6 @@ BEGIN
   RETURN old;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
-
 
 
 --Trigger function created to update password upon change from employee table to userlogin table
@@ -180,9 +162,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --FUNCTION END
-
-
-
 
 
 -- TRIGGERS
