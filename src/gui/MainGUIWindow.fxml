@@ -41,10 +41,10 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
                                                     <children>
-                                                        <TextField fx:id="deptNoCreate" layoutX="50.0" layoutY="40.0" promptText="DeptNo" />
-                                                        <TextField fx:id="deptNameCreate" layoutX="50.0" layoutY="73.0" promptText="DeptName" />
-                                                        <TextField fx:id="deptLocationCreate" layoutX="50.0" layoutY="107.0" promptText="DeptLocation" />
-                                                        <TextField fx:id="deptManagerCreate" layoutX="50.0" layoutY="143.0" promptText="DeptManager" />
+                                                        <TextField fx:id="departmentNumberCreate" layoutX="50.0" layoutY="40.0" promptText="DeptNo" />
+                                                        <TextField fx:id="departmentNameCreate" layoutX="50.0" layoutY="73.0" promptText="DeptName" />
+                                                        <TextField fx:id="departmentLocationCreate" layoutX="50.0" layoutY="107.0" promptText="DeptLocation" />
+                                                        <TextField fx:id="departmentManagerCreate" layoutX="50.0" layoutY="143.0" promptText="DeptManager" />
                                                         <TableView layoutX="250.0" layoutY="22.0" prefHeight="313.0" prefWidth="350.0">
                                                             <columns>
                                                                 <TableColumn prefWidth="75.0" text="DeptNo" />

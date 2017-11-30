@@ -4,10 +4,8 @@ import client.Controller;
 import common.Department;
 import common.Response;
 import common.User;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -35,16 +33,6 @@ public class GUIController {
     @FXML
     private TextField userWageCreate;
 
-    @FXML
-    private TextField departmentNumberCreate;
-    @FXML
-    private TextField departmentNameCreate;
-    @FXML
-    private TextField departmentLocationCreate;
-    @FXML
-    private TextField departmentManagerCreate;
-
-//    Controller c = new Controller();
     /**
      * Author: Yusuf Farah
      * <p>
@@ -99,6 +87,20 @@ public class GUIController {
     @FXML
     private Label profileUsernameLabel;
 
+    /**
+     * Author: Radu Orleanu
+     * <p>
+     * Create user functionality for admin for creating departments.
+     */
+    @FXML
+    private TextField departmentNumberCreate;
+    @FXML
+    private TextField departmentNameCreate;
+    @FXML
+    private TextField departmentLocationCreate;
+    @FXML
+    private TextField departmentManagerCreate;
+
     @FXML
     private void handleCreateUserAdminPanel(ActionEvent event) {
         String name = userNameFieldCreate.getText();
@@ -145,7 +147,13 @@ public class GUIController {
     }
 
     @FXML
-    public void createDept() {
+    private void createDept(ActionEvent event) {
+        String dNumber = departmentNumberCreate.getText();
+        String dName = departmentNameCreate.getText();
+        String dLocation = departmentLocationCreate.getText();
+        String dManager = departmentManagerCreate.getText();
+        Department d = new Department(dNumber, dName, dLocation, dManager);
+        c.createDepartment(d);
     }
 
     public void setUser(Response x) {
