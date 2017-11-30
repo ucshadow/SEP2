@@ -8,8 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-import javax.swing.text.html.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -41,11 +42,11 @@ public class GUIController {
      * My profile implementation.
      */
     @FXML
-    private TextField profileUsernameLabel;
+    private Label profileUsernameLabel;
     @FXML
     private TextField profilePassword;
     @FXML
-    private Label profileUserRole;
+    private TextField profileUserRole;
     @FXML
     private TextField profileFirstName;
     @FXML
@@ -109,6 +110,7 @@ public class GUIController {
     @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
+
         newUserInformation.add("");
         newUserInformation.add(profileUsernameLabel.getText());
         newUserInformation.add(profilePassword.getText());
@@ -152,7 +154,15 @@ public class GUIController {
         c.createDepartment(dNumber, dName, dLocation, dManager);
     }
 
-    //TODO userrole  to be changed to LABEL
+//    public void setUser(Response x) {
+//        System.out.println(x.getRespnoseObject());
+//        user = (User) x.getRespnoseObject();
+//        System.out.println(user);
+//        System.out.println(x);
+////        Image i = new Image(user.getPicture());
+////        profilePicture.setImage(i);
+//    }
+
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
@@ -177,6 +187,9 @@ public class GUIController {
         profileMoreInfo.setText(user.getMoreInfo());
         profileWageLabel.setText(user.getWage());
         profileUserRole.setText(user.getUserRole());
+
+        Image i = new Image("https://cdn2.iconfinder.com/data/icons/avatar-2/512/laly_face_woman-256.png");
+        profilePicture.setImage(i);
 
         System.out.println(user);
         System.out.println(x);
