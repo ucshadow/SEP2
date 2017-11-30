@@ -111,7 +111,7 @@ public class GUIController {
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
 
-        newUserInformation.add(profilePicture.getImage().getUrl());
+        newUserInformation.add("");
         newUserInformation.add(profileUsernameLabel.getText());
         newUserInformation.add(profilePassword.getText());
         newUserInformation.add(profileFirstName.getText());
@@ -166,6 +166,9 @@ public class GUIController {
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
+        if(user.getPicture().equals("")) {
+            user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
+        }
         Image i = new Image(user.getPicture());
         profilePicture.setImage(i);
         profileUsernameLabel.setText(user.getUsername());
