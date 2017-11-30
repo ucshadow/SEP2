@@ -9,7 +9,7 @@ public class TTT {
                 "MomoLina", "1413421213", "Admin", "1234",
                 "","","","","","","",""
                 ,"","","","","","","","");
-        c.createUser(u);
+//        c.createUser(u);
 //        User n = new User("James", "Asd12345678", "1212121213", "Admin");
 //
 //

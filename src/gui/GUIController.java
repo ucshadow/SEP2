@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import javax.swing.text.html.ImageView;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -44,7 +45,7 @@ public class GUIController {
     @FXML
     private TextField profilePassword;
     @FXML
-    private TextField profileUserRole;
+    private Label profileUserRole;
     @FXML
     private TextField profileFirstName;
     @FXML
@@ -74,7 +75,7 @@ public class GUIController {
     @FXML
     private TextField profilePreferredCommunication;
     @FXML
-    private TextField profilePicture;
+    private ImageView profilePicture;
     @FXML
     private TextField profileMoreInfo;
     @FXML
@@ -108,8 +109,7 @@ public class GUIController {
     @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
-
-        newUserInformation.add(profilePicture.getText());
+        newUserInformation.add("");
         newUserInformation.add(profileUsernameLabel.getText());
         newUserInformation.add(profilePassword.getText());
         newUserInformation.add(profileFirstName.getText());
@@ -152,9 +152,32 @@ public class GUIController {
         c.createDepartment(dNumber, dName, dLocation, dManager);
     }
 
+    //TODO userrole  to be changed to LABEL
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
+//        profilePicture
+        profileUsernameLabel.setText(user.getUsername());
+        profilePassword.setText(user.getPassword());
+        profileFirstName.setText(user.getFirstName());
+        profileSecondName.setText(user.getSecondName());
+        profileLastName.setText(user.getLastName());
+        profileCprLabel.setText(user.getCpr());
+        profileDOB.setText(user.getDob());
+        profileAddress.setText(user.getAddress());
+        profilePostcode.setText(user.getPostcode());
+        profileCity.setText(user.getCity());
+        profileMobile.setText(user.getMobile());
+        profileLandline.setText(user.getLandline());
+        profileEmail.setText(user.getEmail());
+        profileKonto.setText(user.getKonto());
+        profileRecNumber.setText(user.getRecnumber());
+        profileLicencePlate.setText(user.getLicencePlate());
+        profilePreferredCommunication.setText(user.getPrefferedCommunication());
+        profileMoreInfo.setText(user.getMoreInfo());
+        profileWageLabel.setText(user.getWage());
+        profileUserRole.setText(user.getUserRole());
+
         System.out.println(user);
         System.out.println(x);
     }

@@ -245,7 +245,6 @@ public class DBAdapter implements IDBAdapter {
         user1.setMobile(arrayList.get(i++));
         user1.setLandline(arrayList.get(i++));
         user1.setEmail(arrayList.get(i++));
-        user1.setEmail(arrayList.get(i++));
         user1.setKonto(arrayList.get(i++));
         user1.setRecnumber(arrayList.get(i++));
         user1.setLicencePlate(arrayList.get(i++));

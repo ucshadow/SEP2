@@ -76,7 +76,6 @@ public class Controller {
         user.setMobile(arrayList.get(i++));
         user.setLandline(arrayList.get(i++));
         user.setEmail(arrayList.get(i++));
-        user.setEmail(arrayList.get(i++));
         user.setKonto(arrayList.get(i++));
         user.setRecnumber(arrayList.get(i++));
         user.setLicencePlate(arrayList.get(i++));
