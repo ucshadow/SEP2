@@ -93,6 +93,7 @@ public class LogInController {
             GUIController controller = fxmlLoader.getController();
             controller.setUser(r);
             controller.setClientController(c);
+            
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Manager");

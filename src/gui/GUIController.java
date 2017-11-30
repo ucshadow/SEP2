@@ -46,7 +46,7 @@ public class GUIController {
     @FXML
     private TextField profilePassword;
     @FXML
-    private TextField profileUserRole;
+    private Label profileUserRole;
     @FXML
     private TextField profileFirstName;
     @FXML
@@ -111,7 +111,7 @@ public class GUIController {
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
 
-        newUserInformation.add("");
+        newUserInformation.add(profilePicture.getImage().getUrl());
         newUserInformation.add(profileUsernameLabel.getText());
         newUserInformation.add(profilePassword.getText());
         newUserInformation.add(profileFirstName.getText());
@@ -136,14 +136,14 @@ public class GUIController {
         c.changeUserInformation(newUserInformation);
     }
 
-    public void setText(ActionEvent event) {
-        Random rand = new Random();
-        int n = rand.nextInt(10000 + 1);
-        String str = Integer.toString(n);
-        this.profileCprLabel.setText("0987654321");
-        this.profileWageLabel.setText(str);
-        this.profileUsernameLabel.setText("Yusuf AJ Farah");
-    }
+//    public void setText(ActionEvent event) {
+//        Random rand = new Random();
+//        int n = rand.nextInt(10000 + 1);
+//        String str = Integer.toString(n);
+//        this.profileCprLabel.setText("0987654321");
+//        this.profileWageLabel.setText(str);
+//        this.profileUsernameLabel.setText("Yusuf AJ Farah");
+//    }
 
     @FXML
     private void createDept(ActionEvent event) {
@@ -166,7 +166,8 @@ public class GUIController {
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
-//        profilePicture
+        Image i = new Image(user.getPicture());
+        profilePicture.setImage(i);
         profileUsernameLabel.setText(user.getUsername());
         profilePassword.setText(user.getPassword());
         profileFirstName.setText(user.getFirstName());
@@ -188,8 +189,6 @@ public class GUIController {
         profileWageLabel.setText(user.getWage());
         profileUserRole.setText(user.getUserRole());
 
-        Image i = new Image("https://cdn2.iconfinder.com/data/icons/avatar-2/512/laly_face_woman-256.png");
-        profilePicture.setImage(i);
 
         System.out.println(user);
         System.out.println(x);
