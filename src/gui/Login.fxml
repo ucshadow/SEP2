@@ -31,7 +31,7 @@
                         <Font size="27.0" />
                     </font>
                 </Label>
-            <Label fx:id="errorText" layoutX="143.0" layoutY="300.0" prefHeight="17.0" prefWidth="316.0" text="Label" textFill="#da0f0f" />
+            <Label fx:id="errorText" layoutX="143.0" layoutY="300.0" prefHeight="17.0" prefWidth="316.0" textAlignment="CENTER" textFill="#da0f0f" />
             </children>
         </AnchorPane>
     </children>

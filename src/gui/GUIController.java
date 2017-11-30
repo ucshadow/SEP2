@@ -102,7 +102,7 @@ public class GUIController {
         String pass = passwordFieldCreate.getText();
         String role = userRoleCreate.getText();
         String wage = userWageCreate.getText();
-        User u = new User(name, pass, cpr, role, wage);
+        c.createUser(name,pass,cpr,role,wage);
     }
 
     @FXML
@@ -132,6 +132,7 @@ public class GUIController {
         for (int i = 0; i < 21; i++) {
             newUserInformation.add("s" + i);
         }
+        c.changeUserInformation(newUserInformation);
     }
 
     public void setText(ActionEvent event) {
@@ -149,8 +150,7 @@ public class GUIController {
         String dName = departmentNameCreate.getText();
         String dLocation = departmentLocationCreate.getText();
         String dManager = departmentManagerCreate.getText();
-        Department d = new Department(dNumber, dName, dLocation, dManager);
-        c.createDepartment(d);
+        c.createDepartment(dNumber, dName, dLocation, dManager);
     }
 
     public void setUser(Response x) {
