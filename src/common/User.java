@@ -10,65 +10,10 @@ public class User implements Serializable {
     /**
      * for inserting a new user in the UserLogIn
      **/
-    public User(String username, String password, String cpr, String userRole) {
-        this.username = username;
-        this.password = password;
-        this.cpr = cpr;
-        this.userRole = userRole;
+    public User() {
+
     }
 
-    public User(String picture, String firstName, String lastName, String mobile, String email, boolean a) {
-        this.picture = picture;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobile = mobile;
-        this.email = email;
-    }
-
-    public User(String username, String password, String cpr, String userRole, String wage) {
-        this.username = username;
-        this.password = password;
-        this.cpr = cpr;
-        this.userRole = userRole;
-        this.wage = wage;
-    }
-
-    public User(String cpr, String wage) {
-        this.cpr = cpr;
-        this.wage = wage;
-    }
-
-    public User(String username, String password, boolean logIn) {
-        this.username = username;
-        this.password = password;
-    }
-
-    /**
-     * for GUI employee insertion
-     **/
-    public User(String picture, String username, String password, String firstName, String secondName, String lastName, String cpr, String dob, String address, String postcode, String city, String mobile, String landline, String email, String konto, String recnumber, String licencePlate, String prefferedCommunication, String moreInfo, String wage, String userRole) {
-        this.picture = picture;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-        this.cpr = cpr;
-        this.dob = dob;
-        this.address = address;
-        this.postcode = postcode;
-        this.city = city;
-        this.mobile = mobile;
-        this.landline = landline;
-        this.email = email;
-        this.konto = konto;
-        this.recnumber = recnumber;
-        this.licencePlate = licencePlate;
-        this.prefferedCommunication = prefferedCommunication;
-        this.moreInfo = moreInfo;
-        this.wage = wage;
-        this.userRole = userRole;
-    }
 
     public String getPicture() {
         return picture;

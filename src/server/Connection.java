@@ -86,10 +86,19 @@ public class Connection implements Runnable, OurObserver {
                         break;
                     case "changewageperhour":
                         adapter.changeWagePerHours((User) s.getRequestObject());
+                        break;
                 }
             } catch (Exception e) {
+                try {
+                    outToClient.close();
+                    inFromClient.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 server.removeObserver(this);
-                System.out.println(e.getMessage());
+                break;
+
+
             }
         }
     }

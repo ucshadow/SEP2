@@ -18,8 +18,8 @@ FROM UserLogIn;
 SELECT *
 FROM Employee;
 SELECT *
-FROM department
-WHERE dno = 'd001';
+FROM department;
+
 UPDATE department
 SET dno = 'd001', dname = 'Ice', dlocation = 'London', dmanager = '1212121213'
 WHERE dno = 'D001';

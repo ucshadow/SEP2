@@ -16,30 +16,22 @@ public class DBAdapter implements IDBAdapter {
         calendar = Calendar.getInstance();
     }
 
-    /**
-     * @param username
-     * @return true if username exists.
-     */
-    @Override
-    public boolean checkUsername(String username) {
-        ArrayList temp = DBHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
-        return temp.size() >= 1;
-    }
+//    @Override
+//    public boolean checkUsername(String username) {
+//        ArrayList temp = DBHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
+//        return temp.size() >= 1;
+//    }
 
-    /**
-     * @param username
-     * @return user after checkUsername returns true to user.
-     */
+    //    @Override
+//    public String getUserPassword(String username) {
+//        if (checkUsername(username)) {
+//            String sql = "SELECT password from UserLogIn WHERE username = '" + username + "';";
+//            ArrayList temp = DBHandler.getResultSet(sql);
+//            return (String) temp.get(0);
+//        }
+//        return null;
+//    }
     @Override
-    public String getUserPassword(String username) {
-        if (checkUsername(username)) {
-            String sql = "SELECT password from UserLogIn WHERE username = '" + username + "';";
-            ArrayList temp = DBHandler.getResultSet(sql);
-            return (String) temp.get(0);
-        }
-        return null;
-    }
-
     public void changeUserInformation(User user) {
         DBHandler.executeStatements("UPDATE Employee SET passEmp = '" + user.getPassword() +
                 "', firstName = '" + user.getFirstName() +
@@ -90,11 +82,11 @@ public class DBAdapter implements IDBAdapter {
         DBHandler.executeStatements(sql);
     }
 
-    private ArrayList getUserByCPR(String CPR) {
-        String sql = "SELECT * from UserLogIn WHERE CPR = '" + CPR + "';";
-        ArrayList temp = DBHandler.getSingleRow(sql);
-        return temp;
-    }
+//    private ArrayList getUserByCPR(String CPR) {
+//        String sql = "SELECT * from UserLogIn WHERE CPR = '" + CPR + "';";
+//        ArrayList temp = DBHandler.getSingleRow(sql);
+//        return temp;
+//    }
 
     @Override
     public void createAccount(User user) {
@@ -113,6 +105,7 @@ public class DBAdapter implements IDBAdapter {
         DBHandler.executeStatements("DELETE FROM userlogin WHERE cpr = '" + user.getCpr() + "';");
     }
 
+    @Override
     public void editAccount(User user) {
         DBHandler.executeStatements("update userlogin set username = '" + user.getUsername() + "', cpr = '" + user.getCpr() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';");
     }
@@ -187,7 +180,12 @@ public class DBAdapter implements IDBAdapter {
             ArrayList<String[]> temp = DBHandler.getAllRows(sql);
             users = new ArrayList<>();
             for (String[] item : temp) {
-                User user1 = new User(item[0], item[1], item[2], item[3], item[4]);
+                User user1 = new User();
+                user1.setPicture(item[0]);
+                user1.setFirstName(item[1]);
+                user1.setLastName(item[2]);
+                user1.setMobile(item[3]);
+                user1.setEmail(item[4]);
                 users.add(user1);
             }
         }
@@ -210,8 +208,12 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : temp) {
             System.out.println(Arrays.toString(item));
-            User user1 = new User(item[0], item[1], item[2], item[3], item[4], true);
-            System.out.println(user1.toString());
+            User user1 = new User();
+            user1.setPicture(item[0]);
+            user1.setFirstName(item[1]);
+            user1.setLastName(item[2]);
+            user1.setMobile(item[3]);
+            user1.setEmail(item[4]);
             users.add(user1);
         }
         return users;
@@ -223,29 +225,35 @@ public class DBAdapter implements IDBAdapter {
                 user.getPassword() + "';";
         ArrayList temp = DBHandler.getSingleRow(sql);
         if (temp.isEmpty()) {
-            return new User("", "", "", "");
+            return new User();
         }
         String sql2 = "SELECT * from Employee WHERE cpr = '" + temp.get(1) + "';";
-        ArrayList t = DBHandler.getSingleRow(sql2);
-        return new User((String) t.get(0),
-                (String) t.get(1),
-                (String) t.get(2),
-                (String) t.get(3),
-                (String) t.get(4),
-                (String) t.get(5),
-                (String) t.get(6),
-                (String) t.get(7),
-                (String) t.get(8),
-                (String) t.get(9),
-                (String) t.get(10),
-                (String) t.get(11),
-                (String) t.get(12),
-                (String) t.get(13),
-                (String) t.get(14),
-                (String) t.get(15),
-                (String) t.get(16),
-                (String) t.get(17),
-                (String) t.get(18), (String) t.get(19), (String) t.get(20));
+        ArrayList<String> arrayList = DBHandler.getSingleRow(sql2);
+        User user1 = new User();
+        int i = 0;
+        user1.setPicture(arrayList.get(i++));
+        user1.setUsername(arrayList.get(i++));
+        user1.setPassword(arrayList.get(i++));
+        user1.setFirstName(arrayList.get(i++));
+        user1.setSecondName(arrayList.get(i++));
+        user1.setLastName(arrayList.get(i++));
+        user1.setCpr(arrayList.get(i++));
+        user1.setDob(arrayList.get(i++));
+        user1.setAddress(arrayList.get(i++));
+        user1.setPostcode(arrayList.get(i++));
+        user1.setCity(arrayList.get(i++));
+        user1.setMobile(arrayList.get(i++));
+        user1.setLandline(arrayList.get(i++));
+        user1.setEmail(arrayList.get(i++));
+        user1.setEmail(arrayList.get(i++));
+        user1.setKonto(arrayList.get(i++));
+        user1.setRecnumber(arrayList.get(i++));
+        user1.setLicencePlate(arrayList.get(i++));
+        user1.setPrefferedCommunication(arrayList.get(i++));
+        user1.setMoreInfo(arrayList.get(i++));
+        user1.setWage(arrayList.get(i++));
+        user1.setUserRole(arrayList.get(i++));
+        return user1;
     }
 
 //    public static void main(String[] args) {

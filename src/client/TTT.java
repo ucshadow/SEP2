@@ -16,7 +16,8 @@ public class TTT {
         User tt = new User("Check12", "123456789A", "1213141517", "Admin");
         User user = new User("Yusuf", "Lasdasd1234", "1234567890", "Admin");
         User username1 = new User("usernameTest", "passwordTest", "0123456969", "Admin");
-//        User usernameChanged = new User("usernameTest", "passwordChange", "abcdef", "secondChange", "familyChange", "0123456969", "12/12/2012", "addressChange", "1000", "city1", "1234567", "1235", "mailChange", "1674", "123455", "12352463356", "Email", "morenfo");
+        User usernameChanged = new User("","usernameTest", "passwordChange", "abcdef", "secondChange", "familyChange", "0123456969", "12/12/2012", "addressChange", "1000", "city1", "1234567", "1235", "mailChange", "1674", "123455", "12352463356",
+                "Email", "morenfo","","Admin");
 
         Department d1 = new Department("d001", "Ice", "London", "1212121213");
         Department d = new Department("D001", null, null, null);
@@ -24,6 +25,6 @@ public class TTT {
         Department d2 = new Department("D002", "Freezer0", "London", "1123456789");
         Department d3 = new Department("D003", "Jelly", "Paris", "1123456789");
         Department d4 = new Department("D003", null, null, null);
-
+        c.deleteDepartment(d4);
     }
 }

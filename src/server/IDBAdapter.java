@@ -9,9 +9,9 @@ import java.util.Map;
 
 public interface IDBAdapter {
 
-    boolean checkUsername(String username);
-
-    String getUserPassword(String username);
+//    boolean checkUsername(String username);
+//
+//    String getUserPassword(String username);
 
     void createDepartment(Department department);
 

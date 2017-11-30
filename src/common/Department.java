@@ -3,7 +3,7 @@ package common;
 import java.io.Serializable;
 
 public class Department implements Serializable {
-    private String dNumber, dName, dLocation, dManager, dEmployees;
+    private String dNumber, dName, dLocation, dManager;
 
     public Department(String dNumber, String dName, String dLocation, String dManager) {
         this.dNumber = dNumber;
@@ -44,20 +44,6 @@ public class Department implements Serializable {
         this.dManager = dManager;
     }
 
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        Department that = (Department) o;
-//
-//        if (dNumber != null ? !dNumber.equals(that.dNumber) : that.dNumber != null) return false;
-//        if (dName != null ? !dName.equals(that.dName) : that.dName != null) return false;
-//        if (dLocation != null ? !dLocation.equals(that.dLocation) : that.dLocation != null) return false;
-//        if (dManager != null ? !dManager.equals(that.dManager) : that.dManager != null) return false;
-//        return dEmployees != null ? dEmployees.equals(that.dEmployees) : that.dEmployees == null;
-//    }
 
     @Override
     public String toString() {
