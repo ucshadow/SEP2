@@ -2,264 +2,331 @@ package common;
 
 import client.Controller;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
  * The FakeUser class generates a new user on invocation.
  *
- * @author Yusuf AJ Farah
- * @version 1.0
+ * @author Yusuf AJ Farah, Catalin Udrea
+ * @version 1.1
  * @since 2017-05-17
  */
 
 
 public class FakeUser {
 
+    // toDo: some people work more than one day, so make it a week
 
-    private String[] girlNames = {"Twyla", "Dorathy", "Missy", "Alishia", "Brenda", "Blanch", "Thea", "Alfreda",
-            "Mireille", "Dione", "Agnus", "Felicia", "Avelina", "Leonia", "Rosie", "Jaimee", "Rosella", "Annamarie",
-            "Alexa", "Crista", "France", "Zenia", "Seema", "Rosa", "Jackqueline", "Elaina", "Latonia", "Eboni",
-            "Evalyn", "Hannah", "Kristeen", "Tula", "Kathryne", "Elisa", "Zina", "Wendolyn", "Joanne", "Anika",
-            "Loise", "Fabiola", "Cathryn", "Jerlene", "Kari", "Erlene", "Doretha", "Marcy", "Shawanna", "Marica",
-            "Vina", "Manda"};
+    private ArrayList<String> citiesZip;
+    private ArrayList<String> boyNames;
+    private ArrayList<String> girlNames;
+    private ArrayList<String> boyPics;
+    private ArrayList<String> girlPics;
+    private ArrayList<String> familyNames;
+    private ArrayList<String> adjectives;
+    private ArrayList<String> streetNames;
+    private Random random;
 
-    private String[] boyNames = {"Brooks", "Columbus", "Lee", "Everette", "Raymundo", "Dexter", "Joesph", "Eli",
-            "Ramon", "Javier", "Deon", "Donte", "Art", "Michel", "Perry", "Dean", "Aaron", "Jamie", "Clifton",
-            "Terence", "Kennith", "Britt", "Harold", "Vincenzo", "Jacob", "Jules", "Harley", "Evan", "Alex", "Eddy",
-            "Anton", "Teodoro", "Rolando", "Keneth", "Hosea", "Rodrigo", "Pablo", "Derick", "Kenneth", "Lino",
-            "Demetrius", "Del", "Burt", "Nicolas", "Adan", "Russell", "Jospeh", "Troy", "Don", "Caleb"};
+    private int interval = 10;
 
-    private String[] famNames = {"Luther", "Hershel", "Brandon", "Reed", "Cliff", "Darell", "Lupe", "Johnnie", "Jorge",
-            "Felton", "Aldo", "Kraig", "Calvin", "Elwood", "Sam", "Andre", "Kelly", "Amado", "Gerard", "Moises", "Raptor",
-            "Tracey", "Alvaro", "Quentin", "Mel", "Jared", "Horacio", "Fredrick", "Moshe", "Buford", "Sonny", "Jackie",
-            "Branden", "Kristofer", "Dylan", "Kris", "Claudio", "Wilfred", "Alexis", "Daniel", "Darrick", "Kim",
-            "Benton", "Shawn", "Lyndon", "Garret", "Josef", "Barton", "Cedrick", "Tory"};
+    private ArrayList<User> workers = new ArrayList<>();
+    private ArrayList<Department> departments = new ArrayList<>();
+    private ArrayList<WorkingSchedule> workingHours = new ArrayList<>();
 
-    private String[] streets = {"Creek Road", "Summit Street", "River Road", "Hudson Street", "Lafayette Street",
-            "Ridge Street", "Cardinal Drive", "Heritage Drive", "Oak Street", "Main Street South", "4th Street",
-            "Myrtle Avenue", "Strawberry Lane", "Monroe Drive", "Arlington Avenue", "Hanover Court", "Pin Oak Drive",
-            "Windsor Drive", "Essex Court", "4th Street North", "Spruce Street", "Roberts Road", "High Street",
-            "Hawthorne Lane", "Creekside Drive", "4th Street West", "Bay Street", "9th Street", "Hillside Drive",
-            "Garfield Avenue", "Hill Street", "Meadow Street", "Overlook Circle", "Bridle Lane", "Division Street",
-            "Holly Court", "Route 44", "Olive Street", "Adams Street", "2nd Avenue"};
-
-    private String[] city = {"Copenhagen", "Aarhus", "Horsens", "Randers",
-            "Vejle", "Odense", "Berlin", "Hamburg", "Dublin", "Honk Kong",
-            "Bucurest", "Budapest", "Bratislava", "Sofia", "Cork", "Maimi",
-            "Las Vegas", "Los Angelis", "Porto", "Milano", "Rome", "Viena",
-            "Hanover", "Malta", "Oaho", "Dubai", "Zurich", "Barcelona",
-            "Madrid", "Paris", "Sidney", "Moscow", "Istanbul", "London",
-            "Prague", "Amsterdam", "Stockholm", "Riga", "Oslo", "Zagreb",
-            "Reykjavik", "Edinburgh", "Florence", "Manchester"};
-    private Random random = new Random();
-
-    private String[] getAName() {
-        String[] name = new String[4];
-        int gender = random.nextInt(10);
-        if (gender <= 5) {
-            name[0] = boyNames[random.nextInt(50)];
-            name[1] = boyNames[random.nextInt(50)];
-            name[2] = famNames[random.nextInt(50)];
-            name[3] = famNames[random.nextInt(50)];
-        } else {
-            name[0] = girlNames[random.nextInt(50)];
-            name[1] = girlNames[random.nextInt(50)];
-            name[2] = famNames[random.nextInt(50)];
-            name[3] = famNames[random.nextInt(50)];
-        }
-        return name;
-    }
-
-    private String getAUsername() {
-
-        readEverything();
-
-        String name = usernames[random.nextInt(50)];
-        return name;
-    }
-
-    private String getAPicture() {
-
-        readEverything();
-
-        String name;
-        int gender = random.nextInt(10);
-        if (gender <= 5) {
-            name = malePics[random.nextInt(50)];
-        } else {
-            name = femalePics[random.nextInt(50)];
-
-        }
-        return name;
+    public FakeUser() {
+        citiesZip = readFile("city.txt");
+        boyNames = readFile("boyNames.txt");
+        girlNames = readFile("girlNames.txt");
+        boyPics = readFile("maleProfilePics.txt");
+        girlPics = readFile("femaleProfilePics.txt");
+        familyNames = readFile("familyNames.txt");
+        adjectives = readFile("adj.txt");
+        streetNames = readFile("streetNames.txt");
+        random = new Random();
     }
 
 
-    private String getCPR() {
-        int cpr1 = random.nextInt(77777) + 11111;
-        int cpr2 = random.nextInt(77777) + 11111;
-        return String.valueOf(cpr1) + String.valueOf(cpr2);
-    }
-
-    private String getDateOfBirth() {
-        long l = Math.abs(random.nextLong());
-        Date date2 = new Date(Math.abs(l));
-
-        GregorianCalendar g2 = new GregorianCalendar();
-        g2.setTime(date2);
-
-        return String.valueOf(g2.get(Calendar.DAY_OF_MONTH)) + "/" + String.valueOf(g2.get(Calendar.MONTH) + 1) +
-                "/" + String.valueOf((1935 + random.nextInt(70)));
-    }
-
-    private String getAddress() {
-        return streets[random.nextInt(streets.length)];
-    }
-
-    private String getPostCode() {
-        return String.valueOf(random.nextInt(7777) + 1111);
-    }
-
-    private String getCity() {
-        return String.valueOf(city[random.nextInt(city.length)]);
-    }
-
-    private String getPhone() {
-        int a = random.nextInt(7777) + 111;
-        int b = random.nextInt(7777) + 111;
-        return String.valueOf(a) + String.valueOf(b);
-    }
-
-    private String getLicensePlate() {
-        int a = random.nextInt(91);
-        int b = random.nextInt(91);
-        while (a < 65) a = random.nextInt(91);
-        while (b < 65) b = random.nextInt(91);
-        return String.valueOf((char) a) +
-                String.valueOf((char) b) +
-                String.valueOf(random.nextInt(77777) + 11111);
-
-    }
-
-    private String getMail() {
-        return "test@test.test";
-    }
-
-    private String getKonto() {
-        return String.valueOf(random.nextInt(7777) + 1111);
-    }
-
-    private String getComm() {
-        return "Mobile";
-    }
-
-    private String getWage() {
-        Random rand = new Random();
-        int n = rand.nextInt(10000 + 1);
-        return Integer.toString(n);
-    }
-
-    private String getMore() {
-        return "No more ";
-    }
-
-    private String getPass() {
-        return "A12345";
-    }
-
-    String[] malePics = new String[300];
-    String[] usernames = new String[300];
-    String[] femalePics = new String[300];
-
-    private void readEverything() {
-
-        BufferedReader bufferedReader1;
-        BufferedReader bufferedReader2;
+    private ArrayList<String> readFile(String fileName) {
+        ArrayList<String> res = new ArrayList<>();
         try {
-            bufferedReader1 = new BufferedReader(new FileReader("C:\\Users\\Admin\\Desktop\\Sep2\\src\\usernames.txt"));
-
-            for (int i = 0; i < 300; i++) {
-                usernames[i] = bufferedReader1.readLine();
-            }
-            bufferedReader1.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Files.lines(FileSystems.getDefault().getPath(System.getProperty("user.dir") + "/src/", fileName))
+                    .forEach(res::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            bufferedReader1 = new BufferedReader(new FileReader("C:\\Users\\Admin\\Desktop\\Sep2\\src\\maleProfilePics.txt"));
-
-            for (int i = 0; i < 300; i++) {
-                malePics[i] = bufferedReader1.readLine();
-            }
-            bufferedReader1.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            bufferedReader2 = new BufferedReader(new FileReader("C:\\Users\\Admin\\Desktop\\Sep2\\src\\femaleProfilePics.txt"));
-
-            for (int i = 0; i < 300; i++) {
-                femalePics[i] = bufferedReader2.readLine();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        return res;
     }
 
-
-    private void createAFakeAdmin() {
-        ArrayList<String> newUserInformation = new ArrayList<>();
-
-//        newUserInformation.add(getAPicture());
-//        newUserInformation.add(getAName()[0]);
-//        newUserInformation.add(getAName()[1]);
-//        newUserInformation.add(getAName()[2]);
-//        newUserInformation.add(getDateOfBirth());
-//        newUserInformation.add(getAddress());
-//        newUserInformation.add(getPostCode());
-//        newUserInformation.add(getCity());
-//        newUserInformation.add(getPhone());
-//        newUserInformation.add(getPhone());
-//        newUserInformation.add(getMail());
-//        newUserInformation.add(getKonto());
-//        newUserInformation.add(getCPR());
-//        newUserInformation.add(getLicensePlate());
-//        newUserInformation.add(getComm());
-//        newUserInformation.add(getMore());
-
-        newUserInformation.add(getAUsername()); //
-        newUserInformation.add(getPass()); //
-        newUserInformation.add(getCPR()); //
-        newUserInformation.add("Admin"); //
-        newUserInformation.add(getWage()); //
-
-        new Controller().createUser(getAUsername(), getPass(), getCPR(), "Admin", getWage());
-
-
+    private Department createDepartment(String managerCPR) {
+        return new Department(randomNumber(7), randomAdjective(),
+                randomCityZip().split(",")[0],managerCPR);
     }
 
-    private void createAFakeUser() {
-        ArrayList<String> newUserInformation = new ArrayList<>();
+    private User createFullDetailsUser() {
+        boolean isGirl = tossCoin();
+        String[] cityZip = randomCityZip().split(",");
+        String username = isGirl ? randomGirlUsername() : randomBoyUsername();
 
+        return new User(isGirl ? randomGirlPic() : randomBoyPic(),
+                username,
+                "Password123",
+                isGirl ? randomGirlName() : randomBoyName(),
+                isGirl ? randomGirlName() : randomBoyName(),
+                randomFamilyName(),
+                randomNumber(10),
+                randomBirthday(),
+                randomStreetName(),
+                cityZip[0],
+                cityZip[1],
+                randomNumber(8),
+                randomNumber(8),
+                username + "@gmail.com",
+                randomNumber(4),
+                randomNumber(10),
+                randomNumber(3) + "-" + username,
+                "Mobile",
+                "More info here",
+                randomNumber(4),
+                "User");
+    }
 
-        newUserInformation.add(getAUsername()); //
-        newUserInformation.add(getPass()); //
-        newUserInformation.add(getCPR()); //
-        newUserInformation.add("Admin"); //
-        newUserInformation.add(getWage()); //
+    private String randomNumber(int numberLength) {
+        long l = random.nextLong();
+        String s = String.valueOf(l);
+        return s.substring(1, numberLength + 1);
+    }
 
-        new Controller().createUser(getAUsername(), getPass(), getCPR(), "Admin", getWage());
+    private String randomGirlName() {
+        return girlNames.get(random.nextInt(girlNames.size()));
+    }
 
+    private String randomBoyName() {
+        return boyNames.get(random.nextInt(boyNames.size()));
+    }
+
+    private String randomFamilyName() {
+        return familyNames.get(random.nextInt(familyNames.size()));
+    }
+
+    private String randomCityZip() {
+        return citiesZip.get(random.nextInt(citiesZip.size()));
+    }
+
+    private String randomGirlPic() {
+        return girlPics.get(random.nextInt(girlPics.size()));
+    }
+
+    private String randomBoyPic() {
+        return boyPics.get(random.nextInt(boyPics.size()));
+    }
+
+    private String randomStreetName() {
+        return streetNames.get(random.nextInt(streetNames.size()));
+    }
+
+    private boolean tossCoin() {
+        return random.nextBoolean();
+    }
+
+    private String randomAdjective() {
+        return adjectives.get(random.nextInt(adjectives.size()));
+    }
+
+    private String randomGirlUsername() {
+        String s = "";
+        s += randomAdjective();
+        s += randomGirlName();
+        s += randomGirlName();
+        return s;
+    }
+
+    private String randomBoyUsername() {
+        String s = "";
+        s += randomAdjective();
+        s += randomBoyName();
+        s += randomBoyName();
+        return s;
+    }
+
+    private String randomBirthday() {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        long dob = unixTime - Long.valueOf(randomNumber(9));
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        return Instant.ofEpochSecond(dob)
+                .atZone(ZoneId.of("GMT-1"))
+                .format(formatter);
+    }
+
+    private String randomDayInTheFuture() {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        long dob = unixTime + Long.valueOf(randomNumber(1)) * 86000;
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        return Instant.ofEpochSecond(dob)
+                .atZone(ZoneId.of("GMT-1"))
+                .format(formatter);
+    }
+
+    private User promoteToManager() {
+        User u = workers.remove(random.nextInt(workers.size()));
+        u.setUserRole("Manager");
+        return u;
+    }
+
+    private String getDepartmentNumberByManagerCPR(String cpr) {
+        for(Department d: departments) {
+            if(d.getdManager().equals(cpr)) {
+                return d.getdNumber();
+            }
+        }
+        return null;
+    }
+
+    private String getRandomDepartmentNumber() {
+        int rnd = random.nextInt(departments.size());
+        return departments.get(rnd).getdNumber();
+    }
+
+    public void setEverythingUp(int numberOfEmployees, int numberOfDepartments) {
+        for(int i = 0; i < numberOfEmployees; i++) {
+            workers.add(createFullDetailsUser());
+        }
+        promoteSomeToManager(numberOfDepartments);
+    }
+
+    private void promoteSomeToManager(int numberOfDepartments) {
+        ArrayList<User> managers = new ArrayList<>();
+        for(int i = 0; i < numberOfDepartments; i++) {
+            managers.add(promoteToManager());
+        }
+        setUpDepartments(managers);
+    }
+
+    private void setUpDepartments(ArrayList<User> managers) {
+        for(User u: managers) {
+            departments.add(createDepartment(u.getCpr()));
+            workers.add(u); // add manager back to workers
+        }
+        setupWorkingHours();
+    }
+
+    private String formatHour(String hour) {
+        if(hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        return hour + ":00";
+    }
+
+    private void setupWorkingHours() {
+        for(User u: workers) {
+            if(u.getUserRole().equals("Manager")) {
+                int start = random.nextInt(12);
+                workingHours.add(new WorkingSchedule(
+                        getDepartmentNumberByManagerCPR(u.getCpr()),
+                        u.getCpr(),
+                        randomDayInTheFuture(),
+                        formatHour(String.valueOf(start)),
+                        formatHour(String.valueOf(start + 8)))
+                );
+            }
+            if(u.getUserRole().equals("User")) {
+                int start = random.nextInt(12);
+                workingHours.add(new WorkingSchedule(
+                        getRandomDepartmentNumber(),
+                        u.getCpr(),
+                        randomDayInTheFuture(),
+                        formatHour(String.valueOf(start)),
+                        formatHour(String.valueOf(start + 8)))
+                );
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        workers.forEach(System.out::println);
+        System.out.println();
+        departments.forEach(System.out::println);
+        System.out.println();
+        workingHours.forEach(System.out::println);
+        return "";
+    }
+
+    public void dumpToPostgress() {
+        Controller c = new Controller();
+
+        // create users
+        for(User u: workers) {
+            c.createUser(u.getUsername(), u.getPassword(), u.getCpr(), u.getUserRole(), u.getWage());
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update users
+        for(User u: workers) {
+            ArrayList<String> attributes = new ArrayList<>();
+            attributes.add(u.getPicture());
+            attributes.add(u.getUsername());
+            attributes.add(u.getPassword());
+            attributes.add(u.getFirstName());
+            attributes.add(u.getSecondName());
+            attributes.add(u.getLastName());
+            attributes.add(u.getCpr());
+            attributes.add(u.getDob());
+            attributes.add(u.getAddress());
+            attributes.add(u.getPostcode());
+            attributes.add(u.getCity());
+            attributes.add(u.getMobile());
+            attributes.add(u.getLandline());
+            attributes.add(u.getEmail());
+            attributes.add(u.getKonto());
+            attributes.add(u.getRecnumber());
+            attributes.add(u.getLicencePlate());
+            attributes.add(u.getPrefferedCommunication());
+            attributes.add(u.getMoreInfo());
+            attributes.add(u.getUserRole());
+            attributes.add(u.getWage());
+            c.changeUserInformation(attributes);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update Departments
+        for(Department d: departments) {
+            c.createDepartment(d.getdNumber(), d.getdName(), d.getdLocation(), d.getdManager());
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(WorkingSchedule w: workingHours) {
+            c.addWorkingSchedule(w.getDepartmentNumber(), w.getEmployeeCPR(), w.getWorkingDate(),
+                    w.getStartHours(), w.getEndHours());
+
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
