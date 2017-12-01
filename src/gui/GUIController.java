@@ -6,12 +6,17 @@ import common.Response;
 import common.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -84,6 +89,8 @@ public class GUIController {
     private Label profileCprLabel;
     @FXML
     private Label profileWageLabel;
+    @FXML
+    private TextField newPicture;
     /**
      * Author: Radu Orleanu
      * <p>
@@ -109,10 +116,15 @@ public class GUIController {
     }
 
     @FXML
+    private void closePanel(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
     private void handleEditInformationClientPanel(ActionEvent event) {
         ArrayList<String> newUserInformation = new ArrayList<>();
 
-        newUserInformation.add("");
+        newUserInformation.add(newPicture.getText());
         newUserInformation.add(profileUsernameLabel.getText());
         newUserInformation.add(profilePassword.getText());
         newUserInformation.add(profileFirstName.getText());
