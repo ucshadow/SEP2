@@ -1,99 +1,75 @@
 CREATE SCHEMA sep2;
+SET SEARCH_PATH = sep2;
+
 
 CREATE DOMAIN cpr_Domain CHAR(10);
 CREATE DOMAIN dno_Domain CHAR(4);
+CREATE DOMAIN postcode_Domain VARCHAR(10);
 
 
 CREATE TABLE UserLogIn (
+  cpr      CPR_DOMAIN PRIMARY KEY,
   Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),
-  cpr      CPR_DOMAIN,
-  Password VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(Password) >= 8) CONSTRAINT password_check CHECK (
-    Password LIKE '%A%' OR PASSWORD LIKE '%B%' OR PASSWORD LIKE '%C%' OR PASSWORD LIKE '%D%' OR PASSWORD LIKE '%E%' OR
-    PASSWORD LIKE '%F%' OR PASSWORD LIKE '%G%' OR PASSWORD LIKE '%H%' OR PASSWORD LIKE '%I%' OR PASSWORD LIKE '%J%'
-    OR PASSWORD LIKE '%K%' OR PASSWORD LIKE '%L%' OR PASSWORD LIKE '%M%' OR PASSWORD LIKE '%N%' OR
-    PASSWORD LIKE '%O%' OR PASSWORD LIKE '%P%' OR PASSWORD LIKE '%Q%' OR PASSWORD LIKE '%R%' OR PASSWORD LIKE '%S%'
-    OR PASSWORD LIKE '%T%' OR PASSWORD LIKE '%U%' OR PASSWORD LIKE '%V%' OR PASSWORD LIKE '%W%' OR PASSWORD LIKE '%X%'
-    OR PASSWORD LIKE '%Y%' OR PASSWORD LIKE '%Z%'),
+  pass     VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (
+    pass LIKE '%A%' OR pass LIKE '%B%' OR pass LIKE '%C%' OR pass LIKE '%D%' OR pass LIKE '%E%' OR
+    pass LIKE '%F%' OR pass LIKE '%G%' OR pass LIKE '%H%' OR pass LIKE '%I%' OR pass LIKE '%J%'
+    OR pass LIKE '%K%' OR pass LIKE '%L%' OR pass LIKE '%M%' OR pass LIKE '%N%' OR
+    pass LIKE '%O%' OR pass LIKE '%P%' OR pass LIKE '%Q%' OR pass LIKE '%R%' OR pass LIKE '%S%'
+    OR pass LIKE '%T%' OR pass LIKE '%U%' OR pass LIKE '%V%' OR pass LIKE '%W%' OR pass LIKE '%X%'
+    OR pass LIKE '%Y%' OR pass LIKE '%Z%'),
   userRole VARCHAR(7) DEFAULT 'Admin' CHECK (userRole IN ('Admin', 'User', 'Manager'))
 );
-ALTER TABLE UserLogIn
-  RENAME COLUMN Password TO pass;
-ALTER TABLE UserLogIn
-  ADD PRIMARY KEY (Username, cpr);
 
-
-CREATE TABLE Employee (
-  picture      VARCHAR,
-  --   username     VARCHAR,
-  --   password     VARCHAR,
-  --   firstName    VARCHAR(25),
-  --   secondName   VARCHAR(25),
-  --   familyName   VARCHAR(25),
-  cpr          CPR_DOMAIN PRIMARY KEY,
-  dateOfBirth  DATE,
-  address      VARCHAR(25),
-  postcode     VARCHAR(10),
-  --   city                   VARCHAR(25),
-  --   mobile                 CHAR(8),
-  --   landline               CHAR(8),
-  --   email                  VARCHAR,
-  --   konto        CHAR(4),
-  --   regNumber    CHAR(10),
-  licencePlate VARCHAR,
-  --   preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email')),
-  moreInfo     VARCHAR
-  --   wage                   VARCHAR,
-  --   userRole               VARCHAR
-
-
-);
-ALTER TABLE Employee
-  RENAME COLUMN password TO passEmp;
-
-
-CREATE TABLE names (
-  cpr        CPR_DOMAIN PRIMARY KEY,
-  firstName  VARCHAR(25),
-  secondName VARCHAR(25),
-  familyName VARCHAR(25)
-)
 CREATE TABLE city (
-  postcode VARCHAR(10) PRIMARY KEY,
+  postcode POSTCODE_DOMAIN PRIMARY KEY,
   city     VARCHAR(25)
 );
 
+CREATE TABLE Employee (
+  ID           SERIAL PRIMARY KEY,
+  picture      VARCHAR,
+  firstName    VARCHAR(25),
+  secondName   VARCHAR(25),
+  familyName   VARCHAR(25),
+  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr),
+  dateOfBirth  DATE,
+  address      VARCHAR(25),
+  postcode     VARCHAR(10) REFERENCES city (postcode),
+  licencePlate VARCHAR,
+  moreInfo     VARCHAR
+);
+
+
 CREATE TABLE communication (
-  cpr                    CPR_DOMAIN PRIMARY KEY,
+  id                     SERIAL PRIMARY KEY,
+  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr),
   mobile                 CHAR(8),
   landline               CHAR(8),
   email                  VARCHAR,
   preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))
-
 );
 
-CREATE TABLE bankInfo (
-  cpr       CPR_DOMAIN PRIMARY KEY,
+CREATE TABLE bankInfoDK (
+  id        SERIAL PRIMARY KEY,
+  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr),
   konto     CHAR(4),
   regNumber CHAR(10)
-
 );
 
 
 CREATE TABLE department (
-  dno       DNO_DOMAIN,
-  dname     VARCHAR,
-  dlocation VARCHAR,
-  dManager  CHAR(10)
-
+  dno        DNO_DOMAIN PRIMARY KEY,
+  dname      VARCHAR,
+  dManager   CHAR(10) REFERENCES UserLogIn (cpr),
+  dPostcode  VARCHAR(10) REFERENCES city (postcode),
+  dStartdate TIMESTAMP
 );
-ALTER TABLE department
-  ADD PRIMARY KEY (dno);
 
 
 CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
-  dno        DNO_DOMAIN,
-  employecpr CPR_DOMAIN,
+  dno        DNO_DOMAIN REFERENCES department (dno),
+  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr),
   workingDay DATE,
   startHours TIME,
   endHours   TIME
@@ -101,24 +77,30 @@ CREATE TABLE workingSchedule (
 
 
 CREATE TABLE wagePerHour (
-  employeeCPR CPR_DOMAIN PRIMARY KEY,
+  id          SERIAL PRIMARY KEY,
+  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr),
   wage        NUMERIC(6, 2)
 );
 
-
+CREATE TABLE history (
+  id        SERIAL PRIMARY KEY,
+  tablename VARCHAR,
+  operation VARCHAR,
+  details   VARCHAR,
+  TIMESTAMP TIMESTAMP
+);
 --Functions
 -- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER
 -- Trigger function that deletes employee data one employee is deleted
-CREATE OR REPLACE FUNCTION newEmployee()
+CREATE OR REPLACE FUNCTION newUserCreatedOrRemoved()
   RETURNS TRIGGER AS $$
 BEGIN
   IF (tg_op = 'INSERT')
   THEN
-    INSERT INTO Employee
-    VALUES
-      ('', new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '',
-                                                                          '',
-                                                                          new.userRole);
+    INSERT INTO Employee (cpr, postcode) VALUES (new.cpr, '1234');
+    INSERT INTO communication (cpr) VALUES (new.cpr);
+    INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);
+    INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);
     RETURN new;
   ELSIF (tg_op = 'DELETE')
     THEN
@@ -126,62 +108,235 @@ BEGIN
       WHERE old.cpr = cpr;
       DELETE FROM wagePerHour
       WHERE old.cpr = employeecpr;
+      DELETE FROM bankInfoDK
+      WHERE old.cpr = cpr;
+      DELETE FROM communication
+      WHERE old.cpr = cpr;
   END IF;
   RETURN old;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER newUserAdded
+AFTER INSERT ON userlogin
+FOR EACH ROW
+EXECUTE PROCEDURE newUserCreatedOrRemoved();
 
-CREATE OR REPLACE FUNCTION addWage()
+CREATE TRIGGER oldUserRemoved
+BEFORE DELETE ON UserLogIn
+FOR EACH ROW
+EXECUTE PROCEDURE newUserCreatedOrRemoved();
+
+
+CREATE MATERIALIZED VIEW EmployeeInformation AS
+  SELECT
+    employee.picture,
+    UserLogIn.Username,
+    UserLogIn.pass,
+    employee.firstname,
+    employee.secondName,
+    employee.familyName,
+    UserLogIn.cpr,
+    employee.dateOfBirth,
+    employee.address,
+    employee.postcode,
+    city.city,
+    communication.mobile,
+    communication.landline,
+    communication.email,
+    bankInfoDK.konto,
+    bankInfoDK.regNumber,
+    employee.licencePlate,
+    communication.preferredCommunication,
+    employee.moreInfo,
+    wagePerHour.wage,
+    UserLogIn.userRole
+  FROM
+    City
+    INNER JOIN Employee ON city.postcode = Employee.postcode
+    INNER JOIN Communication ON Employee.cpr = communication.cpr
+    INNER JOIN bankInfoDK ON communication.cpr = bankInfoDK.cpr
+    INNER JOIN wagePerHour ON bankInfoDK.cpr = wagePerHour.employeeCPR
+    INNER JOIN userlogin ON wagePerHour.employeeCPR = UserLogIn.cpr;
+
+
+CREATE MATERIALIZED VIEW workingColleagues AS
+  SELECT
+    picture,
+    firstName,
+    familyName,
+    mobile,
+    email,
+    Employee.cpr,
+    workingSchedule.dno
+  FROM communication
+    INNER JOIN employee ON communication.cpr = Employee.cpr
+    LEFT OUTER JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;
+
+CREATE MATERIALIZED VIEW allColleagues AS
+  SELECT
+    picture,
+    firstName,
+    familyName,
+    mobile,
+    email,
+    Employee.cpr
+  FROM communication
+    INNER JOIN Employee ON communication.cpr = Employee.cpr;
+
+
+/*
+CREATE OR REPLACE FUNCTION historyAdd()
   RETURNS TRIGGER AS $$
+DECLARE
+  details VARCHAR;
 BEGIN
-  IF (tg_op = 'INSERT')
+  IF (tg_table_name = 'bankinfodk')
   THEN
-    UPDATE Employee
-    SET wage = new.wage
-    WHERE cpr = new.employeeCPR;
-    RETURN new;
+    IF (tg_op = 'INSERT')
+    THEN
+      details = ('Employee with ' + new.cpr + ' added bank acount with konto ' + new.konto + ' and reg number ' +
+                 new.regnumber);
+      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('BankingInfo', ' INSERT ', details, now());
+      RETURN new;
+    ELSIF (tg_op = ' UPDATE ')
+      THEN
+        details = ('Employee with ' + new.cpr + ' updated bank acount with konto ' + new.konto + ' and reg number ' +
+                   new.regnumber);
+        INSERT INTO history (tablename, operation, details, TIMESTAMP)
+        VALUES ('BankingInfo', ' Update ', details, now());
+
+        RETURN new;
+    ELSEIF (tg_op = ' DELETE ')
+      THEN
+        details = (
+          'Employee with ' + old.cpr + ' was deleted with bank acount with konto ' + old.konto + ' and reg number ' +
+          old.regnumber);
+        INSERT INTO history (tablename, operation, details, TIMESTAMP)
+        VALUES ('BankingInfo', ' Delete ', details, now());
+
+        RETURN new;
+    END IF;
+  ELSIF (tg_table_name = 'city')
+    THEN
+      IF (tg_op = ' INSERT ')
+      THEN
+        details = (
+          'City with name ' + new.city + ' with post code' + new.postcode);
+        INSERT INTO history (tablename, operation, details, TIMESTAMP)
+        VALUES ('City', ' Insert ', details, now());
+        RETURN new;
+      ELSIF (tg_op = ' UPDATE ')
+        THEN
+          details = (
+            'City with name ' + new.city + ' with post code' + new.postcode);
+          INSERT INTO history (tablename, operation, details, TIMESTAMP)
+          VALUES ('City', ' Update ', details, now());
+          RETURN new;
+      ELSEIF (tg_op = ' DELETE ')
+        THEN
+          details = (
+            'City with name ' + old.city + ' with post code' + old.postcode);
+          INSERT INTO history (tablename, operation, details, TIMESTAMP)
+          VALUES ('City', ' Delete ', details, now());
+          RETURN new;
+      END IF;
+  ELSIF (tg_table_name = 'communication')
+    THEN
+      IF (tg_op = ' INSERT ')
+      THEN
+        details = (' communications for  employee with cpr ' + new.cpr + ' with mobile ' + new.mobile);
+        INSERT INTO history (tablename, operation, details, TIMESTAMP)
+        VALUES ('Communication', ' Insert ', details, now());
+        RETURN new;
+      ELSIF (tg_op = ' UPDATE ')
+        THEN
+          details = ('communications for  employee with cpr ' + old.cpr + ' with mobile ' + new.mobile);
+          INSERT INTO history (tablename, operation, details, TIMESTAMP)
+          VALUES ('Communication', ' Update ', details, now());
+          RETURN new;
+      ELSEIF (tg_op = ' DELETE ')
+        THEN
+          details = ('communications for  employee with cpr ' + old.cpr + ' with mobile ' + old.mobile);
+          INSERT INTO history (tablename, operation, details, TIMESTAMP)
+          VALUES ('Communication', ' Delete ', details, now());
+          RETURN new;
+      END IF;
+      --   ELSIF (tg_table_name = 'department')
+      --     THEN
+      --       IF (tg_op = ' INSERT ')
+      --       THEN
+      --         INSERT INTO history () VALUES ();
+      --         RETURN new;
+      --       ELSIF (tg_op = ' UPDATE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       ELSEIF (tg_op = ' DELETE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       END IF;
+      --   ELSIF (tg_table_name = 'employee')
+      --     THEN
+      --       IF (tg_op = ' INSERT ')
+      --       THEN
+      --         INSERT INTO history () VALUES ();
+      --         RETURN new;
+      --       ELSIF (tg_op = ' UPDATE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       ELSEIF (tg_op = ' DELETE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       END IF;
+      --   ELSIF (tg_table_name = 'userlogin')
+      --     THEN
+      --       IF (tg_op = ' INSERT ')
+      --       THEN
+      --         INSERT INTO history () VALUES ();
+      --         RETURN new;
+      --       ELSIF (tg_op = ' UPDATE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       ELSEIF (tg_op = ' DELETE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       END IF;
+      --   ELSIF (tg_table_name = 'wageperhour')
+      --     THEN
+      --       IF (tg_op = ' INSERT ')
+      --       THEN
+      --         INSERT INTO history () VALUES ();
+      --         RETURN new;
+      --       ELSIF (tg_op = ' UPDATE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       ELSEIF (tg_op = ' DELETE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       END IF;
+      --   ELSIF (tg_table_name = 'workingschedule')
+      --     THEN
+      --       IF (tg_op = ' INSERT ')
+      --       THEN
+      --         INSERT INTO history () VALUES ();
+      --         RETURN new;
+      --       ELSIF (tg_op = ' UPDATE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
+      --       ELSEIF (tg_op = ' DELETE ')
+      --         THEN
+      --           INSERT INTO history () VALUES ();
+      --           RETURN new;
   END IF;
-  RETURN old;
 END;
 $$ LANGUAGE plpgsql;
-
-
---Trigger function created to update password upon change from employee table to userlogin table
-CREATE OR REPLACE FUNCTION empPassword()
-  RETURNS TRIGGER AS $$
-BEGIN
-  IF (tg_op = 'UPDATE')
-  THEN
-    UPDATE userLogIn
-    SET pass = passEmp
-    FROM employee
-    WHERE userlogin.cpr = employee.cpr;
-  END IF;
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql;
---FUNCTION END
-
-
--- TRIGGERS
-
-
-CREATE TRIGGER passChange
-AFTER UPDATE OF passEmp
-  ON Employee
-EXECUTE PROCEDURE empPassword();
-
-
-CREATE TRIGGER newEmp
-BEFORE INSERT OR DELETE ON userlogin
-FOR EACH ROW
-EXECUTE PROCEDURE newEmployee();
-
-
-CREATE TRIGGER newEmpWage
-BEFORE INSERT ON wagePerHour
-FOR EACH ROW
-EXECUTE PROCEDURE addWage();
-
---TRIGGERS END
+*/
