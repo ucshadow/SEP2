@@ -49,152 +49,185 @@ public class Database {
         String sql = "\n" +
                 "CREATE DOMAIN cpr_Domain CHAR(10);\n" +
                 "CREATE DOMAIN dno_Domain CHAR(4);\n" +
+                "CREATE DOMAIN postcode_Domain VARCHAR(10);\n" +
+                "\n" +
                 "\n" +
                 "CREATE TABLE UserLogIn (\n" +
+                "  cpr      CPR_DOMAIN PRIMARY KEY,\n" +
                 "  Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),\n" +
-                "  cpr      CPR_DOMAIN,\n" +
-                "  Password VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(Password) >= 8) CONSTRAINT password_check CHECK (\n" +
-                "    Password LIKE '%A%' OR PASSWORD LIKE '%B%' OR PASSWORD LIKE '%C%' OR PASSWORD LIKE '%D%' OR PASSWORD LIKE '%E%' OR\n" +
-                "    PASSWORD LIKE '%F%' OR PASSWORD LIKE '%G%' OR PASSWORD LIKE '%H%' OR PASSWORD LIKE '%I%' OR PASSWORD LIKE '%J%'\n" +
-                "    OR PASSWORD LIKE '%K%' OR PASSWORD LIKE '%L%' OR PASSWORD LIKE '%M%' OR PASSWORD LIKE '%N%' OR\n" +
-                "    PASSWORD LIKE '%O%' OR PASSWORD LIKE '%P%' OR PASSWORD LIKE '%Q%' OR PASSWORD LIKE '%R%' OR PASSWORD LIKE '%S%'\n" +
-                "    OR PASSWORD LIKE '%T%' OR PASSWORD LIKE '%U%' OR PASSWORD LIKE '%V%' OR PASSWORD LIKE '%W%' OR PASSWORD LIKE '%X%'\n" +
-                "    OR PASSWORD LIKE '%Y%' OR PASSWORD LIKE '%Z%'),\n" +
+                "  pass     VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (\n" +
+                "    pass LIKE '%A%' OR pass LIKE '%B%' OR pass LIKE '%C%' OR pass LIKE '%D%' OR pass LIKE '%E%' OR\n" +
+                "    pass LIKE '%F%' OR pass LIKE '%G%' OR pass LIKE '%H%' OR pass LIKE '%I%' OR pass LIKE '%J%'\n" +
+                "    OR pass LIKE '%K%' OR pass LIKE '%L%' OR pass LIKE '%M%' OR pass LIKE '%N%' OR\n" +
+                "    pass LIKE '%O%' OR pass LIKE '%P%' OR pass LIKE '%Q%' OR pass LIKE '%R%' OR pass LIKE '%S%'\n" +
+                "    OR pass LIKE '%T%' OR pass LIKE '%U%' OR pass LIKE '%V%' OR pass LIKE '%W%' OR pass LIKE '%X%'\n" +
+                "    OR pass LIKE '%Y%' OR pass LIKE '%Z%'),\n" +
                 "  userRole VARCHAR(7) DEFAULT 'Admin' CHECK (userRole IN ('Admin', 'User', 'Manager'))\n" +
                 ");\n" +
                 "\n" +
-                "ALTER TABLE UserLogIn\n" +
-                "  RENAME COLUMN Password TO pass;\n" +
-                "ALTER TABLE UserLogIn\n" +
-                "  ADD PRIMARY KEY (Username, cpr);\n" +
+                "CREATE TABLE city (\n" +
+                "  postcode POSTCODE_DOMAIN PRIMARY KEY,\n" +
+                "  city     VARCHAR(25)\n" +
+                ");\n" +
                 "\n" +
                 "CREATE TABLE Employee (\n" +
-                "  picture                VARCHAR,\n" +
-                "  username               VARCHAR,\n" +
-                "  password               VARCHAR,\n" +
-                "  firstName              VARCHAR(25),\n" +
-                "  secondName             VARCHAR(25),\n" +
-                "  familyName             VARCHAR(25),\n" +
-                "  cpr                    CPR_DOMAIN PRIMARY KEY,\n" +
-                "  dateOfBirth            DATE,\n" +
-                "  address                VARCHAR(25),\n" +
-                "  postcode               VARCHAR(10),\n" +
-                "  city                   VARCHAR(25),\n" +
+                "  ID           SERIAL PRIMARY KEY,\n" +
+                "  picture      VARCHAR,\n" +
+                "  firstName    VARCHAR(25),\n" +
+                "  secondName   VARCHAR(25),\n" +
+                "  familyName   VARCHAR(25),\n" +
+                "  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
+                "  dateOfBirth  DATE,\n" +
+                "  address      VARCHAR(25),\n" +
+                "  postcode     VARCHAR(10) REFERENCES city (postcode),\n" +
+                "  licencePlate VARCHAR,\n" +
+                "  moreInfo     VARCHAR\n" +
+                ");\n" +
+                "\n" +
+                "\n" +
+                "CREATE TABLE communication (\n" +
+                "  id                     SERIAL PRIMARY KEY,\n" +
+                "  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
                 "  mobile                 CHAR(8),\n" +
                 "  landline               CHAR(8),\n" +
                 "  email                  VARCHAR,\n" +
-                "  konto                  CHAR(4),\n" +
-                "  regNumber              CHAR(10),\n" +
-                "  licencePlate           VARCHAR,\n" +
-                "  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email')),\n" +
-                "  moreInfo               VARCHAR,\n" +
-                "  wage                   VARCHAR,\n" +
-                "  userRole               VARCHAR\n" +
-                "\n" +
-                "\n" +
+                "  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))\n" +
                 ");\n" +
-                "ALTER TABLE Employee\n" +
-                "  RENAME COLUMN password TO passEmp;\n" +
+                "\n" +
+                "CREATE TABLE bankInfoDK (\n" +
+                "  id        SERIAL PRIMARY KEY,\n" +
+                "  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
+                "  konto     CHAR(4),\n" +
+                "  regNumber CHAR(10)\n" +
+                ");\n" +
+                "\n" +
+                "\n" +
                 "CREATE TABLE department (\n" +
-                "  dno       DNO_DOMAIN,\n" +
-                "  dname     VARCHAR,\n" +
-                "  dlocation VARCHAR,\n" +
-                "  dManager  CHAR(10)\n" +
-                "\n" +
+                "  dno        DNO_DOMAIN PRIMARY KEY,\n" +
+                "  dname      VARCHAR,\n" +
+                "  dManager   CHAR(10) REFERENCES UserLogIn (cpr),\n" +
+                "  dPostcode  VARCHAR(10) REFERENCES city (postcode),\n" +
+                "  dStartdate TIMESTAMP\n" +
                 ");\n" +
-                "\n" +
-                "ALTER TABLE department\n" +
-                "  ADD PRIMARY KEY (dno);\n" +
                 "\n" +
                 "\n" +
                 "CREATE TABLE workingSchedule (\n" +
                 "  id         SERIAL PRIMARY KEY,\n" +
-                "  dno        DNO_DOMAIN,\n" +
-                "  employecpr CPR_DOMAIN,\n" +
+                "  dno        DNO_DOMAIN REFERENCES department (dno),\n" +
+                "  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
                 "  workingDay DATE,\n" +
                 "  startHours TIME,\n" +
                 "  endHours   TIME\n" +
                 ");\n" +
                 "\n" +
+                "\n" +
                 "CREATE TABLE wagePerHour (\n" +
-                "  employeeCPR CPR_DOMAIN PRIMARY KEY ,\n" +
+                "  id          SERIAL PRIMARY KEY,\n" +
+                "  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
                 "  wage        NUMERIC(6, 2)\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE history (\n" +
+                "  id        SERIAL PRIMARY KEY,\n" +
+                "  tablename VARCHAR,\n" +
+                "  operation VARCHAR,\n" +
+                "  details   VARCHAR,\n" +
+                "  TIMESTAMP TIMESTAMP\n" +
                 ");\n" +
                 "--Functions\n" +
                 "-- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER\n" +
                 "-- Trigger function that deletes employee data one employee is deleted\n" +
-                "CREATE OR REPLACE FUNCTION newEmployee()\n" +
+                "CREATE OR REPLACE FUNCTION newUserCreatedOrRemoved()\n" +
                 "  RETURNS TRIGGER AS $$\n" +
                 "BEGIN\n" +
                 "  IF (tg_op = 'INSERT')\n" +
                 "  THEN\n" +
-                "    INSERT INTO Employee\n" +
-                "    VALUES\n" +
-                "      ('', new.username, new.pass, '', '', '', new.cpr, NULL, '', '', '', '', '', '', '', '', '', NULL, '',\n" +
-                "                                                                          '',\n" +
-                "                                                                          new.userRole);\n" +
+                "    INSERT INTO Employee (cpr, postcode) VALUES (new.cpr, '1234');\n" +
+                "    INSERT INTO communication (cpr) VALUES (new.cpr);\n" +
+                "    INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);\n" +
+                "    INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);\n" +
                 "    RETURN new;\n" +
                 "  ELSIF (tg_op = 'DELETE')\n" +
                 "    THEN\n" +
                 "      DELETE FROM employee\n" +
                 "      WHERE old.cpr = cpr;\n" +
                 "      DELETE FROM wagePerHour\n" +
-                "      WHERE old.cpr = employee;\n" +
+                "      WHERE old.cpr = employeecpr;\n" +
+                "      DELETE FROM bankInfoDK\n" +
+                "      WHERE old.cpr = cpr;\n" +
+                "      DELETE FROM communication\n" +
+                "      WHERE old.cpr = cpr;\n" +
                 "  END IF;\n" +
                 "  RETURN old;\n" +
                 "END;\n" +
                 "$$ LANGUAGE plpgsql;\n" +
                 "\n" +
-                "CREATE OR REPLACE FUNCTION addWage()\n" +
-                "  RETURNS TRIGGER AS $$\n" +
-                "BEGIN\n" +
-                "  IF (tg_op = 'INSERT')\n" +
-                "  THEN\n" +
-                "    UPDATE Employee\n" +
-                "    SET wage = new.wage\n" +
-                "    WHERE cpr = new.employeeCPR;\n" +
-                "    RETURN new;\n" +
-                "  END IF;\n" +
-                "  RETURN old;\n" +
-                "END;\n" +
-                "$$ LANGUAGE plpgsql;\n" +
-                "\n" +
-                "--Trigger function created to update password upon change from employee table to userlogin table\n" +
-                "CREATE OR REPLACE FUNCTION empPassword()\n" +
-                "  RETURNS TRIGGER AS $$\n" +
-                "BEGIN\n" +
-                "  IF (tg_op = 'UPDATE')\n" +
-                "  THEN\n" +
-                "    UPDATE userLogIn\n" +
-                "    SET pass = passEmp\n" +
-                "    FROM employee\n" +
-                "    WHERE userlogin.cpr = employee.cpr;\n" +
-                "  END IF;\n" +
-                "  RETURN new;\n" +
-                "END;\n" +
-                "$$ LANGUAGE plpgsql;\n" +
-                "--FUNCTION END\n" +
-                "-- TRIGGERS\n" +
-                "\n" +
-                "\n" +
-                "CREATE TRIGGER passChange\n" +
-                "AFTER UPDATE OF passEmp\n" +
-                "  ON Employee\n" +
-                "EXECUTE PROCEDURE empPassword();\n" +
-                "\n" +
-                "\n" +
-                "CREATE TRIGGER newEmp\n" +
-                "BEFORE INSERT OR DELETE ON userlogin\n" +
+                "CREATE TRIGGER newUserAdded\n" +
+                "AFTER INSERT ON userlogin\n" +
                 "FOR EACH ROW\n" +
-                "EXECUTE PROCEDURE newEmployee();\n" +
+                "EXECUTE PROCEDURE newUserCreatedOrRemoved();\n" +
                 "\n" +
-                "\n" +
-                "CREATE TRIGGER newEmpWage\n" +
-                "BEFORE INSERT ON wagePerHour\n" +
+                "CREATE TRIGGER oldUserRemoved\n" +
+                "BEFORE DELETE ON UserLogIn\n" +
                 "FOR EACH ROW\n" +
-                "EXECUTE PROCEDURE addWage();\n" +
+                "EXECUTE PROCEDURE newUserCreatedOrRemoved();\n" +
                 "\n" +
-                "--TRIGGERS END";
+                "\n" +
+                "CREATE MATERIALIZED VIEW EmployeeInformation AS\n" +
+                "  SELECT\n" +
+                "    employee.picture,\n" +
+                "    UserLogIn.Username,\n" +
+                "    UserLogIn.pass,\n" +
+                "    employee.firstname,\n" +
+                "    employee.secondName,\n" +
+                "    employee.familyName,\n" +
+                "    UserLogIn.cpr,\n" +
+                "    employee.dateOfBirth,\n" +
+                "    employee.address,\n" +
+                "    employee.postcode,\n" +
+                "    city.city,\n" +
+                "    communication.mobile,\n" +
+                "    communication.landline,\n" +
+                "    communication.email,\n" +
+                "    bankInfoDK.konto,\n" +
+                "    bankInfoDK.regNumber,\n" +
+                "    employee.licencePlate,\n" +
+                "    communication.preferredCommunication,\n" +
+                "    employee.moreInfo,\n" +
+                "    wagePerHour.wage,\n" +
+                "    UserLogIn.userRole\n" +
+                "  FROM\n" +
+                "    City\n" +
+                "    INNER JOIN Employee ON city.postcode = Employee.postcode\n" +
+                "    INNER JOIN Communication ON Employee.cpr = communication.cpr\n" +
+                "    INNER JOIN bankInfoDK ON communication.cpr = bankInfoDK.cpr\n" +
+                "    INNER JOIN wagePerHour ON bankInfoDK.cpr = wagePerHour.employeeCPR\n" +
+                "    INNER JOIN userlogin ON wagePerHour.employeeCPR = UserLogIn.cpr;\n" +
+                "\n" +
+                "\n" +
+                "CREATE MATERIALIZED VIEW workingColleagues AS\n" +
+                "  SELECT\n" +
+                "    picture,\n" +
+                "    firstName,\n" +
+                "    familyName,\n" +
+                "    mobile,\n" +
+                "    email,\n" +
+                "    Employee.cpr,\n" +
+                "    workingSchedule.dno\n" +
+                "  FROM communication\n" +
+                "    INNER JOIN employee ON communication.cpr = Employee.cpr\n" +
+                "    LEFT OUTER JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;\n" +
+                "\n" +
+                "CREATE MATERIALIZED VIEW allColleagues AS\n" +
+                "  SELECT\n" +
+                "    picture,\n" +
+                "    firstName,\n" +
+                "    familyName,\n" +
+                "    mobile,\n" +
+                "    email,\n" +
+                "    Employee.cpr\n" +
+                "  FROM communication\n" +
+                "    INNER JOIN Employee ON communication.cpr = Employee.cpr;\n";
         executeStatements(sql);
     }
 

@@ -44,5 +44,7 @@ public interface IDBAdapter {
     ArrayList<User> getAllColleagues(User user);
 
     User logIn(User user);
+
+    void addToWorkingSchedule(WorkingSchedule workingSchedule);
 }
 

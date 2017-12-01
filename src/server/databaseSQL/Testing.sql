@@ -1,5 +1,5 @@
 SET SEARCH_PATH = sep2;
-
+DROP SCHEMA sep2 CASCADE;
 SELECT *
 FROM userlogin;
 
@@ -11,17 +11,23 @@ FROM bankinfodk;
 
 SELECT *
 FROM communication;
-
+SELECT *
+FROM workingschedule;
 SELECT *
 FROM wageperhour;
+
+SELECT *
+FROM department;
 REFRESH MATERIALIZED VIEW allcolleagues;
 SELECT *
 FROM allcolleagues
 WHERE cpr IS DISTINCT FROM '1234567890';
-INSERT into wageperhour (employeecpr, wage) VALUES ('9988776655','1234');
+INSERT INTO wageperhour (employeecpr, wage) VALUES ('9988776655', '1234');
 
 SELECT *
 FROM department;
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('3187044', '4334320890', '10/12/2017', '08:00', '19:00');
 REFRESH MATERIALIZED VIEW workingcolleagues;
 SELECT *
 FROM workingcolleagues;
@@ -41,11 +47,39 @@ INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'Nik
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay5', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('6789012345', 'Nikolay6', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('7890123456', 'Nikolay7', 'Password123', 'Admin');
+UPDATE communication
+SET preferredcommunication = 'mobile'
+WHERE cpr = '1234657890'
+DELETE FROM userlogin;
 
-
+SELECT *
+FROM userlogin;
+SELECT *
+FROM history;
+SELECT *
+FROM city;
 INSERT INTO city (postcode, city) VALUES ('1234', 'Admin');
-
+UPDATE city
+SET city = 'MyAss'
+WHERE postcode = '1234'
 INSERT INTO city (postcode, city) VALUES ('8700', 'Horsens');
+INSERT INTO city (postcode, city) VALUES ('8732', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('9000', 'Horsens34');
+DELETE FROM city
+WHERE postcode = '9000';
+INSERT INTO city (postcode, city) VALUES ('4321', 'Horsens');
+INSERT INTO city (postcode, city) VALUES ('8736', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('9009', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('8709', 'Horsens');
+INSERT INTO city (postcode, city) VALUES ('9999', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('9000', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('8700', 'Horsens');
+INSERT INTO city (postcode, city) VALUES ('8732', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('9000', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('8700', 'Horsens');
+INSERT INTO city (postcode, city) VALUES ('8732', 'Horsens34');
+INSERT INTO city (postcode, city) VALUES ('9000', 'Horsens34');
+
 -- SELECT *
 -- FROM employee;
 -- SELECT *

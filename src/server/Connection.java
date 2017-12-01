@@ -31,6 +31,10 @@ public class Connection implements Runnable, OurObserver {
                 s = (Request) temp;
                 String requestText = s.getType();
                 switch (requestText.toLowerCase()) {
+                    case "addschedule":
+                        System.out.println("here");
+                        adapter.addToWorkingSchedule((WorkingSchedule) s.getRequestObject());
+                        break;
                     case "createaccount":
                         adapter.createAccount((User) s.getRequestObject());
                         break;
@@ -87,6 +91,7 @@ public class Connection implements Runnable, OurObserver {
                     case "changewageperhour":
                         adapter.changeWagePerHours((User) s.getRequestObject());
                         break;
+
                 }
             } catch (Exception e) {
                 try {

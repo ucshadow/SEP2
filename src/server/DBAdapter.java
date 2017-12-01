@@ -20,7 +20,7 @@ public class DBAdapter implements IDBAdapter {
     public void createAccount(User user) {
         String sql = "INSERT INTO UserLogIn VALUES (" + "'" + user.getCpr() + "'," + "'" + user.getUsername() + "'," + "'" + user.getPassword() + "'," + "'" + user.getUserRole() + "'" + ")";
         DBHandler.executeStatements(sql);
-        sql = " INSERT INTO wageperhour (wage) VALUES ('" + user.getWage() + "') where employeecpr='" + user.getCpr() + "' ;";
+        sql = " update wageperhour set wage ='" + user.getWage() + "' where employeecpr='" + user.getCpr() + "' ;";
         DBHandler.executeStatements(sql);
     }
 
@@ -62,7 +62,7 @@ public class DBAdapter implements IDBAdapter {
         DBHandler.executeStatements(sql);
         sql = "Insert into city values ('" + user.getPostcode() + "','" + user.getCity() + "');";
         DBHandler.executeStatements(sql);
-        sql = "Update Employee set picture ='" + user.getPicture() + "',dataofbirth='" + user.getDob() + "',address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenseplate='" +
+        sql = "Update Employee set picture ='" + user.getPicture() + "',dateofbirth='" + user.getDob() + "',address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenceplate='" +
                 user.getLicencePlate() + "',moreinfo ='" + user.getMoreInfo() + "',firstname ='" + user.getFirstName() + "',secondName ='" + user.getSecondName() + "',familyName='" + user.getLastName() + "' where cpr ='" + user.getCpr() + "';";
         DBHandler.executeStatements(sql);
 
@@ -124,6 +124,18 @@ public class DBAdapter implements IDBAdapter {
 //        user1.setUserRole(arrayList.get(i++));
         return user1;
     }
+
+    @Override
+    public void addToWorkingSchedule(WorkingSchedule workingSchedule) {
+        String sql =
+                "INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours) VALUES ('"
+                        + workingSchedule.getDepartmentNumber() + "','" + workingSchedule.getEmployeeCPR() +
+                        "','" + workingSchedule.getWorkingDate() + "','" + workingSchedule.getStartHours() +
+                        "','" + workingSchedule.getEndHours() + "');";
+
+        DBHandler.executeStatements(sql);
+    }
+
 
     //TODO d city
     @Override
@@ -250,6 +262,20 @@ public class DBAdapter implements IDBAdapter {
         return users;
     }
 
+    public ArrayList<User> getAllUsers(User user) {
+        String sql = "select * from userlogin where is cpr is distinct from ='" + user.getCpr() + "';";
+        ArrayList<String[]> arrayList = DBHandler.getAllRows(sql);
+        ArrayList<User> users = new ArrayList<>();
+        for (String[] item : arrayList) {
+            User newuser = new User();
+            newuser.setCpr(item[0]);
+            newuser.setUsername(item[1]);
+            newuser.setPassword(item[2]);
+            newuser.setUserRole(item[3]);
+            users.add(newuser);
+        }
+        return users;
+    }
 
 //    public static void main(String[] args) {
 //        User user = new User("9087654321", "3333.20");

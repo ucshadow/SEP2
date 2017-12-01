@@ -1,9 +1,6 @@
 package client;
 
-import common.Department;
-import common.Request;
-import common.Response;
-import common.User;
+import common.*;
 
 import java.util.ArrayList;
 
@@ -12,7 +9,7 @@ public class Controller {
 
     public Controller() {
 //        client = new Client("10.152.196.94", 6789);
-        client = new Client("10.152.196.60", 6789);
+        client = new Client("localhost", 6789);
 //        client = new Client("10.152.192.107", 6789);
 
     }
@@ -185,4 +182,10 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
+    public void addWorkingSchedule(String dno, String dManager, String date, String starhours, String endHours) {
+        WorkingSchedule workingSchedule = new WorkingSchedule(dno, dManager, date, starhours, endHours);
+        Request submitEditRequest = new Request<>("addSchedule", workingSchedule);
+        client.sendRequest(submitEditRequest);
+
+    }
 }
