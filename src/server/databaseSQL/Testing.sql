@@ -40,7 +40,7 @@ SELECT *
 FROM EmployeeInformation;
 
 
-INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('1234567890', 'Nikolay', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('11 223455', 'Nikolay', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'Nikolay2', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Nikolay3', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'Nikolay4', 'Password123', 'Admin');

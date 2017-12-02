@@ -1,12 +1,11 @@
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
 
-
-CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL;
-CREATE DOMAIN dno_Domain CHAR(7);
-CREATE DOMAIN postcode_Domain VARCHAR(10);
-CREATE DOMAIN varcharDomain VARCHAR(100);
-CREATE DOMAIN numberDomain CHAR(8);
+CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
+CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '');
+CREATE DOMAIN postcode_Domain VARCHAR(10) CONSTRAINT emptyString CHECK (VALUE <> '');
+CREATE DOMAIN varcharDomain VARCHAR(100) CONSTRAINT emptyString CHECK (VALUE <> '');
+CREATE DOMAIN numberDomain CHAR(8) CONSTRAINT emptyString CHECK (VALUE <> '');
 
 CREATE TABLE UserLogIn (
   cpr      CPR_DOMAIN PRIMARY KEY,
@@ -32,7 +31,7 @@ CREATE TABLE Employee (
   firstName    VARCHARDOMAIN,
   secondName   VARCHARDOMAIN,
   familyName   VARCHARDOMAIN,
-  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr),
+  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   dateOfBirth  DATE,
   address      VARCHARDOMAIN,
   postcode     VARCHAR(10) REFERENCES city (postcode),
@@ -43,7 +42,7 @@ CREATE TABLE Employee (
 
 CREATE TABLE communication (
   id                     SERIAL PRIMARY KEY,
-  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr),
+  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   mobile                 NUMBERDOMAIN,
   landline               NUMBERDOMAIN,
   email                  VARCHARDOMAIN,
@@ -52,7 +51,7 @@ CREATE TABLE communication (
 
 CREATE TABLE bankInfoDK (
   id        SERIAL PRIMARY KEY,
-  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr),
+  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   konto     CHAR(4),
   regNumber CHAR(10)
 );
@@ -61,7 +60,7 @@ CREATE TABLE bankInfoDK (
 CREATE TABLE department (
   dno        DNO_DOMAIN PRIMARY KEY,
   dname      VARCHARDOMAIN,
-  dManager   CHAR(10) REFERENCES UserLogIn (cpr),
+  dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   dPostcode  VARCHAR(10) REFERENCES city (postcode),
   dStartdate TIMESTAMP
 );
@@ -70,8 +69,8 @@ CREATE TABLE department (
 CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
   dno        DNO_DOMAIN REFERENCES department (dno),
-  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr),
-  workingDay DATE,
+  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
+  workingDay DATE CONSTRAINT check_date CHECK ( workingDay >= now()),
   startHours TIME,
   endHours   TIME
 );
@@ -79,7 +78,7 @@ CREATE TABLE workingSchedule (
 
 CREATE TABLE wagePerHour (
   id          SERIAL PRIMARY KEY,
-  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr),
+  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   wage        NUMBERDOMAIN CONSTRAINT check_Size CHECK (length(wage)
                                                         < 7)
 );
@@ -104,18 +103,7 @@ BEGIN
     INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);
     INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);
     RETURN new;
-  ELSIF (tg_op = 'DELETE')
-    THEN
-      DELETE FROM employee
-      WHERE old.cpr = cpr;
-      DELETE FROM wagePerHour
-      WHERE old.cpr = employeecpr;
-      DELETE FROM bankInfoDK
-      WHERE old.cpr = cpr;
-      DELETE FROM communication
-      WHERE old.cpr = cpr;
   END IF;
-  RETURN old;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -123,12 +111,6 @@ CREATE TRIGGER newUserAdded
 AFTER INSERT ON userlogin
 FOR EACH ROW
 EXECUTE PROCEDURE newUserCreatedOrRemoved();
-
-CREATE TRIGGER oldUserRemoved
-BEFORE DELETE ON UserLogIn
-FOR EACH ROW
-EXECUTE PROCEDURE newUserCreatedOrRemoved();
-
 
 CREATE MATERIALIZED VIEW EmployeeInformation AS
   SELECT
@@ -390,16 +372,16 @@ BEGIN
         RETURN new;
 
     ELSEIF (tg_op = 'DELETE')
-    THEN
-    details = ('Deleted workingschedule with  cpr ', old.employecpr, ' with working date ', old.workingday, ' in department', old.dno);
+      THEN
+        details = ('Deleted workingschedule with  cpr ', old.employecpr, ' with working date ', old.workingday, ' in department', old.dno);
 
-    INSERT INTO history (tablename, operation, details, TIMESTAMP)
-    VALUES ('workingschedule', 'DELETE', details, now());
-    RETURN old;
+        INSERT INTO history (tablename, operation, details, TIMESTAMP)
+        VALUES ('workingschedule', 'DELETE', details, now());
+        RETURN old;
 
+    END IF;
   END IF;
-END IF;
-RETURN new;
+  RETURN new;
 END;
 $$ LANGUAGE plpgsql;
 
