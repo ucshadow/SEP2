@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Database {
     private Connection connection = null;
     private Statement statement = null;
     private String driver = "org.postgresql.Driver";
     private String url = "jdbc:postgresql://localhost/postgres";
+    private String urlForTestingjUnit = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
+
     private String username;
     private String password;
 
@@ -45,16 +48,35 @@ public class Database {
         executeStatements(sql);
     }
 
+    public void deleteFromtables() {
+        try {
+            connection = DriverManager.getConnection(urlForTestingjUnit, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String[] tables = {"bankinfodk", "communication", "department", "employee", "history", "userlogin", "wageperhour", "workingschedule"};
+        for (String table : tables) {
+            String sql = "delete from " + table + ";";
+            executeStatements(sql);
+        }
+        String sql = "delete from city where postcode is distinct from '1234'";
+        executeStatements(sql);
+    }
+
     private void everything() {
-        String sql = "\n" +
-                "CREATE DOMAIN cpr_Domain CHAR(10);\n" +
-                "CREATE DOMAIN dno_Domain CHAR(4);\n" +
-                "CREATE DOMAIN postcode_Domain VARCHAR(10);\n" +
+        String sql = "CREATE SCHEMA sep2;\n" +
+                "SET SEARCH_PATH = sep2;\n" +
                 "\n" +
+                "CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (\n" +
+                "  length(value) = 10);\n" +
+                "CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
+                "CREATE DOMAIN postcode_Domain VARCHAR(10) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
+                "CREATE DOMAIN varcharDomain VARCHAR(100) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
+                "CREATE DOMAIN numberDomain CHAR(8) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
                 "\n" +
                 "CREATE TABLE UserLogIn (\n" +
                 "  cpr      CPR_DOMAIN PRIMARY KEY,\n" +
-                "  Username VARCHAR(25) UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),\n" +
+                "  Username VARCHARDOMAIN UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),\n" +
                 "  pass     VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (\n" +
                 "    pass LIKE '%A%' OR pass LIKE '%B%' OR pass LIKE '%C%' OR pass LIKE '%D%' OR pass LIKE '%E%' OR\n" +
                 "    pass LIKE '%F%' OR pass LIKE '%G%' OR pass LIKE '%H%' OR pass LIKE '%I%' OR pass LIKE '%J%'\n" +
@@ -67,36 +89,36 @@ public class Database {
                 "\n" +
                 "CREATE TABLE city (\n" +
                 "  postcode POSTCODE_DOMAIN PRIMARY KEY,\n" +
-                "  city     VARCHAR(25)\n" +
+                "  city     VARCHARDOMAIN\n" +
                 ");\n" +
                 "\n" +
                 "CREATE TABLE Employee (\n" +
                 "  ID           SERIAL PRIMARY KEY,\n" +
                 "  picture      VARCHAR,\n" +
-                "  firstName    VARCHAR(25),\n" +
-                "  secondName   VARCHAR(25),\n" +
-                "  familyName   VARCHAR(25),\n" +
-                "  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
+                "  firstName    VARCHARDOMAIN,\n" +
+                "  secondName   VARCHARDOMAIN,\n" +
+                "  familyName   VARCHARDOMAIN,\n" +
+                "  cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  dateOfBirth  DATE,\n" +
-                "  address      VARCHAR(25),\n" +
+                "  address      VARCHARDOMAIN,\n" +
                 "  postcode     VARCHAR(10) REFERENCES city (postcode),\n" +
-                "  licencePlate VARCHAR,\n" +
-                "  moreInfo     VARCHAR\n" +
+                "  licencePlate VARCHARDOMAIN,\n" +
+                "  moreInfo     VARCHARDOMAIN\n" +
                 ");\n" +
                 "\n" +
                 "\n" +
                 "CREATE TABLE communication (\n" +
                 "  id                     SERIAL PRIMARY KEY,\n" +
-                "  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
-                "  mobile                 CHAR(8),\n" +
-                "  landline               CHAR(8),\n" +
-                "  email                  VARCHAR,\n" +
+                "  cpr                    CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "  mobile                 NUMBERDOMAIN,\n" +
+                "  landline               NUMBERDOMAIN,\n" +
+                "  email                  VARCHARDOMAIN,\n" +
                 "  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))\n" +
                 ");\n" +
                 "\n" +
                 "CREATE TABLE bankInfoDK (\n" +
                 "  id        SERIAL PRIMARY KEY,\n" +
-                "  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
+                "  cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  konto     CHAR(4),\n" +
                 "  regNumber CHAR(10)\n" +
                 ");\n" +
@@ -104,8 +126,8 @@ public class Database {
                 "\n" +
                 "CREATE TABLE department (\n" +
                 "  dno        DNO_DOMAIN PRIMARY KEY,\n" +
-                "  dname      VARCHAR,\n" +
-                "  dManager   CHAR(10) REFERENCES UserLogIn (cpr),\n" +
+                "  dname      VARCHARDOMAIN,\n" +
+                "  dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  dPostcode  VARCHAR(10) REFERENCES city (postcode),\n" +
                 "  dStartdate TIMESTAMP\n" +
                 ");\n" +
@@ -114,17 +136,18 @@ public class Database {
                 "CREATE TABLE workingSchedule (\n" +
                 "  id         SERIAL PRIMARY KEY,\n" +
                 "  dno        DNO_DOMAIN REFERENCES department (dno),\n" +
-                "  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
+                "  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  workingDay DATE,\n" +
                 "  startHours TIME,\n" +
                 "  endHours   TIME\n" +
                 ");\n" +
-                "\n" +
+                "-- CONSTRAINT check_date CHECK ( workingDay >= now())\n" +
                 "\n" +
                 "CREATE TABLE wagePerHour (\n" +
                 "  id          SERIAL PRIMARY KEY,\n" +
-                "  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr),\n" +
-                "  wage        NUMERIC(6, 2)\n" +
+                "  employeeCPR CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
+                "  wage        NUMBERDOMAIN CONSTRAINT check_Size CHECK (length(wage)\n" +
+                "                                                        < 7)\n" +
                 ");\n" +
                 "\n" +
                 "CREATE TABLE history (\n" +
@@ -147,18 +170,7 @@ public class Database {
                 "    INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);\n" +
                 "    INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);\n" +
                 "    RETURN new;\n" +
-                "  ELSIF (tg_op = 'DELETE')\n" +
-                "    THEN\n" +
-                "      DELETE FROM employee\n" +
-                "      WHERE old.cpr = cpr;\n" +
-                "      DELETE FROM wagePerHour\n" +
-                "      WHERE old.cpr = employeecpr;\n" +
-                "      DELETE FROM bankInfoDK\n" +
-                "      WHERE old.cpr = cpr;\n" +
-                "      DELETE FROM communication\n" +
-                "      WHERE old.cpr = cpr;\n" +
                 "  END IF;\n" +
-                "  RETURN old;\n" +
                 "END;\n" +
                 "$$ LANGUAGE plpgsql;\n" +
                 "\n" +
@@ -166,12 +178,6 @@ public class Database {
                 "AFTER INSERT ON userlogin\n" +
                 "FOR EACH ROW\n" +
                 "EXECUTE PROCEDURE newUserCreatedOrRemoved();\n" +
-                "\n" +
-                "CREATE TRIGGER oldUserRemoved\n" +
-                "BEFORE DELETE ON UserLogIn\n" +
-                "FOR EACH ROW\n" +
-                "EXECUTE PROCEDURE newUserCreatedOrRemoved();\n" +
-                "\n" +
                 "\n" +
                 "CREATE MATERIALIZED VIEW EmployeeInformation AS\n" +
                 "  SELECT\n" +
@@ -227,7 +233,278 @@ public class Database {
                 "    email,\n" +
                 "    Employee.cpr\n" +
                 "  FROM communication\n" +
-                "    INNER JOIN Employee ON communication.cpr = Employee.cpr;\n";
+                "    INNER JOIN Employee ON communication.cpr = Employee.cpr;\n" +
+                "\n" +
+                "\n" +
+                "CREATE OR REPLACE FUNCTION historyAdd()\n" +
+                "  RETURNS TRIGGER AS $$\n" +
+                "DECLARE\n" +
+                "  details VARCHAR;\n" +
+                "BEGIN\n" +
+                "  IF (tg_table_name = 'bankinfodk')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('Employee with ', new.cpr, ' added bank account with konto ', new.konto, ' and reg number ', new.regnumber);\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('BankingInfo', ' INSERT ', details, now());\n" +
+                "      RETURN new;\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('Employee with ', new.cpr, ' updated bank account with konto ', new.konto, ' and reg number ', new.regnumber);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('BankingInfo', ' Update ', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = (\n" +
+                "          'Employee with ', old.cpr, ' was deleted with bank account with konto ', old.konto, ' and reg number ',\n" +
+                "          old.regnumber);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('BankingInfo', ' Delete ', details, now());\n" +
+                "        RETURN old;\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'city')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = (\n" +
+                "        'City with name ', new.city, ' with post code', new.postcode);\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "      VALUES ('City', ' Insert ', details, now());\n" +
+                "      RETURN new;\n" +
+                "\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = (\n" +
+                "          'City with name ', new.city, ' with post code', new.postcode);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('City', ' Update ', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = (\n" +
+                "          'City with name ', old.city, ' with post code', old.postcode);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('City', ' Delete ', details, now());\n" +
+                "        RETURN old;\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'communication')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = (' communications for  employee with cpr ', new.cpr, ' with mobile ', new.mobile);\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "      VALUES ('Communication', ' Insert ', details, now());\n" +
+                "      RETURN new;\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('communications for  employee with cpr ', old.cpr, ' with mobile ', new.mobile);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('Communication', ' Update ', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('communications for  employee with cpr ', old.cpr, ' with mobile ', old.mobile);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('Communication', ' Delete ', details, now());\n" +
+                "        RETURN old;\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'department')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('department created with  ', new.dno, ' with name ', new.dname);\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('department', 'INSERT', details, now());\n" +
+                "      RETURN new;\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('department update with  ', new.dno, ' with name ', new.dname);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('department', 'update', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('department deleted with  ', old.dno, ' with name ', old.dname);\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('department', 'delete', details, now());\n" +
+                "        RETURN old;\n" +
+                "\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'employee')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('Employee insert with  ', new.cpr, ' with name ', new.firstname);\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('Employee', 'INSERT', details, now());\n" +
+                "      RETURN new;\n" +
+                "\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('Employee update with  ', new.cpr, ' with name ', new.firstname);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('Employee', 'update', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('Delete employee with  ', old.cpr, ' with name ', old.firstname);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('Employee', 'delete', details, now());\n" +
+                "        RETURN old;\n" +
+                "\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'userlogin')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('Inserted user with  ', new.cpr, ' with password ', new.pass, ' and role ', new.userrole);\n" +
+                "\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('userlogin', 'INSERT', details, now());\n" +
+                "      RETURN new;\n" +
+                "\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('updated user with  ', new.cpr, ' with password ', new.pass, ' and role ', new.userrole);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('userlogin', 'UPDATE', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('deleted user with  ', old.cpr, ' with password ', old.pass, ' and role ', old.userrole);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('userlogin', 'DELETE', details, now());\n" +
+                "        RETURN old;\n" +
+                "\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "\n" +
+                "  IF (tg_table_name = 'wageperhour')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('Inserted wage with  ', new.employeecpr, ' with wage ', new.wage);\n" +
+                "\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP) VALUES ('wageperhour', 'INSERT', details, now());\n" +
+                "      RETURN new;\n" +
+                "\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('Updated wage with  ', new.employeecpr, ' with wage ', new.wage);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('wageperhour', 'UPDATE', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('delete wage with  ', old.employeecpr, ' with wage ', old.wage);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('wageperhour', 'DELETE', details, now());\n" +
+                "        RETURN old;\n" +
+                "\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "  IF (tg_table_name = 'workingschedule')\n" +
+                "  THEN\n" +
+                "    IF (tg_op = 'INSERT')\n" +
+                "    THEN\n" +
+                "      details = ('Inserted workingschedule with  cpr ', new.employecpr, ' with working date ', new.workingday, ' in department', new.dno);\n" +
+                "\n" +
+                "      INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "      VALUES ('workingschedule', 'INSERT', details, now());\n" +
+                "      RETURN new;\n" +
+                "\n" +
+                "    ELSIF (tg_op = 'UPDATE')\n" +
+                "      THEN\n" +
+                "        details = ('Updated workingschedule with  cpr ', new.employecpr, ' with working date ', new.workingday, ' in department', new.dno);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('workingschedule', 'UPDATE', details, now());\n" +
+                "        RETURN new;\n" +
+                "\n" +
+                "    ELSEIF (tg_op = 'DELETE')\n" +
+                "      THEN\n" +
+                "        details = ('Deleted workingschedule with  cpr ', old.employecpr, ' with working date ', old.workingday, ' in department', old.dno);\n" +
+                "\n" +
+                "        INSERT INTO history (tablename, operation, details, TIMESTAMP)\n" +
+                "        VALUES ('workingschedule', 'DELETE', details, now());\n" +
+                "        RETURN old;\n" +
+                "\n" +
+                "    END IF;\n" +
+                "  END IF;\n" +
+                "  RETURN new;\n" +
+                "END;\n" +
+                "$$ LANGUAGE plpgsql;\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON bankInfoDK\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON city\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON communication\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON department\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON Employee\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON UserLogIn\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON wagePerHour\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "\n" +
+                "CREATE TRIGGER logOnInsert\n" +
+                "AFTER INSERT OR UPDATE OR DELETE ON workingSchedule\n" +
+                "FOR EACH ROW\n" +
+                "EXECUTE PROCEDURE historyAdd();\n" +
+                "\n" +
+                "INSERT INTO city (postcode, city) VALUES ('1234', 'Admin');\n";
+        executeStatements(sql);
+    }
+
+    public void dropAll() {
+        String sql = "DROP SCHEMA sep2 CASCADE;";
         executeStatements(sql);
     }
 

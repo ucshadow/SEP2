@@ -1,5 +1,6 @@
 SET SEARCH_PATH = sep2;
 DROP SCHEMA sep2 CASCADE;
+delete from userlogin;
 SELECT *
 FROM userlogin;
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
@@ -8,6 +9,7 @@ CREATE TABLE testing (
   that   INTEGER,
   number INTEGER
 );
+delete from userlogin ;
 INSERT INTO testing (that, number) VALUES ('1', '0');
 SELECT *
 FROM testing;

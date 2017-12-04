@@ -82,7 +82,7 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<String> temp = dbHandler.getResultSet(sql);
         String forReturn = null;
         try {
-            forReturn = temp.get(0);
+            forReturn = temp.get(0).trim();
         } catch (Exception e) {
             //Do nothing
         }
