@@ -1,8 +1,9 @@
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
 
-CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
-CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '');
+CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (
+  length(value) = 10);
+CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '' );
 CREATE DOMAIN postcode_Domain VARCHAR(10) CONSTRAINT emptyString CHECK (VALUE <> '');
 CREATE DOMAIN varcharDomain VARCHAR(100) CONSTRAINT emptyString CHECK (VALUE <> '');
 CREATE DOMAIN numberDomain CHAR(8) CONSTRAINT emptyString CHECK (VALUE <> '');
@@ -70,11 +71,11 @@ CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
   dno        DNO_DOMAIN REFERENCES department (dno),
   employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  workingDay DATE CONSTRAINT check_date CHECK ( workingDay >= now()),
+  workingDay DATE,
   startHours TIME,
   endHours   TIME
 );
-
+-- CONSTRAINT check_date CHECK ( workingDay >= now())
 
 CREATE TABLE wagePerHour (
   id          SERIAL PRIMARY KEY,

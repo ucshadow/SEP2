@@ -1,6 +1,7 @@
 package server;
 
 import common.Department;
+import common.Request;
 import common.User;
 import common.WorkingSchedule;
 
@@ -165,6 +166,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public void deleteDepartment(Department department) {
+
         String sql = " Delete from department where dno='" + department.getdNumber().toLowerCase() + "';";
         DBHandler.executeStatements(sql);
     }
@@ -178,6 +180,7 @@ public class DBAdapter implements IDBAdapter {
     //TODO DStartDate
     @Override
     public ArrayList<Department> getAllDepartments() {
+
         String sql = "Select * from department;";
         ArrayList<String[]> temp = DBHandler.getAllRows(sql);
         ArrayList<Department> departments = new ArrayList<>();
@@ -190,6 +193,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<WorkingSchedule> workingSchedulePerWeek(User user) {
+
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         String firstDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -211,6 +215,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<User> getWorkingColleagues(User user) {
+
         String sql = "SELECT  DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
         ArrayList<String> forReturn = DBHandler.getResultSet(sql);
         ArrayList<User> users = null;
@@ -237,12 +242,14 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<String> getWorkingDepartments(User user) {
+
         String sql = "SELECT DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
         return DBHandler.getResultSet(sql);
     }
 
     @Override
     public ArrayList<User> getAllColleagues(User user) {
+
         String sql = "REFRESH MATERIALIZED VIEW allcolleagues;";
         DBHandler.executeStatements(sql);
         sql = "SELECT * from allcolleagues where cpr is DISTINCT FROM '" + user.getCpr() + "';";
@@ -263,7 +270,8 @@ public class DBAdapter implements IDBAdapter {
     }
 
     public ArrayList<User> getAllUsers(User user) {
-        String sql = "select * from userlogin where is cpr is distinct from ='" + user.getCpr() + "';";
+
+        String sql = "select * from userlogin where cpr is distinct from '" + user.getCpr() + "';";
         ArrayList<String[]> arrayList = DBHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : arrayList) {
@@ -275,6 +283,12 @@ public class DBAdapter implements IDBAdapter {
             users.add(newuser);
         }
         return users;
+    }
+
+    @Override
+    public void wordCheck(String string) {
+        String sql = "INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '" + string + "', now());";
+        DBHandler.executeStatements(sql);
     }
 
 //    public static void main(String[] args) {

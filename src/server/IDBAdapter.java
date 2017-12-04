@@ -1,6 +1,7 @@
 package server;
 
 import common.Department;
+import common.Request;
 import common.User;
 import common.WorkingSchedule;
 
@@ -46,5 +47,7 @@ public interface IDBAdapter {
     User logIn(User user);
 
     void addToWorkingSchedule(WorkingSchedule workingSchedule);
+
+    void wordCheck(String string);
 }
 

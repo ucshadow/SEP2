@@ -2,6 +2,7 @@ SET SEARCH_PATH = sep2;
 DROP SCHEMA sep2 CASCADE;
 SELECT *
 FROM userlogin;
+INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
 
 SELECT *
 FROM employee;
@@ -11,7 +12,7 @@ FROM bankinfodk;
 
 SELECT *
 FROM communication;
-SELECT *
+SELECT count(id)
 FROM workingschedule;
 SELECT *
 FROM wageperhour;
@@ -40,8 +41,8 @@ SELECT *
 FROM EmployeeInformation;
 
 
-INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('11 223455', 'Nikolay', 'Password123', 'Admin');
-INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'Nikolay2', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('', 'Nikolay', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', '', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Nikolay3', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'Nikolay4', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay5', 'Password123', 'Admin');
