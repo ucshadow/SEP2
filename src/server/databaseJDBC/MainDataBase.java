@@ -15,6 +15,7 @@ public class MainDataBase {
         Database database = new Database(username, pass);
         database.mainMethod();
         System.out.println("Thank you for your time database is ready");
+
     }
 
 }

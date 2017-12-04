@@ -1,27 +1,49 @@
 package server;
 
+
 import java.sql.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 
 public class DBHandler {
+    private Connection connection = null;
+    private Statement statement = null;
+    private String driver = "org.postgresql.Driver";
+    private String url = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
+    private String username = "postgres";
+    private String pass = "1q2w3e";
 
-    private static Connection connection = null;
-    private static Statement statement = null;
-    private static final String DRIVER = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "aev123";
+    public DBHandler() {
+        try {
+            connection = DriverManager.getConnection(url, username, pass);
 
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+        } catch (SQLException e) {
+            System.out.println("Errorrr");
+            System.out.println("=========================================================");
+            e.printStackTrace();
+        }
+    }
 
-    public static void executeStatements(String sql) {
-        openDataBase();
+    public void executeStatements(String sql) {
 
         try {
             statement = connection.createStatement();
             statement.executeUpdate(sql);
-
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+                System.out.println("Roll back catch");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e2) {
+                    e2.printStackTrace();
+                }
+            }
             if (e.getSQLState().toString().equals("23505")) {
                 System.out.println("CPR exists");
             } else {
@@ -30,19 +52,17 @@ public class DBHandler {
             }
         }
 
-        closeDataBase();
 
     }
 
-    public static ArrayList getResultSet(String statment) {
+    public ArrayList getResultSet(String sql) {
         ArrayList<String> temp = new ArrayList<>();
 
         try {
-            Class.forName(DRIVER);
-            openDataBase();
+            Class.forName(driver);
 
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(statment);
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 if (resultSet.getString(1).length() > 1) {
                     temp.add(resultSet.getString(1));
@@ -51,50 +71,39 @@ public class DBHandler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-//        System.out.println("DBHandler" + temp);
-        closeDataBase();
         return temp;
 
     }
 
-    public static ArrayList getSingleRow(String statement) {
+    public ArrayList getSingleRow(String sql) {
         ArrayList<String> temp = new ArrayList<>();
 
         try {
-            Class.forName(DRIVER);
-            String sql = statement;
-            openDataBase();
+            Class.forName(driver);
 
-            DBHandler.statement = connection.createStatement();
-            ResultSet resultSet = DBHandler.statement.executeQuery(sql);
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                     temp.add(resultSet.getString(i));
                 }
             }
-//            while (resultSet.next()) {
-//                if (resultSet.getString(1).length() > 1) {
-//                    temp.add(resultSet.getString(1));
-//                }
-//            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-//        System.out.println("DBHandler" + temp);
-        closeDataBase();
         return temp;
 
     }
 
-    public static ArrayList<String[]> getAllRows(String statement) {
+    public ArrayList<String[]> getAllRows(String sql) {
         ArrayList<String[]> temp = new ArrayList<>();
         String[] temp2 = null;
 
         try {
-            Class.forName(DRIVER);
-            openDataBase();
-            DBHandler.statement = connection.createStatement();
-            ResultSet resultSet = DBHandler.statement.executeQuery(statement);
+            Class.forName(driver);
+
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 temp2 = new String[resultSet.getMetaData().getColumnCount()];
                 for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
@@ -102,36 +111,12 @@ public class DBHandler {
                 }
                 temp.add(temp2);
             }
-//            while (resultSet.next()) {
-//                if (resultSet.getString(1).length() > 1) {
-//                    temp.add(resultSet.getString(1));
-//                }
-//            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-//        System.out.println("DBHandler" + temp);
-        closeDataBase();
         return temp;
 
     }
 
-
-    private static void closeDataBase() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private static void openDataBase() {
-        try {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

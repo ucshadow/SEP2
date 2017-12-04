@@ -85,14 +85,18 @@ public class Connection implements Runnable, OurObserver {
                                     adapter.logIn((User) s.getRequestObject())));
                             break;
                         case "getallcolleagues":
-                            ArrayList<User> allColleagues = adapter.getAllColleagues((User) s.getRequestObject());
+                            ArrayList<User> allColleagues = adapter.getAllColleagues();
                             getOutputStream().writeObject(new Response<>("getAllColleagues", allColleagues));
                             break;
                         case "changewageperhour":
                             adapter.changeWagePerHours((User) s.getRequestObject());
                             break;
                         case "getallusers":
+<<<<<<< HEAD
                             ArrayList<User> users  = adapter.getAllUsers((User) s.getRequestObject());
+=======
+                            ArrayList<User> users = adapter.getAllUsers();
+>>>>>>> jUnitTest
                             getOutputStream().writeObject(new Response<>("getallusers", users));
                             break;
                     }
