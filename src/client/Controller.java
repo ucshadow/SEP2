@@ -9,8 +9,8 @@ public class Controller {
 
     public Controller() {
 //        client = new Client("10.152.196.94", 6789);
-        client = new Client("localhost", 6789);
-//        client = new Client("10.152.192.107", 6789);
+//        client = new Client("localhost", 6789);
+        client = new Client("10.152.192.90", 6789);
 
     }
 

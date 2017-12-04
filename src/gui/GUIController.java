@@ -1,26 +1,22 @@
 package gui;
 
 import client.Controller;
-import common.Department;
 import common.Response;
 import common.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class GUIController {
 
@@ -93,6 +89,9 @@ public class GUIController {
     private Label profileWageLabel;
     @FXML
     private TextField newPicture;
+    @FXML
+    private ListView clientList;
+
     /**
      * Author: Radu Orleanu
      * <p>
@@ -181,7 +180,7 @@ public class GUIController {
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
-        if(user.getPicture().equals("")) {
+        if (user.getPicture().equals("") || user.getPicture().equals("null")) {
             user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
         }
         Image i = new Image(user.getPicture());
@@ -210,7 +209,11 @@ public class GUIController {
 
         System.out.println(user);
         System.out.println(x);
+
+
     }
+
+
     @FXML
     private void getAllUsersEvent(ActionEvent event) {
 
@@ -275,6 +278,7 @@ public class GUIController {
 
         }
     }
+
 
     public void setClientController(Controller c) {
         this.c = c;
