@@ -4,6 +4,18 @@ SELECT *
 FROM userlogin;
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
 
+CREATE TABLE testing (
+  that   INTEGER,
+  number INTEGER
+);
+INSERT INTO testing (that, number) VALUES ('1', '0');
+SELECT *
+FROM testing;
+UPDATE testing
+SET number = number + 1
+WHERE that = '1';
+UPDATE testing
+SET number = '0';
 SELECT *
 FROM employee;
 
@@ -50,19 +62,19 @@ INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('6789012345', 'Nik
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('7890123456', 'Nikolay7', 'Password123', 'Admin');
 UPDATE communication
 SET preferredcommunication = 'mobile'
-WHERE cpr = '1234657890'
+WHERE cpr = '1234657890';
 DELETE FROM userlogin;
 
 SELECT *
 FROM userlogin;
-SELECT *
+SELECT count(id)
 FROM history;
 SELECT *
 FROM city;
 INSERT INTO city (postcode, city) VALUES ('1234', 'Admin');
 UPDATE city
 SET city = 'MyAss'
-WHERE postcode = '1234'
+WHERE postcode = '1234';
 INSERT INTO city (postcode, city) VALUES ('8700', 'Horsens');
 INSERT INTO city (postcode, city) VALUES ('8732', 'Horsens34');
 INSERT INTO city (postcode, city) VALUES ('9000', 'Horsens34');

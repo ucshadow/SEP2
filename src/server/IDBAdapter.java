@@ -42,12 +42,15 @@ public interface IDBAdapter {
 
     ArrayList<String> getWorkingDepartments(User user);
 
-    ArrayList<User> getAllColleagues(User user);
+    ArrayList<User> getAllColleagues();
 
     User logIn(User user);
 
     void addToWorkingSchedule(WorkingSchedule workingSchedule);
 
     void wordCheck(String string);
+
+    ArrayList<User> getAllUsers();
+
 }
 

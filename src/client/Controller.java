@@ -175,10 +175,15 @@ public class Controller {
     }
 
     //TODO Tested working
-    public void getAllColleagues(String cpr) {
-        User user = new User();
-        user.setCpr(cpr);
-        Request submitEditRequest = new Request<>("getAllColleagues", user);
+    public void getAllColleagues() {
+//        User user = new User();
+//        user.setCpr(cpr);
+        Request submitEditRequest = new Request<>("getAllColleagues", null);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getAllUsers() {
+        Request submitEditRequest = new Request<>("getallusers", null);
         client.sendRequest(submitEditRequest);
     }
 
