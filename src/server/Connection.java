@@ -91,6 +91,10 @@ public class Connection implements Runnable, OurObserver {
                         case "changewageperhour":
                             adapter.changeWagePerHours((User) s.getRequestObject());
                             break;
+                        case "getallusers":
+                            ArrayList<User> users  = adapter.getAllUsers((User) s.getRequestObject());
+                            getOutputStream().writeObject(new Response<>("getallusers", users));
+                            break;
                     }
                 } else {
                     adapter.wordCheck(s.getRequestObject().toString());

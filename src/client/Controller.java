@@ -188,4 +188,8 @@ public class Controller {
         client.sendRequest(submitEditRequest);
 
     }
+    public void getAllUsers(User user) {
+        Request submitEditRequest = new Request<>("getallusers", user);
+        client.sendRequest(submitEditRequest);
+    }
 }

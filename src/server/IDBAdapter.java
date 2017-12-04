@@ -48,6 +48,8 @@ public interface IDBAdapter {
 
     void addToWorkingSchedule(WorkingSchedule workingSchedule);
 
+    ArrayList<User> getAllUsers(User user);
+
     void wordCheck(String string);
 }
 

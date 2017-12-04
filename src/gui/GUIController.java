@@ -4,6 +4,7 @@ import client.Controller;
 import common.Department;
 import common.Response;
 import common.User;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class GUIController {
@@ -208,6 +210,70 @@ public class GUIController {
 
         System.out.println(user);
         System.out.println(x);
+    }
+    @FXML
+    private void getAllUsersEvent(ActionEvent event) {
+
+        c.getAllUsers(user);
+//        User[] users = (User[]) x.get;
+
+        final Response[] res2 = new Response[1];
+
+        try {
+            Task task = new Task<Void>() {
+                @Override
+                public Void call() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Response res = c.getLastResponse();
+                    User[] users = (User[]) res.getRespnoseObject();
+                    System.out.println(Arrays.toString(users));
+                    res2[0] = res;
+                    return null;
+
+                }
+            };
+
+            new Thread(task).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        System.out.println(res);
+//        User[] users = (User[]) res.getAllParameters();
+//        c.getAllUsers(user.getUsername(),user.getPassword(),user.getCpr(),user.getUserRole());
+
+
+//        = FXCollections.observableArrayList (
+//                "Red");
+
+
+        while (true) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (res2[0] != null) {
+                System.out.println(res2[0]);
+//                break;
+//
+//                User[] users = (User[]) res2[0].getRespnoseObject();
+//            ArrayList<User> users2 = new ArrayList<>();
+//
+//            users2.addAll(Arrays.asList(users));
+//
+//
+//            ObservableList<User> items = FXCollections.observableArrayList(users2);
+//            clientList.setItems(items);
+                break;
+            }
+
+
+        }
     }
 
     public void setClientController(Controller c) {
