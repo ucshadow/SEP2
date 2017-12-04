@@ -1,12 +1,15 @@
 package gui;
 
 import client.Controller;
+import common.Department;
 import common.Response;
 import common.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -216,67 +219,48 @@ public class GUIController {
 
     @FXML
     private void getAllUsersEvent(ActionEvent event) {
-
         c.getAllUsers(user);
-//        User[] users = (User[]) x.get;
-
-        final Response[] res2 = new Response[1];
-
-        try {
-            Task task = new Task<Void>() {
-                @Override
-                public Void call() {
+        Task task = new Task<Response>() {
+            @Override
+            public Response call() {
+                int tries = 0;
+                while (tries < 10) {
+                    Response r = c.getLastResponse();
+                    if (r != null) {
+                        return r;
+                    }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Response res = c.getLastResponse();
-                    User[] users = (User[]) res.getRespnoseObject();
-                    System.out.println(Arrays.toString(users));
-                    res2[0] = res;
-                    return null;
-
+                    tries++;
                 }
-            };
-
-            new Thread(task).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        System.out.println(res);
-//        User[] users = (User[]) res.getAllParameters();
-//        c.getAllUsers(user.getUsername(),user.getPassword(),user.getCpr(),user.getUserRole());
-
-
-//        = FXCollections.observableArrayList (
-//                "Red");
-
-
-        while (true) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                return null;
             }
-            if (res2[0] != null) {
-                System.out.println(res2[0]);
-//                break;
-//
-//                User[] users = (User[]) res2[0].getRespnoseObject();
-//            ArrayList<User> users2 = new ArrayList<>();
-//
-//            users2.addAll(Arrays.asList(users));
-//
-//
-//            ObservableList<User> items = FXCollections.observableArrayList(users2);
-//            clientList.setItems(items);
-                break;
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+
+    }
+
+    private void responseReader(Response res) {
+        if (res != null) {
+            if (res.getResponse().equals("getallusers")) {
+                populateUserTable((ArrayList<User>) res.getRespnoseObject());
             }
-
-
+            if (res.getResponse().equals("getalldepartments")) { //todo change keyword
+                populateDepartments((ArrayList<Department>) res.getRespnoseObject());
+            }
         }
+    }
+
+    private void populateUserTable(ArrayList<User> users) {
+        users.forEach(System.out::println);
+    }
+
+    private void populateDepartments(ArrayList<Department> departments) {
+        departments.forEach(System.out::println);
     }
 
 
