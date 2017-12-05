@@ -10,7 +10,8 @@ public class Controller {
     public Controller() {
 //        client = new Client("10.152.196.94", 6789);
 //        client = new Client("localhost", 6789);
-        client = new Client("10.152.192.90", 6789);
+        client = new Client("10.152.192.102", 6789);
+//        client = new Client("10.152.196.96", 6789);
 
     }
 
@@ -120,9 +121,9 @@ public class Controller {
 
     //TODO Tested working
     public void getAllDepartments() {
-
         Request submitEditRequest = new Request<>("getAllDepartments", null);
         client.sendRequest(submitEditRequest);
+        System.out.println("sended");
     }
 
     //TODO Tested working
@@ -193,6 +194,7 @@ public class Controller {
         client.sendRequest(submitEditRequest);
 
     }
+
     public void getAllUsers(User user) {
         Request submitEditRequest = new Request<>("getallusers", user);
         client.sendRequest(submitEditRequest);

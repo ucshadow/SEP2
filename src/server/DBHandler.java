@@ -11,7 +11,7 @@ public class DBHandler {
     private String driver = "org.postgresql.Driver";
     private String url = "jdbc:postgresql://localhost/postgres?currentSchema=sep2";
     private String username = "postgres";
-    private String pass = "1q2w3e";
+    private String pass = "postgres";
 
     public DBHandler() {
         try {

@@ -47,6 +47,12 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
+        String shortDescription = "";
+        shortDescription += dNumber + " " + dName + " " + dLocation + " " + dManager;
+        return shortDescription;
+    }
+
+    public String asString() {
         return "Department{" +
                 "dNumber='" + dNumber + '\'' +
                 ", dName='" + dName + '\'' +

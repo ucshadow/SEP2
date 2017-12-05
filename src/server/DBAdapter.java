@@ -138,6 +138,11 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
     }
 
+    @Override
+    public ArrayList<User> getAllUsers(User user) {
+        return null;
+    }
+
 
     //TODO d city
     @Override

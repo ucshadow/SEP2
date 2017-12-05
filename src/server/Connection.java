@@ -30,7 +30,7 @@ public class Connection implements Runnable, OurObserver {
                 Object temp = inFromClient.readObject();
                 s = (Request) temp;
                 String requestText = s.getType();
-                if (!wordsCheck(s.getRequestObject().toString())) {
+//                if (!wordsCheck(s.getRequestObject().toString())) {
                     switch (requestText.toLowerCase()) {
                         case "addschedule":
                             adapter.addToWorkingSchedule((WorkingSchedule) s.getRequestObject());
@@ -92,18 +92,14 @@ public class Connection implements Runnable, OurObserver {
                             adapter.changeWagePerHours((User) s.getRequestObject());
                             break;
                         case "getallusers":
-<<<<<<< HEAD
-                            ArrayList<User> users  = adapter.getAllUsers((User) s.getRequestObject());
-=======
                             ArrayList<User> users = adapter.getAllUsers();
->>>>>>> jUnitTest
                             getOutputStream().writeObject(new Response<>("getallusers", users));
                             break;
                     }
-                } else {
-                    adapter.wordCheck(s.getRequestObject().toString());
-                    getOutputStream().writeObject(new Response<>("Word check was triggered", null));
-                }
+//                } else {
+//                    adapter.wordCheck(s.getRequestObject().toString());
+//                    getOutputStream().writeObject(new Response<>("Word check was triggered", null));
+//                }
             } catch (Exception e) {
                 try {
                     outToClient.close();
@@ -113,8 +109,6 @@ public class Connection implements Runnable, OurObserver {
                 }
                 server.removeObserver(this);
                 break;
-
-
             }
         }
     }

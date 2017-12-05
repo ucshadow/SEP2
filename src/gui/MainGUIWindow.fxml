@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -14,7 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GUIController">
     <children>
         <TabPane prefHeight="794.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
@@ -133,18 +138,11 @@
                                                         <TextField fx:id="departmentNameCreate" layoutX="50.0" layoutY="73.0" promptText="DeptName" />
                                                         <TextField fx:id="departmentLocationCreate" layoutX="50.0" layoutY="107.0" promptText="DeptLocation" />
                                                         <TextField fx:id="departmentManagerCreate" layoutX="50.0" layoutY="143.0" promptText="DeptManager" />
-                                                        <TableView layoutX="250.0" layoutY="22.0" prefHeight="313.0" prefWidth="350.0">
-                                                            <columns>
-                                                                <TableColumn prefWidth="75.0" text="DeptNo" />
-                                                                <TableColumn prefWidth="75.0" text="DeptName" />
-                                                                <TableColumn prefWidth="75.0" text="DeptLocation" />
-                                                                <TableColumn prefWidth="75.0" text="DeptManager" />
-                                                            </columns>
-                                                        </TableView>
-                                                        <Button fx:id="departmentCreateButton" layoutX="50.0" layoutY="188.0" mnemonicParsing="false" onAction="#createDept" text="Create" />
-                                                        <Button fx:id="departmentSearchButton" layoutX="154.0" layoutY="188.0" mnemonicParsing="false" text="Search" />
+                                                        <Button fx:id="departmentCreateButton" onAction="#getAllDepartmentsEvent" layoutX="50.0" layoutY="188.0" mnemonicParsing="false" text="Create" />
+                                                        <Button fx:id="departmentSelectButton" onAction="#selectDepartment" layoutX="154.0" layoutY="188.0" mnemonicParsing="false" text="Select" />
                                                         <Button fx:id="departmentEditButton" layoutX="50.0" layoutY="234.0" mnemonicParsing="false" text="Edit" />
                                                         <Button fx:id="departmentRemoveButton" layoutX="151.0" layoutY="234.0" mnemonicParsing="false" text="Remove" />
+                                          <ListView fx:id="departmentList" layoutX="248.0" layoutY="32.0" prefHeight="232.0" prefWidth="205.0" />
                                                     </children></AnchorPane>
                                             </content>
                                         </Tab>

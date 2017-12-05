@@ -7,19 +7,17 @@ import common.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GUIController {
 
@@ -108,6 +106,11 @@ public class GUIController {
     private TextField departmentLocationCreate;
     @FXML
     private TextField departmentManagerCreate;
+    @FXML
+    private ListView departmentList;
+
+    private ArrayList<Department> arrayListDepartments = new ArrayList<>();
+    private ObservableList<Department> observableListDepartments;
 
     @FXML
     private void handleCreateUserAdminPanel(ActionEvent event) {
@@ -183,7 +186,7 @@ public class GUIController {
     public void setUser(Response x) {
         System.out.println(x.getRespnoseObject());
         user = (User) x.getRespnoseObject();
-        if (user.getPicture().equals("") || user.getPicture().equals("null")) {
+        if (user.getPicture().equals("null") || user.getPicture().equals("")) {
             user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
         }
         Image i = new Image(user.getPicture());
@@ -241,15 +244,44 @@ public class GUIController {
         };
         new Thread(task).start();
         task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+    }
 
+    @FXML
+    public void getAllDepartmentsEvent(Event event) {
+        c.getAllDepartments();
+        Task task = new Task<Response>() {
+            @Override
+            public Response call() {
+                int tries = 0;
+                while (tries < 10) {
+                    Response r = c.getLastResponse();
+                    if (r != null) {
+                        System.out.println("that null");
+
+                        return r;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tries++;
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
     }
 
     private void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getallusers")) {
+                System.out.println(res.toString());
                 populateUserTable((ArrayList<User>) res.getRespnoseObject());
             }
-            if (res.getResponse().equals("getalldepartments")) { //todo change keyword
+            if (res.getResponse().equals("getAllDepartments")) {
+                System.out.println(res.toString());
                 populateDepartments((ArrayList<Department>) res.getRespnoseObject());
             }
         }
@@ -260,11 +292,30 @@ public class GUIController {
     }
 
     private void populateDepartments(ArrayList<Department> departments) {
+        observableListDepartments = FXCollections.observableArrayList();
         departments.forEach(System.out::println);
+        arrayListDepartments.addAll(departments);
+        for (Department d : arrayListDepartments) {
+            observableListDepartments.add(d);
+        }
+        departmentList.getItems().setAll(observableListDepartments);
+        departmentList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
+
+    @FXML
+    public void selectDepartment() {
+        Department selectedDepartment = (Department) departmentList.getSelectionModel().getSelectedItem();
+        departmentNumberCreate.setText(selectedDepartment.getdNumber());
+
+        departmentNameCreate.setText(selectedDepartment.getdName());
+        departmentLocationCreate.setText(selectedDepartment.getdLocation());
+        departmentManagerCreate.setText(selectedDepartment.getdManager());
+    }
+
 
 
     public void setClientController(Controller c) {
         this.c = c;
     }
+
 }

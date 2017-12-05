@@ -77,71 +77,71 @@ public class DBAdapterTest {
 
     }
 
-    @Test
-    public void createTenUsers() {
-        fakeUser.setEverythingUp(10, 1);
-        ArrayList<User> users = fakeUser.getWorkers();
-        ArrayList<User> allUsersFromDB;
-        for (int i = 0; i < users.size(); i++) {
-            idbAdapter.createAccount(users.get(i));
-            allUsersFromDB = idbAdapter.getAllUsers();
-            assertTrue(allUsersFromDB.size() == i + 1);
-        }
-        allUsersFromDB = idbAdapter.getAllUsers();
-        assertEquals(users.size(), allUsersFromDB.size());
-        for (int i = 0; i < allUsersFromDB.size(); i++) {
-            assertEquals(users.get(i).getCpr(), allUsersFromDB.get(i).getCpr());
-            assertEquals(users.get(i).getUsername(), allUsersFromDB.get(i).getUsername());
-            assertEquals(users.get(i).getUserRole(), allUsersFromDB.get(i).getUserRole());
-            assertEquals(users.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
-        }
-
-        database.deleteFromtables();
-
-    }
-
-    @Test
-    public void createHounderdUsers() {
-        fakeUser.setEverythingUp(100, 1);
-        ArrayList<User> users = fakeUser.getWorkers();
-        ArrayList<User> allUsersFromDB;
-        for (int i = 0; i < users.size(); i++) {
-            idbAdapter.createAccount(users.get(i));
-            allUsersFromDB = idbAdapter.getAllUsers();
-            assertTrue(allUsersFromDB.size() == i + 1);
-        }
-        allUsersFromDB = idbAdapter.getAllUsers();
-        assertEquals(users.size(), allUsersFromDB.size());
-        for (int i = 0; i < allUsersFromDB.size(); i++) {
-            assertEquals(users.get(i).getCpr(), allUsersFromDB.get(i).getCpr());
-            assertEquals(users.get(i).getUsername(), allUsersFromDB.get(i).getUsername());
-            assertEquals(users.get(i).getUserRole(), allUsersFromDB.get(i).getUserRole());
-            assertEquals(users.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
-        }
-
-        database.deleteFromtables();
-    }
-
-    @Test
-    public void editAccount() {
-        fakeUser.setEverythingUp(10, 1);
-        ArrayList<User> users = fakeUser.getWorkers();
-        ArrayList<User> allUsersFromDB;
-        for (int i = 0; i < users.size(); i++) {
-            idbAdapter.createAccount(users.get(i));
-            allUsersFromDB = idbAdapter.getAllUsers();
-            assertTrue(allUsersFromDB.size() == i + 1);
-        }
-        for (User item : users
-                ) {
-            item.setPassword("Testing123");
-            idbAdapter.editAccount(item);
-        }
-        allUsersFromDB = idbAdapter.getAllUsers();
-        for (int i = 0; i < allUsersFromDB.size(); i++) {
-            assertEquals(allUsersFromDB.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
-        }
-        database.deleteFromtables();
-    }
+//    @Test
+//    public void createTenUsers() {
+//        fakeUser.setEverythingUp(10, 1);
+//        ArrayList<User> users = fakeUser.getWorkers();
+//        ArrayList<User> allUsersFromDB;
+//        for (int i = 0; i < users.size(); i++) {
+//            idbAdapter.createAccount(users.get(i));
+//            allUsersFromDB = idbAdapter.getAllUsers();
+//            assertTrue(allUsersFromDB.size() == i + 1);
+//        }
+//        allUsersFromDB = idbAdapter.getAllUsers();
+//        assertEquals(users.size(), allUsersFromDB.size());
+//        for (int i = 0; i < allUsersFromDB.size(); i++) {
+//            assertEquals(users.get(i).getCpr(), allUsersFromDB.get(i).getCpr());
+//            assertEquals(users.get(i).getUsername(), allUsersFromDB.get(i).getUsername());
+//            assertEquals(users.get(i).getUserRole(), allUsersFromDB.get(i).getUserRole());
+//            assertEquals(users.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
+//        }
+//
+//        database.deleteFromtables();
+//
+//    }
+//
+//    @Test
+//    public void createHounderdUsers() {
+//        fakeUser.setEverythingUp(100, 1);
+//        ArrayList<User> users = fakeUser.getWorkers();
+//        ArrayList<User> allUsersFromDB;
+//        for (int i = 0; i < users.size(); i++) {
+//            idbAdapter.createAccount(users.get(i));
+//            allUsersFromDB = idbAdapter.getAllUsers();
+//            assertTrue(allUsersFromDB.size() == i + 1);
+//        }
+//        allUsersFromDB = idbAdapter.getAllUsers();
+//        assertEquals(users.size(), allUsersFromDB.size());
+//        for (int i = 0; i < allUsersFromDB.size(); i++) {
+//            assertEquals(users.get(i).getCpr(), allUsersFromDB.get(i).getCpr());
+//            assertEquals(users.get(i).getUsername(), allUsersFromDB.get(i).getUsername());
+//            assertEquals(users.get(i).getUserRole(), allUsersFromDB.get(i).getUserRole());
+//            assertEquals(users.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
+//        }
+//
+//        database.deleteFromtables();
+//    }
+//
+//    @Test
+//    public void editAccount() {
+//        fakeUser.setEverythingUp(10, 1);
+//        ArrayList<User> users = fakeUser.getWorkers();
+//        ArrayList<User> allUsersFromDB;
+//        for (int i = 0; i < users.size(); i++) {
+//            idbAdapter.createAccount(users.get(i));
+//            allUsersFromDB = idbAdapter.getAllUsers();
+//            assertTrue(allUsersFromDB.size() == i + 1);
+//        }
+//        for (User item : users
+//                ) {
+//            item.setPassword("Testing123");
+//            idbAdapter.editAccount(item);
+//        }
+//        allUsersFromDB = idbAdapter.getAllUsers();
+//        for (int i = 0; i < allUsersFromDB.size(); i++) {
+//            assertEquals(allUsersFromDB.get(i).getPassword(), allUsersFromDB.get(i).getPassword());
+//        }
+//        database.deleteFromtables();
+//    }
 
 }

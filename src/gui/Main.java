@@ -20,8 +20,6 @@ public class Main extends Application {
 //        primaryStage.setScene(new Scene(root, 1280, 800));
 //        primaryStage.show();
 
-
-
         try {
             FXMLLoader loader = new
                     FXMLLoader(getClass().getResource("Login.fxml"));
