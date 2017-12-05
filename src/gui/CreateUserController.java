@@ -3,9 +3,11 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 public class CreateUserController {
 
     private Controller controller;
+    ArrayList<User> userList;
     private User user;
 
     @FXML
@@ -25,6 +28,18 @@ public class CreateUserController {
     private TextField userRoleCreate;
     @FXML
     private TextField userWageCreate;
+    @FXML
+    private ListView clientList;
+    @FXML
+    private TextField adminEditUserUsername;
+    @FXML
+    private TextField adminEditUserCPR;
+    @FXML
+    private TextField adminEditUserPassword;
+    @FXML
+    private TextField adminEditUserRole;
+    @FXML
+    private TextField adminEditWage;
 
 
     @FXML
@@ -67,13 +82,54 @@ public class CreateUserController {
         if (res != null) {
             if (res.getResponse().equals("getallusers")) {
                 System.out.println(res.toString());
+                userList = (ArrayList<User>) res.getRespnoseObject();
                 populateUserTable((ArrayList<User>) res.getRespnoseObject());
             }
         }
     }
 
     private void populateUserTable(ArrayList<User> users) {
-        users.forEach(System.out::println);
+        ObservableList<String> items = FXCollections.observableArrayList();
+
+        for (User user: users){
+            items.add(user.getUsername() + " " + user.getCpr());
+        }
+
+        clientList.setItems(items);
+
+        System.out.println(userList.toString());
+    }
+
+    @FXML
+    private void getListText(){
+
+        String str = clientList.getFocusModel().getFocusedItem().toString();
+        String[] parts = str.split(" ");
+        User m = getUserByCPR(parts[1]);
+        adminEditUserUsername.setText(m.getUsername());
+        adminEditUserCPR.setText(m.getCpr());
+        adminEditUserPassword.setText(m.getPassword());
+        adminEditUserRole.setText(m.getUserRole());
+        adminEditWage.setText(m.getWage());
+    }
+
+    private User getUserByCPR(String cpr){
+        for (User user : userList){
+            if ( user.getCpr().equals(cpr)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @FXML
+    private void removeUser(){
+        controller.removeUser(adminEditUserUsername.getText(),adminEditUserPassword.getText(),adminEditUserCPR.getText(),adminEditUserRole.getText());
+    }
+
+    @FXML
+    private void submitEdit(){
+        controller.submitEdit(adminEditUserUsername.getText(),adminEditUserPassword.getText(),adminEditUserCPR.getText(),adminEditUserRole.getText());
     }
 
     @FXML
