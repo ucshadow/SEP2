@@ -1,12 +1,12 @@
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
-
+--CONSTRAINT emptyString CHECK (VALUE <> '' )
 CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (
   length(value) = 10);
-CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '' );
-CREATE DOMAIN postcode_Domain VARCHAR(10) CONSTRAINT emptyString CHECK (VALUE <> '');
-CREATE DOMAIN varcharDomain VARCHAR(100) CONSTRAINT emptyString CHECK (VALUE <> '');
-CREATE DOMAIN numberDomain CHAR(8) CONSTRAINT emptyString CHECK (VALUE <> '');
+CREATE DOMAIN dno_Domain CHAR(7) NOT NULL;
+CREATE DOMAIN postcode_Domain VARCHAR(10) NOT NULL;
+CREATE DOMAIN varcharDomain VARCHAR(100) NOT NULL;
+CREATE DOMAIN numberDomain CHAR(8) NOT NULL;
 
 CREATE TABLE UserLogIn (
   cpr      CPR_DOMAIN PRIMARY KEY,
@@ -71,11 +71,12 @@ CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
   dno        DNO_DOMAIN REFERENCES department (dno),
   employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  workingDay DATE,
+  workingDay DATE ,
   startHours TIME,
   endHours   TIME
 );
--- CONSTRAINT check_date CHECK ( workingDay >= now())
+-- ALTER TABLE workingSchedule
+--   ADD CONSTRAINT check_date check(workingDay>=now());
 
 CREATE TABLE wagePerHour (
   id          SERIAL PRIMARY KEY,
@@ -99,10 +100,11 @@ CREATE OR REPLACE FUNCTION newUserCreatedOrRemoved()
 BEGIN
   IF (tg_op = 'INSERT')
   THEN
-    INSERT INTO Employee (cpr, postcode) VALUES (new.cpr, '1234');
-    INSERT INTO communication (cpr) VALUES (new.cpr);
-    INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);
-    INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);
+    INSERT INTO Employee (picture, firstName, secondName, familyName, cpr, dateOfBirth, address, postcode, licencePlate, moreInfo)
+    VALUES ('', '', '', '', new.cpr, '01/01/0001', '', '1234', '', '');
+    INSERT INTO communication (cpr, mobile, landline, email) VALUES (new.cpr, '', '', '');
+    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '', '');
+    INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '');
     RETURN new;
   END IF;
 END;

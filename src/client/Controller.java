@@ -8,9 +8,7 @@ public class Controller {
     private Client client;
 
     public Controller() {
-//        client = new Client("10.152.196.94", 6789);
         client = new Client("localhost", 6789);
-//        client = new Client("10.152.192.107", 6789);
 
     }
 
@@ -192,5 +190,9 @@ public class Controller {
         Request submitEditRequest = new Request<>("addSchedule", workingSchedule);
         client.sendRequest(submitEditRequest);
 
+    }
+    public void getAllUsers(User user) {
+        Request submitEditRequest = new Request<>("getallusers", user);
+        client.sendRequest(submitEditRequest);
     }
 }

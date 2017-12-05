@@ -27,7 +27,8 @@ public class Response<T> implements Serializable {
         this.response = response;
     }
 
-//    public Reservation getParameter() {
+
+    //    public Reservation getParameter() {
 //        return parameter;
 //    }
 //
@@ -35,9 +36,9 @@ public class Response<T> implements Serializable {
 //        this.parameter = parameter;
 //    }
 //
-//    public Reservation[] getAllParameters() {
-//        return allParameters;
-//    }
+    public T[] getAllParameters() {
+        return responseObjects;
+    }
 //
 //    public void setAllParameters(Reservation[] allParameters) {
 //        this.allParameters = allParameters;

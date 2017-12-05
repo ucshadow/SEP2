@@ -1,6 +1,7 @@
 SET SEARCH_PATH = sep2;
 DROP SCHEMA sep2 CASCADE;
-delete from userlogin;
+CREATE SCHEMA sep2;
+DELETE FROM userlogin;
 SELECT *
 FROM userlogin;
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
@@ -9,7 +10,7 @@ CREATE TABLE testing (
   that   INTEGER,
   number INTEGER
 );
-delete from userlogin ;
+DELETE FROM userlogin;
 INSERT INTO testing (that, number) VALUES ('1', '0');
 SELECT *
 FROM testing;
@@ -56,7 +57,7 @@ FROM EmployeeInformation;
 
 
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('', 'Nikolay', 'Password123', 'Admin');
-INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', '', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Nikolay3', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'Nikolay4', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay5', 'Password123', 'Admin');

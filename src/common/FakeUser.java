@@ -1,6 +1,7 @@
 package common;
 
 import client.Controller;
+import server.DBAdapter;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -25,6 +26,19 @@ public class FakeUser {
 
     private ArrayList<String> citiesZip;
     private ArrayList<String> boyNames;
+
+    public ArrayList<User> getWorkers() {
+        return workers;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public ArrayList<WorkingSchedule> getWorkingHours() {
+        return workingHours;
+    }
+
     private ArrayList<String> girlNames;
     private ArrayList<String> boyPics;
     private ArrayList<String> girlPics;
@@ -65,7 +79,7 @@ public class FakeUser {
 
     private Department createDepartment(String managerCPR) {
         return new Department(randomNumber(7), randomAdjective(),
-                randomCityZip().split(",")[0],managerCPR);
+                randomCityZip().split(",")[0], managerCPR);
     }
 
     private User createFullDetailsUser() {
@@ -185,8 +199,8 @@ public class FakeUser {
     }
 
     private String getDepartmentNumberByManagerCPR(String cpr) {
-        for(Department d: departments) {
-            if(d.getdManager().equals(cpr)) {
+        for (Department d : departments) {
+            if (d.getdManager().equals(cpr)) {
                 return d.getdNumber();
             }
         }
@@ -199,7 +213,7 @@ public class FakeUser {
     }
 
     public void setEverythingUp(int numberOfEmployees, int numberOfDepartments) {
-        for(int i = 0; i < numberOfEmployees; i++) {
+        for (int i = 0; i < numberOfEmployees; i++) {
             workers.add(createFullDetailsUser());
         }
         promoteSomeToManager(numberOfDepartments);
@@ -207,14 +221,14 @@ public class FakeUser {
 
     private void promoteSomeToManager(int numberOfDepartments) {
         ArrayList<User> managers = new ArrayList<>();
-        for(int i = 0; i < numberOfDepartments; i++) {
+        for (int i = 0; i < numberOfDepartments; i++) {
             managers.add(promoteToManager());
         }
         setUpDepartments(managers);
     }
 
     private void setUpDepartments(ArrayList<User> managers) {
-        for(User u: managers) {
+        for (User u : managers) {
             departments.add(createDepartment(u.getCpr()));
             workers.add(u); // add manager back to workers
         }
@@ -222,15 +236,15 @@ public class FakeUser {
     }
 
     private String formatHour(String hour) {
-        if(hour.length() == 1) {
+        if (hour.length() == 1) {
             hour = "0" + hour;
         }
         return hour + ":00";
     }
 
     private void setupWorkingHours() {
-        for(User u: workers) {
-            if(u.getUserRole().equals("Manager")) {
+        for (User u : workers) {
+            if (u.getUserRole().equals("Manager")) {
                 int start = random.nextInt(12);
                 workingHours.add(new WorkingSchedule(
                         getDepartmentNumberByManagerCPR(u.getCpr()),
@@ -240,7 +254,7 @@ public class FakeUser {
                         formatHour(String.valueOf(start + 8)))
                 );
             }
-            if(u.getUserRole().equals("User")) {
+            if (u.getUserRole().equals("User")) {
                 int start = random.nextInt(12);
                 workingHours.add(new WorkingSchedule(
                         getRandomDepartmentNumber(),
@@ -267,7 +281,7 @@ public class FakeUser {
         Controller c = new Controller();
 
         // create users
-        for(User u: workers) {
+        for (User u : workers) {
             c.createUser(u.getUsername(), u.getPassword(), u.getCpr(), u.getUserRole(), u.getWage());
             try {
                 Thread.sleep(interval);
@@ -277,7 +291,7 @@ public class FakeUser {
         }
 
         // update users
-        for(User u: workers) {
+        for (User u : workers) {
             ArrayList<String> attributes = new ArrayList<>();
             attributes.add(u.getPicture());
             attributes.add(u.getUsername());
@@ -309,7 +323,7 @@ public class FakeUser {
         }
 
         // update Departments
-        for(Department d: departments) {
+        for (Department d : departments) {
             c.createDepartment(d.getdNumber(), d.getdName(), d.getdLocation(), d.getdManager());
             try {
                 Thread.sleep(interval);
@@ -318,10 +332,54 @@ public class FakeUser {
             }
         }
 
-        for(WorkingSchedule w: workingHours) {
+        for (WorkingSchedule w : workingHours) {
             c.addWorkingSchedule(w.getDepartmentNumber(), w.getEmployeeCPR(), w.getWorkingDate(),
                     w.getStartHours(), w.getEndHours());
 
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void dumpToPostgreslocaly()
+
+    {
+        DBAdapter dbAdapter = new DBAdapter();
+        // create users
+        for (User u : workers) {
+            dbAdapter.createAccount(u);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update users
+        for (User u : workers) {
+            dbAdapter.changeUserInformation(u);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update Departments
+        for (Department d : departments) {
+            dbAdapter.createDepartment(d);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (WorkingSchedule w : workingHours) {
+            dbAdapter.addToWorkingSchedule(w);
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
