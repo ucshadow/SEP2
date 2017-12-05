@@ -162,11 +162,11 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public Department viewDepartment(Department department) {
-        String sql = "Select * from department where dno = '" + department.getdNumber().toLowerCase() + "';";
-        System.out.println(department.getdNumber());
+        String sql = "Select * from department where dno = '" + department.getdNumber() + "';";
         ArrayList temp = dbHandler.getSingleRow(sql);
         System.out.println(temp);
-        Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(2), (String) temp.get(3));
+        Department d = new Department((String) temp.get(0), (String) temp.get(1), (String) temp.get(3), (String) temp.get(2));
+        System.out.println(d);
         return d;
     }
 
@@ -191,7 +191,7 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
         ArrayList<Department> departments = new ArrayList<>();
         for (String[] item : temp) {
-            Department department = new Department(item[0], item[1], item[2], item[3]);
+            Department department = new Department(item[0], item[1], item[3], item[2]);
             departments.add(department);
         }
         return departments;
@@ -258,12 +258,10 @@ public class DBAdapter implements IDBAdapter {
 
         String sql = "REFRESH MATERIALIZED VIEW allcolleagues;";
         dbHandler.executeStatements(sql);
-        sql = "SELECT * from allcolleagues ;";
-        System.out.println(sql);
+        sql = "SELECT * from allcolleagues;";
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : temp) {
-            System.out.println(Arrays.toString(item));
             User user1 = new User();
             user1.setPicture(item[0]);
             user1.setFirstName(item[1]);

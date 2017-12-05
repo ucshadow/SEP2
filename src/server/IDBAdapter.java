@@ -11,11 +11,10 @@ import java.util.Map;
 public interface IDBAdapter {
 
     void createAccount(User user);
-    
+
     void editAccount(User user);
-//    boolean checkUsername(String username);
-//
-//    String getUserPassword(String username);
+
+    void removeAccount(User user);
 
     void createDepartment(Department department);
 
@@ -25,35 +24,39 @@ public interface IDBAdapter {
 
     void deleteDepartment(Department department);
 
-
-    void removeAccount(User user);
-
-
-    void changeUserInformation(User user);
-
     ArrayList<Department> getAllDepartments();
-
-    ArrayList<WorkingSchedule> workingSchedulePerWeek(User user);
 
     String getWagePerHour(User user);
 
     void changeWagePerHours(User user);
 
-    ArrayList<User> getWorkingColleagues(User user);
-
-    ArrayList<String> getWorkingDepartments(User user);
+    void changeUserInformation(User user);
 
     ArrayList<User> getAllColleagues();
+
+    ArrayList<User> getAllUsers();
 
     User logIn(User user);
 
     void addToWorkingSchedule(WorkingSchedule workingSchedule);
 
+
+    ArrayList<WorkingSchedule> workingSchedulePerWeek(User user);
+
+    ArrayList<String> getWorkingDepartments(User user);
+
+    ArrayList<User> getWorkingColleagues(User user);
+
+
+
+
+
+
     ArrayList<User> getAllUsers(User user);
 
     void wordCheck(String string);
 
-    ArrayList<User> getAllUsers();
 
 }
+
 
