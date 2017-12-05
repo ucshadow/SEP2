@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<Tab text="Create User" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateUserController">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="767.0" prefWidth="1513.0">
+            <children>
+                <TextField fx:id="userNameFieldCreate" layoutX="246.0" layoutY="128.0" promptText="Username">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="CPRFieldCreate" layoutX="246.0" layoutY="198.0" promptText="CPR">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="passwordFieldCreate" layoutX="246.0" layoutY="268.0" promptText="Password">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="userRoleCreate" layoutX="246.0" layoutY="340.0" promptText="User Role">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="userWageCreate" layoutX="246.0" layoutY="408.0" promptText="Wage">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <Button fx:id="adminPanelCreateButton" layoutX="299.0" layoutY="495.0" mnemonicParsing="false"
+                        onAction="#handleCreateUserAdminPanel" text="Create">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Button>
+                <Separator layoutX="462.0" layoutY="32.0" orientation="VERTICAL" prefHeight="696.0" prefWidth="0.0"/>
+                <Label layoutX="153.0" layoutY="55.0" text="Create New User">
+                    <font>
+                        <Font name="Calibri" size="27.0"/>
+                    </font>
+                </Label>
+                <TextField layoutX="579.0" layoutY="129.0">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField layoutX="579.0" layoutY="188.0">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField layoutX="579.0" layoutY="253.0">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <TextField layoutX="579.0" layoutY="325.0">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </TextField>
+                <Label layoutX="143.0" layoutY="135.0" text="Username:">
+                    <font>
+                        <Font name="Calibri" size="16.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="145.0" layoutY="203.0" text="CPR:">
+                    <font>
+                        <Font name="Calibri" size="17.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="143.0" layoutY="275.0" text="Password:">
+                    <font>
+                        <Font name="Calibri" size="16.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="143.0" layoutY="347.0" text="UserRole:">
+                    <font>
+                        <Font name="Calibri" size="16.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="145.0" layoutY="415.0" text="Wage:">
+                    <font>
+                        <Font name="Calibri" size="16.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="500.0" layoutY="133.0" text="CPR:">
+                    <font>
+                        <Font name="Calibri" size="17.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="testB" layoutX="632.0" layoutY="412.0" mnemonicParsing="false"
+                        onAction="#getAllUsersEvent" text="Get">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Button>
+                <ListView fx:id="clientList" layoutX="860.0" layoutY="88.0" prefHeight="504.0" prefWidth="353.0"/>
+                <Button layoutX="1161.0" layoutY="683.0" mnemonicParsing="false" onAction="#closePanel" text="Close"/>
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>
