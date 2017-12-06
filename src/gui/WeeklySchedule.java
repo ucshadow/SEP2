@@ -3,12 +3,24 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
+import common.WorkingSchedule;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class WeeklySchedule {
 
     private Controller controller;
     private User user;
+
+    @FXML
+    private GridPane parent;
 
     public void printSchedule() {
         getWorkingSchedule();
@@ -44,8 +56,35 @@ public class WeeklySchedule {
     private void responseReader(Response res) {
         if (res != null) {
             System.out.println("Schedule.");
-            System.out.println(res.getRespnoseObject());
+            ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();
+            arr.forEach(this::populateView);
         }
+    }
+
+    private void populateView(WorkingSchedule w) {
+        String[] params = w.getWorkingDate().split("-");
+        int year = Integer.valueOf(params[0]);
+        int month = Integer.valueOf(params[1]);
+        int day = Integer.valueOf(params[2]);
+
+        int start = Integer.parseInt(w.getStartHours().split(":")[0]);
+        int end = Integer.parseInt(w.getEndHours().split(":")[0]);
+
+        int weekDay = LocalDate.of(year, month, day).getDayOfWeek().getValue();
+
+//        System.out.println(LocalDate.of(year, month, day).getDayOfWeek().getValue());
+
+        for(int i = start; i < end; i++) {
+            Region r = new Region();
+            r.setStyle("-fx-background-color: green; -fx-border-style: solid;");
+            parent.add(r, weekDay, i);
+        }
+
+
+
+        //Gets the list of children of this Parent.
+//        ObservableList<Node> ch = parent.getChildren();
+
     }
 
     public Controller getController() {
