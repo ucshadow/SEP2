@@ -1,15 +1,19 @@
 package common;
 
 import client.Controller;
-import server.DBAdapter;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+
+import client.Controller;
+import server.DBAdapter;
 
 /**
  * The FakeUser class generates a new user on invocation.
@@ -26,19 +30,6 @@ public class FakeUser {
 
     private ArrayList<String> citiesZip;
     private ArrayList<String> boyNames;
-
-    public ArrayList<User> getWorkers() {
-        return workers;
-    }
-
-    public ArrayList<Department> getDepartments() {
-        return departments;
-    }
-
-    public ArrayList<WorkingSchedule> getWorkingHours() {
-        return workingHours;
-    }
-
     private ArrayList<String> girlNames;
     private ArrayList<String> boyPics;
     private ArrayList<String> girlPics;
@@ -244,35 +235,64 @@ public class FakeUser {
 
     private void setupWorkingHours() {
         for (User u : workers) {
+            if (u.getUserRole().equals("Manager") || u.getUserRole().equals("User")) {
+                fixWorkingHoursForDateInterval(u);
+            }
+        }
+    }
+
+    private void fixWorkingHoursForDateInterval(User u) {
+        Random r = new Random();
+        int start = random.nextInt(12);
+        int dayOfYear = LocalDate.now().getDayOfYear();
+        int workingTime = r.nextInt(60);
+        int workingFrom = dayOfYear - workingTime;
+        int workingDays = r.nextInt(4) + 1;
+        int workedWeeks = (int) (Math.ceil(workingTime / 7.0));
+        ArrayList<Integer> workingDates = new ArrayList<>();
+
+        for (int i = 0; i < workedWeeks; i++) {
+            for (int day = 0; day < workingDays; day++) {
+                workingDates.add(workingFrom + day);
+            }
+            workingFrom += 7;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/LL/yyyy");
+
+        workingDates.forEach(e -> {
+            LocalDate localDate = LocalDate.now().withDayOfYear(e);
+            String formattedString = localDate.format(formatter);
             if (u.getUserRole().equals("Manager")) {
-                int start = random.nextInt(12);
                 workingHours.add(new WorkingSchedule(
                         getDepartmentNumberByManagerCPR(u.getCpr()),
                         u.getCpr(),
-                        randomDayInTheFuture(),
+                        formattedString,
                         formatHour(String.valueOf(start)),
                         formatHour(String.valueOf(start + 8)))
                 );
             }
             if (u.getUserRole().equals("User")) {
-                int start = random.nextInt(12);
                 workingHours.add(new WorkingSchedule(
                         getRandomDepartmentNumber(),
                         u.getCpr(),
-                        randomDayInTheFuture(),
+                        formattedString,
                         formatHour(String.valueOf(start)),
                         formatHour(String.valueOf(start + 8)))
                 );
             }
-        }
+        });
     }
 
     @Override
     public String toString() {
+        System.out.println("Workers: ");
         workers.forEach(System.out::println);
         System.out.println();
+        System.out.println("Departments: ");
         departments.forEach(System.out::println);
         System.out.println();
+        System.out.println("Working schedule: ");
         workingHours.forEach(System.out::println);
         return "";
     }
@@ -344,9 +364,7 @@ public class FakeUser {
         }
     }
 
-    public void dumpToPostgreslocaly()
-
-    {
+    public void dumpToPostgreslocaly() {
         DBAdapter dbAdapter = new DBAdapter();
         // create users
         for (User u : workers) {
@@ -386,5 +404,17 @@ public class FakeUser {
                 e.printStackTrace();
             }
         }
+    }
+
+    public ArrayList<User> getWorkers() {
+        return workers;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public ArrayList<WorkingSchedule> getWorkingHours() {
+        return workingHours;
     }
 }
