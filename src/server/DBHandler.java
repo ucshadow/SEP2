@@ -15,8 +15,8 @@ public class DBHandler {
 
     public DBHandler() {
         try {
-            connection = DriverManager.getConnection(url, username, pass);
 
+            connection = DriverManager.getConnection(url, username, pass);
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         } catch (SQLException e) {

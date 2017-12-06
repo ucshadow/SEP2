@@ -94,6 +94,10 @@ public class Connection implements Runnable, OurObserver {
                         ArrayList<User> users = adapter.getAllUsers();
                         getOutputStream().writeObject(new Response<>("getallusers", users));
                         break;
+                    case "getuserbydepartment":
+                        ArrayList<User> user2 = adapter.getUsersByDepartment((Department) s.getRequestObject());
+                        getOutputStream().writeObject(new Response<>("getuserbydepartment", user2));
+                        break;
                 }
 
             } catch (Exception e) {
@@ -130,7 +134,7 @@ public class Connection implements Runnable, OurObserver {
     public ObjectOutputStream getOutputStream() {
         return outToClient;
     }
-    
+
 
     private OurObserver getMe() {
         return this;

@@ -62,16 +62,16 @@ CREATE TABLE department (
   dno        DNO_DOMAIN PRIMARY KEY,
   dname      VARCHARDOMAIN,
   dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  dPostcode  VARCHAR(10) REFERENCES city (postcode),
+  dPostcode  VARCHAR(10) REFERENCES city (postcode) on UPDATE CASCADE ,
   dStartdate TIMESTAMP
 );
 
 
 CREATE TABLE workingSchedule (
   id         SERIAL PRIMARY KEY,
-  dno        DNO_DOMAIN REFERENCES department (dno),
+  dno        DNO_DOMAIN REFERENCES department (dno) ON DELETE CASCADE ON UPDATE CASCADE,
   employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  workingDay DATE ,
+  workingDay DATE,
   startHours TIME,
   endHours   TIME
 );
@@ -170,6 +170,16 @@ CREATE MATERIALIZED VIEW allColleagues AS
     Employee.cpr
   FROM communication
     INNER JOIN Employee ON communication.cpr = Employee.cpr;
+
+
+CREATE MATERIALIZED VIEW usersByDepartment AS
+  SELECT
+    firstname,
+    familyName,
+    cpr,
+    dno
+  FROM employee
+    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
 
 
 CREATE OR REPLACE FUNCTION historyAdd()
