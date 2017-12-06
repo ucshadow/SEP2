@@ -1,12 +1,12 @@
 package common;
 
 import client.Controller;
-import server.DBAdapter;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,19 +26,6 @@ public class FakeUser {
 
     private ArrayList<String> citiesZip;
     private ArrayList<String> boyNames;
-
-    public ArrayList<User> getWorkers() {
-        return workers;
-    }
-
-    public ArrayList<Department> getDepartments() {
-        return departments;
-    }
-
-    public ArrayList<WorkingSchedule> getWorkingHours() {
-        return workingHours;
-    }
-
     private ArrayList<String> girlNames;
     private ArrayList<String> boyPics;
     private ArrayList<String> girlPics;
@@ -244,27 +231,52 @@ public class FakeUser {
 
     private void setupWorkingHours() {
         for (User u : workers) {
-            if (u.getUserRole().equals("Manager")) {
-                int start = random.nextInt(12);
-                workingHours.add(new WorkingSchedule(
-                        getDepartmentNumberByManagerCPR(u.getCpr()),
-                        u.getCpr(),
-                        randomDayInTheFuture(),
-                        formatHour(String.valueOf(start)),
-                        formatHour(String.valueOf(start + 8)))
-                );
-            }
-            if (u.getUserRole().equals("User")) {
-                int start = random.nextInt(12);
-                workingHours.add(new WorkingSchedule(
-                        getRandomDepartmentNumber(),
-                        u.getCpr(),
-                        randomDayInTheFuture(),
-                        formatHour(String.valueOf(start)),
-                        formatHour(String.valueOf(start + 8)))
-                );
+            if (u.getUserRole().equals("Manager") || u.getUserRole().equals("User")) {
+                fixWorkingHoursForDateInterval(u.getCpr());
             }
         }
+    }
+
+    private void fixWorkingHoursForDateInterval(String CPR) {
+        Random r = new Random();
+        int start = random.nextInt(12);
+        int dayOfYear = LocalDate.now().getDayOfYear();
+        int workingTime = r.nextInt(60);
+        int workingFrom = dayOfYear - workingTime;
+        int workingDays = r.nextInt(4) + 1;
+        int workedWeeks = (int) (Math.ceil(workingTime / 7.0));
+        System.out.println("working weeks -> " + workedWeeks);
+        System.out.println("working days per week -> " + workingDays);
+
+
+        System.out.println("all worked days:");
+        ArrayList<Integer> workingDates = new ArrayList<>();
+
+//        System.out.println(Math.ceil(20 / 7.0));
+
+        for (int i = 0; i < workedWeeks; i++) {
+            for (int day = 0; day < workingDays; day++) {
+                workingDates.add(workingFrom + day);
+            }
+            workingFrom += 7;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/LL/yyyy");
+
+        workingDates.forEach(e -> {
+            LocalDate localDate = LocalDate.now().withDayOfYear(e);
+            String formattedString = localDate.format(formatter);
+            workingHours.add(new WorkingSchedule(
+                    getDepartmentNumberByManagerCPR(CPR),
+                    CPR,
+                    formattedString,
+                    formatHour(String.valueOf(start)),
+                    formatHour(String.valueOf(start + 8)))
+            );
+        });
+//        System.out.println(workingDates);
+//
+//        System.out.println();
     }
 
     @Override
@@ -336,50 +348,6 @@ public class FakeUser {
             c.addWorkingSchedule(w.getDepartmentNumber(), w.getEmployeeCPR(), w.getWorkingDate(),
                     w.getStartHours(), w.getEndHours());
 
-            try {
-                Thread.sleep(interval);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void dumpToPostgreslocaly()
-
-    {
-        DBAdapter dbAdapter = new DBAdapter();
-        // create users
-        for (User u : workers) {
-            dbAdapter.createAccount(u);
-            try {
-                Thread.sleep(interval);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // update users
-        for (User u : workers) {
-            dbAdapter.changeUserInformation(u);
-            try {
-                Thread.sleep(interval);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // update Departments
-        for (Department d : departments) {
-            dbAdapter.createDepartment(d);
-            try {
-                Thread.sleep(interval);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (WorkingSchedule w : workingHours) {
-            dbAdapter.addToWorkingSchedule(w);
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
