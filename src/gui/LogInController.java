@@ -1,6 +1,7 @@
 package gui;
 
 import client.Controller;
+import common.Department;
 import common.Response;
 import common.User;
 import javafx.concurrent.Task;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LogInController {
 
@@ -34,50 +36,40 @@ public class LogInController {
 
         final Response[] res = {null};
 
-        try {
-            Task task = new Task<Void>() {
-                @Override
-                public Void call() {
-                    int max = 10;
-                    for (int i = 1; i <= max; i++) {
-                        System.out.println(i);
 
-                        Response r = c.getLastResponse();
-
-                        if (r != null) {
-                            res[0] = r;
-                            return null;
-                        }
-
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        Task task = new Task<Response>() {
+            @Override
+            public Response call() {
+                int max = 10;
+                for (int i = 1; i <= max; i++) {
+                    Response r = c.getLastResponse();
+                    if (r != null) {
+                        return r;
                     }
-                    System.out.println("Max retries exceeded");
-                    return null;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            };
-            new Thread(task).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        while (true) {
-            if (res[0] != null) {
-                if (handleLoginFailure(res[0])) {
-                    errorText.setText("Wrong username or password");
-                    return;
-                } else {
-                    createMainWindow(res[0]);
-                    ((Node) (event.getSource())).getScene().getWindow().hide();
-                    return;
-                }
-
+                System.out.println("Max retries exceeded");
+                return null;
             }
-        }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(t -> responseReader((Response) task.getValue(), event));
 
+    }
+
+    private void responseReader(Response res, ActionEvent event) {
+        if (handleLoginFailure(res)) {
+            errorText.setText("Wrong username or password");
+            return;
+        } else {
+            createMainWindow(res);
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+            return;
+        }
     }
 
     private boolean handleLoginFailure(Response r) {
@@ -93,7 +85,7 @@ public class LogInController {
             GUIController controller = fxmlLoader.getController();
             controller.setUser(r);
             controller.setClientController(c);
-            
+
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Manager");
