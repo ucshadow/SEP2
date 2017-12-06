@@ -132,7 +132,7 @@ public class DBAdapter implements IDBAdapter {
         String sql =
                 "INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours) VALUES ('"
                         + workingSchedule.getDepartmentNumber() + "','" + workingSchedule.getEmployeeCPR() +
-                        "','" + workingSchedule.getWorkingDate() + "','" + workingSchedule.getStartHours() +
+                        "', to_date('" + workingSchedule.getWorkingDate() + "', 'dd/mm/yyyy'),'" + workingSchedule.getStartHours() +
                         "','" + workingSchedule.getEndHours() + "');";
 
         dbHandler.executeStatements(sql);
@@ -205,12 +205,12 @@ public class DBAdapter implements IDBAdapter {
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         String lastDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
         String sql = "SELECT * FROM workingschedule WHERE employecpr = '" + user.getCpr() + "' AND workingday >='" + firstDayOfWeek + "' AND workingday <= '" + lastDayOfWeek + "';";
-        System.out.println(sql);
+//        System.out.println(sql);
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
         ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
         for (String[] item : temp) {
             WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
-            System.out.println(workingSchedule.toString());
+//            System.out.println(workingSchedule.toString());
             workingSchedules.add(workingSchedule);
         }
         System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);

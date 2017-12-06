@@ -34,11 +34,11 @@
 
                                         <!--create user-->
 
-                                        <fx:include fx:id="createUser" source="CreateUser.fxml"/>
+                                        <fx:include fx:id="createUser" source="CreateUser.fxml" />
 
 
                                         <!--create department-->
-                                        <fx:include fx:id="createDepartment" source="CreateDepartment.fxml"/>
+                                        <fx:include fx:id="createDepartment" source="CreateDepartment.fxml" />
 
                                     </tabs>
                                 </TabPane>
@@ -50,16 +50,12 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TabPane prefHeight="766.0" prefWidth="1288.0" tabClosingPolicy="UNAVAILABLE" fx:id="clientTab">
+                                <TabPane prefHeight="766.0" prefWidth="1288.0" tabClosingPolicy="UNAVAILABLE">
                                     <tabs>
 
 
                                         <!--my profile-->
-                                        <fx:include fx:id="myProfile" source="MyProfile.fxml"/>
-
-
-                                        <!--my weekly schedule-->
-                                        <fx:include fx:id="weeklySchedule" source="WeeklySchedule.fxml"/>
+                                        <fx:include fx:id="myProfile" source="MyProfile.fxml" />
 
 
                                         <Tab text="Untitled Tab 2">
@@ -74,7 +70,6 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-
             </tabs>
         </TabPane>
     </children>

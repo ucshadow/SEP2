@@ -10,6 +10,16 @@ CREATE TABLE testing (
   that   INTEGER,
   number INTEGER
 );
+
+SELECT *
+FROM userlogin
+WHERE cpr = '3243302455';
+SELECT *
+FROM workingschedule
+WHERE workingday >= '04/12/2017' OR workingday <= '10/12/2017';
+INSERT INTO department (dno, dname, dmanager, dpostcode, dstartdate) VALUES ('1234', '', '2345678901', '1234', now());
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('1234', '2345678901', to_date('20-1-2017', 'dd/mm/yyyy'),'08:00','09:00');
 DELETE FROM userlogin;
 INSERT INTO testing (that, number) VALUES ('1', '0');
 SELECT *
@@ -27,7 +37,7 @@ FROM bankinfodk;
 
 SELECT *
 FROM communication;
-SELECT count(id)
+SELECT *
 FROM workingschedule;
 SELECT *
 FROM wageperhour;
