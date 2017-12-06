@@ -65,7 +65,7 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
         sql = "Insert into city values ('" + user.getPostcode() + "','" + user.getCity() + "');";
         dbHandler.executeStatements(sql);
-        sql = "Update Employee set picture ='" + user.getPicture() + "',dateofbirth='" + user.getDob() + "',address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenceplate='" +
+        sql = "Update Employee set picture ='" + user.getPicture() + "',dateofbirth= to_date('" + user.getDob() + "', 'dd/mm/yyyy') ,address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenceplate='" +
                 user.getLicencePlate() + "',moreinfo ='" + user.getMoreInfo() + "',firstname ='" + user.getFirstName() + "',secondName ='" + user.getSecondName() + "',familyName='" + user.getLastName() + "' where cpr ='" + user.getCpr() + "';";
         dbHandler.executeStatements(sql);
 
