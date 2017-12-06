@@ -232,12 +232,12 @@ public class FakeUser {
     private void setupWorkingHours() {
         for (User u : workers) {
             if (u.getUserRole().equals("Manager") || u.getUserRole().equals("User")) {
-                fixWorkingHoursForDateInterval(u.getCpr());
+                fixWorkingHoursForDateInterval(u);
             }
         }
     }
 
-    private void fixWorkingHoursForDateInterval(String CPR) {
+    private void fixWorkingHoursForDateInterval(User u) {
         Random r = new Random();
         int start = random.nextInt(12);
         int dayOfYear = LocalDate.now().getDayOfYear();
@@ -245,14 +245,7 @@ public class FakeUser {
         int workingFrom = dayOfYear - workingTime;
         int workingDays = r.nextInt(4) + 1;
         int workedWeeks = (int) (Math.ceil(workingTime / 7.0));
-        System.out.println("working weeks -> " + workedWeeks);
-        System.out.println("working days per week -> " + workingDays);
-
-
-        System.out.println("all worked days:");
         ArrayList<Integer> workingDates = new ArrayList<>();
-
-//        System.out.println(Math.ceil(20 / 7.0));
 
         for (int i = 0; i < workedWeeks; i++) {
             for (int day = 0; day < workingDays; day++) {
@@ -266,17 +259,25 @@ public class FakeUser {
         workingDates.forEach(e -> {
             LocalDate localDate = LocalDate.now().withDayOfYear(e);
             String formattedString = localDate.format(formatter);
-            workingHours.add(new WorkingSchedule(
-                    getDepartmentNumberByManagerCPR(CPR),
-                    CPR,
-                    formattedString,
-                    formatHour(String.valueOf(start)),
-                    formatHour(String.valueOf(start + 8)))
-            );
+            if(u.getUserRole().equals("Manager")) {
+                workingHours.add(new WorkingSchedule(
+                        getDepartmentNumberByManagerCPR(u.getCpr()),
+                        u.getCpr(),
+                        formattedString,
+                        formatHour(String.valueOf(start)),
+                        formatHour(String.valueOf(start + 8)))
+                );
+            }
+            if(u.getUserRole().equals("User")) {
+                workingHours.add(new WorkingSchedule(
+                        getRandomDepartmentNumber(),
+                        u.getCpr(),
+                        formattedString,
+                        formatHour(String.valueOf(start)),
+                        formatHour(String.valueOf(start + 8)))
+                );
+            }
         });
-//        System.out.println(workingDates);
-//
-//        System.out.println();
     }
 
     @Override
