@@ -402,4 +402,16 @@ public class FakeUser {
             }
         }
     }
+
+    public ArrayList<User> getWorkers() {
+        return workers;
+    }
+
+    public ArrayList<Department> getDepartments() {
+        return departments;
+    }
+
+    public ArrayList<WorkingSchedule> getWorkingHours() {
+        return workingHours;
+    }
 }
