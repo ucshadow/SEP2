@@ -203,4 +203,10 @@ public class Controller {
         Request submitEditRequest = new Request<>("getallusers", user);
         client.sendRequest(submitEditRequest);
     }
+
+    public void getUserByDepartment(String dno) {
+        Department d = new Department(dno, null, null, null);
+        Request submitEditRequest = new Request<>("getuserbydepartment", d);
+        client.sendRequest(submitEditRequest);
+    }
 }

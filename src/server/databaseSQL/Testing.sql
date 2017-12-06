@@ -11,6 +11,13 @@ CREATE TABLE testing (
   number INTEGER
 );
 
+
+REFRESH MATERIALIZED VIEW usersbydepartment;
+
+SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '8129047';
+
+
+
 SELECT *
 FROM userlogin
 WHERE cpr = '3243302455';

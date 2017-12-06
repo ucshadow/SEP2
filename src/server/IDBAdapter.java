@@ -48,15 +48,11 @@ public interface IDBAdapter {
     ArrayList<User> getWorkingColleagues(User user);
 
 
-
-
-
-
     ArrayList<User> getAllUsers(User user);
 
     void wordCheck(String string);
 
-
+    ArrayList<User> getUsersByDepartment(Department department);
 }
 
 

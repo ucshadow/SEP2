@@ -4,6 +4,7 @@ import common.Department;
 import common.User;
 import common.WorkingSchedule;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -200,24 +201,32 @@ public class DBAdapter implements IDBAdapter {
     @Override
     public ArrayList<WorkingSchedule> workingSchedulePerWeek(User user) {
 
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        String firstDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+        int currentDayInWeek = 3;
+        int day = LocalDate.now().getDayOfMonth();
+        int monday = day - currentDayInWeek;
+        int sunday = day + (7 - currentDayInWeek);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+
+
+        String firstDayOfWeek = monday + "/" + month + "/" + year;
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        String lastDayOfWeek = calendar.get(calendar.DATE) + "/" + (calendar.get(calendar.MONTH) + 1) + "/" + calendar.get(calendar.YEAR);
+        String lastDayOfWeek = sunday + "/" + month + "/" + year;
         String sql = "SELECT * FROM workingschedule WHERE employecpr = '" + user.getCpr() + "' AND workingday >='" + firstDayOfWeek + "' AND workingday <= '" + lastDayOfWeek + "';";
-//        System.out.println(sql);
+        System.out.println(sql);
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
+        System.out.println("arrayList is empty + " + temp.size());
         ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
         for (String[] item : temp) {
+            System.out.println("each row in all rows");
+            System.out.println(Arrays.toString(item));
             WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
-//            System.out.println(workingSchedule.toString());
             workingSchedules.add(workingSchedule);
         }
         System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
         System.out.println(workingSchedules);
         return workingSchedules;
     }
-
 
     @Override
     public ArrayList<User> getWorkingColleagues(User user) {
@@ -294,6 +303,23 @@ public class DBAdapter implements IDBAdapter {
     public void wordCheck(String string) {
         String sql = "INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '" + string + "', now());";
         dbHandler.executeStatements(sql);
+    }
+
+    @Override
+    public ArrayList<User> getUsersByDepartment(Department department) {
+        String sql = "REFRESH MATERIALIZED VIEW usersbydepartment;";
+        dbHandler.executeStatements(sql);
+        sql = "SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
+        ArrayList<User> forReturn = new ArrayList<>();
+        ArrayList<String[]> users = dbHandler.getAllRows(sql);
+        for (String[] item : users) {
+            User user = new User();
+            user.setFirstName(item[0]);
+            user.setLastName(item[1]);
+            user.setCpr(item[2]);
+            forReturn.add(user);
+        }
+        return forReturn;
     }
 
 //    public static void main(String[] args) {
