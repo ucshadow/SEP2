@@ -11,6 +11,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+
+import client.Controller;
+import server.DBAdapter;
+
 /**
  * The FakeUser class generates a new user on invocation.
  *
@@ -259,7 +263,7 @@ public class FakeUser {
         workingDates.forEach(e -> {
             LocalDate localDate = LocalDate.now().withDayOfYear(e);
             String formattedString = localDate.format(formatter);
-            if(u.getUserRole().equals("Manager")) {
+            if (u.getUserRole().equals("Manager")) {
                 workingHours.add(new WorkingSchedule(
                         getDepartmentNumberByManagerCPR(u.getCpr()),
                         u.getCpr(),
@@ -268,7 +272,7 @@ public class FakeUser {
                         formatHour(String.valueOf(start + 8)))
                 );
             }
-            if(u.getUserRole().equals("User")) {
+            if (u.getUserRole().equals("User")) {
                 workingHours.add(new WorkingSchedule(
                         getRandomDepartmentNumber(),
                         u.getCpr(),
@@ -349,6 +353,48 @@ public class FakeUser {
             c.addWorkingSchedule(w.getDepartmentNumber(), w.getEmployeeCPR(), w.getWorkingDate(),
                     w.getStartHours(), w.getEndHours());
 
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void dumpToPostgreslocaly() {
+        DBAdapter dbAdapter = new DBAdapter();
+        // create users
+        for (User u : workers) {
+            dbAdapter.createAccount(u);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update users
+        for (User u : workers) {
+            dbAdapter.changeUserInformation(u);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update Departments
+        for (Department d : departments) {
+            dbAdapter.createDepartment(d);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (WorkingSchedule w : workingHours) {
+            dbAdapter.addToWorkingSchedule(w);
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
