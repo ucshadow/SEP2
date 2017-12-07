@@ -248,7 +248,7 @@ public class FakeUser {
         int workingTime = r.nextInt(60);
         int workingFrom = dayOfYear - workingTime;
         int workingDays = r.nextInt(4) + 1;
-        int workedWeeks = (int) (Math.ceil(workingTime / 7.0));
+        int workedWeeks = (int) (Math.ceil(workingTime / 7.0)) + 1;
         ArrayList<Integer> workingDates = new ArrayList<>();
 
         for (int i = 0; i < workedWeeks; i++) {
