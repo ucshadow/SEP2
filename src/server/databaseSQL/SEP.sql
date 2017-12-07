@@ -1,12 +1,12 @@
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
 --CONSTRAINT emptyString CHECK (VALUE <> '' )
-CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (
-  length(value) = 10);
-CREATE DOMAIN dno_Domain CHAR(7) NOT NULL;
-CREATE DOMAIN postcode_Domain VARCHAR(10) NOT NULL;
-CREATE DOMAIN varcharDomain VARCHAR(100) NOT NULL;
-CREATE DOMAIN numberDomain CHAR(8) NOT NULL;
+CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL
+  CONSTRAINT charLenght CHECK (length(value) = 10) CONSTRAINT emptyString CHECK (VALUE <> '' );
+CREATE DOMAIN dno_Domain CHAR(7) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
+CREATE DOMAIN postcode_Domain VARCHAR(10) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
+CREATE DOMAIN varcharDomain VARCHAR(100) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
+CREATE DOMAIN numberDomain CHAR(8) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
 
 CREATE TABLE UserLogIn (
   cpr      CPR_DOMAIN PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE Employee (
   cpr          CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
   dateOfBirth  DATE,
   address      VARCHARDOMAIN,
-  postcode     VARCHAR(10) REFERENCES city (postcode),
+  postcode     POSTCODE_DOMAIN REFERENCES city (postcode),
   licencePlate VARCHARDOMAIN,
   moreInfo     VARCHARDOMAIN
 );
@@ -53,16 +53,16 @@ CREATE TABLE communication (
 CREATE TABLE bankInfoDK (
   id        SERIAL PRIMARY KEY,
   cpr       CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  konto     CHAR(4),
-  regNumber CHAR(10)
+  konto     CHAR(4) CONSTRAINT kontoLenght CHECK (konto <> '' ),
+  regNumber CHAR(10) CONSTRAINT regLenght CHECK (regnumber <> '' )
 );
 
 
 CREATE TABLE department (
   dno        DNO_DOMAIN PRIMARY KEY,
   dname      VARCHARDOMAIN,
-  dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  dPostcode  VARCHAR(10) REFERENCES city (postcode) ON UPDATE CASCADE,
+  dManager   CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
+  dPostcode  POSTCODE_DOMAIN REFERENCES city (postcode) ON UPDATE CASCADE,
   dStartdate TIMESTAMP
 );
 
@@ -101,10 +101,14 @@ BEGIN
   IF (tg_op = 'INSERT')
   THEN
     INSERT INTO Employee (picture, firstName, secondName, familyName, cpr, dateOfBirth, address, postcode, licencePlate, moreInfo)
-    VALUES ('', '', '', '', new.cpr, '01/01/0001', '', '1234', '', '');
-    INSERT INTO communication (cpr, mobile, landline, email) VALUES (new.cpr, '', '', '');
-    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '', '');
-    INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '');
+    VALUES
+      ('picture', 'firstname', 'secondname', 'lastname', new.cpr, current_date, 'address', 'postcode',
+       'licenceplate',
+       'more info');
+    INSERT INTO communication (cpr, mobile, landline, email)
+    VALUES (new.cpr, '00000000', '00000000', 'email@email.com');
+    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '1234', '1234567890');
+    INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '0');
     RETURN new;
   END IF;
 END;
@@ -114,72 +118,6 @@ CREATE TRIGGER newUserAdded
 AFTER INSERT ON userlogin
 FOR EACH ROW
 EXECUTE PROCEDURE newUserCreatedOrRemoved();
-
-CREATE MATERIALIZED VIEW EmployeeInformation AS
-  SELECT
-    employee.picture,
-    UserLogIn.Username,
-    UserLogIn.pass,
-    employee.firstname,
-    employee.secondName,
-    employee.familyName,
-    UserLogIn.cpr,
-    employee.dateOfBirth,
-    employee.address,
-    employee.postcode,
-    city.city,
-    communication.mobile,
-    communication.landline,
-    communication.email,
-    bankInfoDK.konto,
-    bankInfoDK.regNumber,
-    employee.licencePlate,
-    communication.preferredCommunication,
-    employee.moreInfo,
-    wagePerHour.wage,
-    UserLogIn.userRole
-  FROM
-    City
-    INNER JOIN Employee ON city.postcode = Employee.postcode
-    INNER JOIN Communication ON Employee.cpr = communication.cpr
-    INNER JOIN bankInfoDK ON communication.cpr = bankInfoDK.cpr
-    INNER JOIN wagePerHour ON bankInfoDK.cpr = wagePerHour.employeeCPR
-    INNER JOIN userlogin ON wagePerHour.employeeCPR = UserLogIn.cpr;
-
-
-CREATE MATERIALIZED VIEW workingColleagues AS
-  SELECT
-    picture,
-    firstName,
-    familyName,
-    mobile,
-    email,
-    Employee.cpr,
-    workingSchedule.dno
-  FROM communication
-    INNER JOIN employee ON communication.cpr = Employee.cpr
-    LEFT OUTER JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;
-
-CREATE MATERIALIZED VIEW allColleagues AS
-  SELECT
-    picture,
-    firstName,
-    familyName,
-    mobile,
-    email,
-    Employee.cpr
-  FROM communication
-    INNER JOIN Employee ON communication.cpr = Employee.cpr;
-
-
-CREATE MATERIALIZED VIEW usersByDepartment AS
-  SELECT DISTINCT ON (cpr)
-    cpr,
-    firstname,
-    familyName,
-    dno
-  FROM employee
-    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
 
 
 CREATE OR REPLACE FUNCTION historyAdd()
@@ -445,4 +383,88 @@ AFTER INSERT OR UPDATE OR DELETE ON workingSchedule
 FOR EACH ROW
 EXECUTE PROCEDURE historyAdd();
 
-INSERT INTO city (postcode, city) VALUES ('1234', 'Admin');
+
+INSERT INTO city (postcode, city) VALUES ('postcode', 'City');
+
+CREATE MATERIALIZED VIEW EmployeeInformation AS
+  SELECT
+    employee.picture,
+    UserLogIn.Username,
+    UserLogIn.pass,
+    employee.firstname,
+    employee.secondName,
+    employee.familyName,
+    UserLogIn.cpr,
+    employee.dateOfBirth,
+    employee.address,
+    employee.postcode,
+    city.city,
+    communication.mobile,
+    communication.landline,
+    communication.email,
+    bankInfoDK.konto,
+    bankInfoDK.regNumber,
+    employee.licencePlate,
+    communication.preferredCommunication,
+    employee.moreInfo,
+    wagePerHour.wage,
+    UserLogIn.userRole
+  FROM
+    City
+    INNER JOIN Employee ON city.postcode = Employee.postcode
+    INNER JOIN Communication ON Employee.cpr = communication.cpr
+    INNER JOIN bankInfoDK ON communication.cpr = bankInfoDK.cpr
+    INNER JOIN wagePerHour ON bankInfoDK.cpr = wagePerHour.employeeCPR
+    INNER JOIN userlogin ON wagePerHour.employeeCPR = UserLogIn.cpr;
+
+CREATE MATERIALIZED VIEW allUsersWithWage AS
+  SELECT
+    UserLogIn.cpr,
+    UserLogIn.username,
+    UserLogIn.pass,
+    UserLogIn.userrole,
+    wagePerHour.wage
+  FROM UserLogIn
+    INNER JOIN wagePerHour ON UserLogIn.cpr = wagePerHour.employeeCPR;
+
+CREATE MATERIALIZED VIEW workingColleagues AS
+  SELECT
+    picture,
+    firstName,
+    familyName,
+    mobile,
+    email,
+    Employee.cpr,
+    workingSchedule.dno
+  FROM communication
+    INNER JOIN employee ON communication.cpr = Employee.cpr
+    LEFT OUTER JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;
+
+CREATE MATERIALIZED VIEW allColleagues AS
+  SELECT
+    picture,
+    firstName,
+    familyName,
+    mobile,
+    email,
+    Employee.cpr
+  FROM communication
+    INNER JOIN Employee ON communication.cpr = Employee.cpr;
+
+
+CREATE MATERIALIZED VIEW usersByDepartment AS
+  SELECT DISTINCT ON (cpr)
+    cpr,
+    firstname,
+    familyName,
+    dno
+  FROM employee
+    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
+
+CREATE MATERIALIZED VIEW userswithoudschedule AS
+  SELECT
+    cpr,
+    firstname,
+    familyname
+  FROM employee
+    LEFT JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;
