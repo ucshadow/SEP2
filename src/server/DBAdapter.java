@@ -255,6 +255,31 @@ public class DBAdapter implements IDBAdapter {
     }
 
     @Override
+    public ArrayList<WorkingSchedule> getAllWorkingSchedules() {
+
+//        int currentDayInWeek = LocalDate.now().getDayOfWeek().getValue();
+//        int day = LocalDate.now().getDayOfMonth();
+//        int monday = day - currentDayInWeek;
+//        int sunday = day + (7 - currentDayInWeek);
+//        int year = LocalDate.now().getYear();
+//        int month = LocalDate.now().getMonthValue();
+//
+//        String firstDayOfWeek = monday + "/" + month + "/" + year;
+//        String lastDayOfWeek = sunday + "/" + month + "/" + year;
+        String sql = "SELECT * FROM workingschedule";
+        ArrayList<String[]> temp = dbHandler.getAllRows(sql);
+//        System.out.println("arrayList is empty + " + temp.size());
+        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
+        for (String[] item : temp) {
+            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
+            workingSchedules.add(workingSchedule);
+        }
+//        System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
+//        System.out.println(workingSchedules);
+        return workingSchedules;
+    }
+
+    @Override
     public ArrayList<User> getWorkingColleagues(User user) {
 
         String sql = "SELECT  DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";

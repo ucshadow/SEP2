@@ -67,6 +67,10 @@ public class Connection implements Runnable, OurObserver {
                         ArrayList<WorkingSchedule> workingSchedules = adapter.workingSchedulePerWeek((User) s.getRequestObject());
                         getOutputStream().writeObject(new Response<>("getWorkingSchedule", workingSchedules));
                         break;
+                    case "getallworkingschedule":
+                        ArrayList<WorkingSchedule> allWorkingSchedules = adapter.getAllWorkingSchedules();
+                        getOutputStream().writeObject(new Response<>("getWorkingSchedule", allWorkingSchedules));
+                        break;
                     case "getwageperhours":
                         String wage = adapter.getWagePerHour((User) s.getRequestObject());
                         getOutputStream().writeObject(new Response<>("getWagePerHours", wage));
