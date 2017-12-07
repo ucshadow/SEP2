@@ -45,6 +45,8 @@ public interface IDBAdapter {
 
     ArrayList<String> getWorkingDepartments(User user);
 
+    ArrayList<WorkingSchedule> allWorkingSchedulesPerWeek();
+
     ArrayList<User> getWorkingColleagues(User user);
 
 

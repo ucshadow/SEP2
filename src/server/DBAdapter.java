@@ -201,7 +201,7 @@ public class DBAdapter implements IDBAdapter {
     @Override
     public ArrayList<WorkingSchedule> workingSchedulePerWeek(User user) {
 
-        int currentDayInWeek = 3;
+        int currentDayInWeek = LocalDate.now().getDayOfWeek().getValue();
         int day = LocalDate.now().getDayOfMonth();
         int monday = day - currentDayInWeek;
         int sunday = day + (7 - currentDayInWeek);
@@ -214,16 +214,43 @@ public class DBAdapter implements IDBAdapter {
                 "' AND workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy') ';";
         System.out.println(sql);
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
-        System.out.println("arrayList is empty + " + temp.size());
+//        System.out.println("arrayList is empty + " + temp.size());
         ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
         for (String[] item : temp) {
-            System.out.println("each row in all rows");
-            System.out.println(Arrays.toString(item));
+//            System.out.println("each row in all rows");
+//            System.out.println(Arrays.toString(item));
             WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
             workingSchedules.add(workingSchedule);
         }
-        System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
-        System.out.println(workingSchedules);
+//        System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
+//        System.out.println(workingSchedules);
+        return workingSchedules;
+    }
+
+    @Override
+    public ArrayList<WorkingSchedule> allWorkingSchedulesPerWeek() {
+
+        int currentDayInWeek = LocalDate.now().getDayOfWeek().getValue();
+        int day = LocalDate.now().getDayOfMonth();
+        int monday = day - currentDayInWeek;
+        int sunday = day + (7 - currentDayInWeek);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+
+        String firstDayOfWeek = monday + "/" + month + "/" + year;
+        String lastDayOfWeek = sunday + "/" + month + "/" + year;
+        String sql = "SELECT * FROM workingschedule WHERE " +
+                "workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy');";
+        System.out.println(sql);
+        ArrayList<String[]> temp = dbHandler.getAllRows(sql);
+//        System.out.println("arrayList is empty + " + temp.size());
+        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
+        for (String[] item : temp) {
+            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
+            workingSchedules.add(workingSchedule);
+        }
+//        System.out.println(firstDayOfWeek + "    " + lastDayOfWeek);
+//        System.out.println(workingSchedules);
         return workingSchedules;
     }
 

@@ -6,8 +6,8 @@ import java.net.ServerSocket;
 
 
 public class Server extends OurObservable {
-    private ServerSocket serverSocket;
     private final int PORT = 6789;
+    private ServerSocket serverSocket;
     private IDBAdapter adapter;
     private Connection newClient;
 
@@ -18,6 +18,7 @@ public class Server extends OurObservable {
             e.printStackTrace();
         }
         adapter = new DBAdapter();
+        new ScheduleUpdater(adapter).automaticUpdater();
     }
 
 
@@ -34,5 +35,7 @@ public class Server extends OurObservable {
             }
         }
     }
+
+
 
 }
