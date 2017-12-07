@@ -65,7 +65,9 @@ public class CreateDepartmentController {
     private ObservableList<Department> observableListDepartments;
 
     private ArrayList<User> arrayListWorkers;
-    private ObservableList<User> observableListWorkers;
+    private ObservableList<String> observableListWorkers;
+
+    private Department selectedDepartment;
 
     //    initialize method is called automatically
     public void initialize() {
@@ -80,31 +82,17 @@ public class CreateDepartmentController {
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         if (newValue != null) {
                             Department department = (Department) departmentList.getSelectionModel().getSelectedItem();
+                            selectedDepartment = (Department) departmentList.getSelectionModel().getSelectedItem();
                             departmentNumberCreate.setText(department.getdNumber());
                             departmentNameCreate.setText(department.getdName());
                             departmentManagerCreate.setText(department.getdManager());
                             departmentLocationCreate.setText(department.getdLocation());
-                            getAllUsersInDepartment(department.getdNumber());
-                            populateWorkersInDepartment(arrayListWorkers);
                         }
                     }
                 }
         );
-
-//        workerList.getSelectionModel().selectedItemProperty().addListener(
-//                new ChangeListener() {
-//                    @Override
-//                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-//
-//                    }
-//                }
-//        );
     }
 
-    @FXML
-    public void selectDept() {
-
-    }
 
     @FXML
     public void createDept(ActionEvent event) {
@@ -146,7 +134,13 @@ public class CreateDepartmentController {
     }
 
     @FXML
-    public void getAllDepartmentsEvent() {
+    public void refreshWorkers() {
+        workerList.getItems().clear();
+        workerList.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    public void getAllDepartmentsEvent(ActionEvent event) {
         controller.getAllDepartments();
         Task task = new Task<Response>() {
             @Override
@@ -184,9 +178,11 @@ public class CreateDepartmentController {
             if (res.getResponse().equals("getAllDepartments")) {
                 System.out.println(res.toString());
                 populateDepartments((ArrayList<Department>) res.getRespnoseObject());
-            } else if (res.getRespnoseObject().equals("getuserbydepartment")) {
+            }
+            if (res.getResponse().equals("getuserbydepartment")) {
                 System.out.println(res.toString());
                 populateWorkersInDepartment((ArrayList<User>) res.getRespnoseObject());
+
             }
         }
     }
@@ -208,8 +204,8 @@ public class CreateDepartmentController {
     }
 
     @FXML
-    public void getAllUsersInDepartment(String dno) {
-        controller.getUserByDepartment(dno);
+    public void getAllUsersInDepartment(ActionEvent event) {
+        controller.getUserByDepartment(selectedDepartment.getdNumber());
         Task task = new Task<Response>() {
             @Override
             public Response call() {
@@ -225,6 +221,7 @@ public class CreateDepartmentController {
                         e.printStackTrace();
                     }
                     tries++;
+
                 }
                 return null;
             }
@@ -234,11 +231,11 @@ public class CreateDepartmentController {
     }
 
     private void populateWorkersInDepartment(ArrayList<User> workers) {
-        // add all workers to observable array list
+        arrayListWorkers.addAll(workers);
         for (User u : workers) {
-            observableListWorkers.add(u);
+            observableListWorkers.add(u.getFirstName() + " " + u.getLastName() + " CPR: " + u.getCpr());
+            System.out.println(u);
         }
         workerList.setItems(observableListWorkers);
-        arrayListWorkers.addAll(workers); // add all workers to array list
     }
 }

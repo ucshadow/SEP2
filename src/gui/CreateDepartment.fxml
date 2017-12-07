@@ -19,12 +19,11 @@
                         onAction="#removeDept" text="Remove"/>
                 <Button fx:id="departmentLoadButton" layoutX="248.0" layoutY="369.0" mnemonicParsing="false"
                         onAction="#getAllDepartmentsEvent" text="Load Departments"/>
-                <Button fx:id="listRefreshButton" layoutX="456.0" layoutY="369.0" mnemonicParsing="false"
-                        onAction="#refreshDepartment" text="Refresh"/>
-                <Button fx:id="departmentSelectButton" layoutX="248.0" layoutY="420.0" mnemonicParsing="false"
-                        onAction="#selectDept" text="Select Department"/>
-                <!--<Button fx:id="departmentEmployeeLoadButton" layoutX="654.0" layoutY="369.0" mnemonicParsing="false"-->
-                <!--onAction="#getAllUsersInDepartment" text="Load Employees"/>-->
+                <Button fx:id="departmentListRefreshButton" layoutX="456.0" layoutY="369.0" mnemonicParsing="false"
+                        onAction="#refreshDepartment" text="Department List Refresh"/>
+                <Button fx:id="workerListRefreshButton" layoutX="784.0" layoutY="369.0" mnemonicParsing="false" onAction="#refreshWorkers" text="Worker List Refresh" />
+                <Button fx:id="departmentEmployeeLoadButton" layoutX="654.0" layoutY="369.0" mnemonicParsing="false"
+                onAction="#getAllUsersInDepartment" text="Load Employees"/>
                 <ListView fx:id="departmentList" layoutX="248.0" layoutY="32.0" prefHeight="300.0" prefWidth="270.0"/>
                 <ListView fx:id="workerList" layoutX="570.0" layoutY="32.0" prefHeight="300.0" prefWidth="270.0"/>
                 <Label layoutX="250.0" layoutY="10.0" prefHeight="17.0" prefWidth="270.0" text="Department information">
