@@ -211,7 +211,7 @@ public class DBAdapter implements IDBAdapter {
         String firstDayOfWeek = monday + "/" + month + "/" + year;
         String lastDayOfWeek = sunday + "/" + month + "/" + year;
         String sql = "SELECT * FROM workingschedule WHERE employecpr = '" + user.getCpr() +
-                "' AND workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy') ';";
+                "' AND workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy');";
         System.out.println(sql);
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
 //        System.out.println("arrayList is empty + " + temp.size());
