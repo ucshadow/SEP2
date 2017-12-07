@@ -55,7 +55,6 @@ public class Database {
             e.printStackTrace();
         }
         String[] tables = {"bankinfodk", "communication", "department", "employee", "history", "userlogin", "wageperhour", "workingschedule"};
-
         for (String table : tables) {
             String sql = "delete from " + table + ";";
             executeStatements(sql);
@@ -65,20 +64,18 @@ public class Database {
     }
 
     private void everything() {
-        String sql = "CREATE SCHEMA sep2;\n" +
-                "SET SEARCH_PATH = sep2;\n" +
-                "\n" +
+        String sql = "\n" +
                 "CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (\n" +
                 "  length(value) = 10);\n" +
-                "CREATE DOMAIN dno_Domain CHAR(7) CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
-                "CREATE DOMAIN postcode_Domain VARCHAR(10) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
-                "CREATE DOMAIN varcharDomain VARCHAR(100) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
-                "CREATE DOMAIN numberDomain CHAR(8) CONSTRAINT emptyString CHECK (VALUE <> '');\n" +
+                "CREATE DOMAIN dno_Domain CHAR(7) NOT NULL;\n" +
+                "CREATE DOMAIN postcode_Domain VARCHAR(10) NOT NULL;\n" +
+                "CREATE DOMAIN varcharDomain VARCHAR(100) NOT NULL;\n" +
+                "CREATE DOMAIN numberDomain CHAR(8) NOT NULL;\n" +
                 "\n" +
                 "CREATE TABLE UserLogIn (\n" +
                 "  cpr      CPR_DOMAIN PRIMARY KEY,\n" +
                 "  Username VARCHARDOMAIN UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),\n" +
-                "  pass     VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (\n" +
+                "  pass     VARCHARDOMAIN CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (\n" +
                 "    pass LIKE '%A%' OR pass LIKE '%B%' OR pass LIKE '%C%' OR pass LIKE '%D%' OR pass LIKE '%E%' OR\n" +
                 "    pass LIKE '%F%' OR pass LIKE '%G%' OR pass LIKE '%H%' OR pass LIKE '%I%' OR pass LIKE '%J%'\n" +
                 "    OR pass LIKE '%K%' OR pass LIKE '%L%' OR pass LIKE '%M%' OR pass LIKE '%N%' OR\n" +
@@ -129,20 +126,21 @@ public class Database {
                 "  dno        DNO_DOMAIN PRIMARY KEY,\n" +
                 "  dname      VARCHARDOMAIN,\n" +
                 "  dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
-                "  dPostcode  VARCHAR(10) REFERENCES city (postcode),\n" +
+                "  dPostcode  VARCHAR(10) REFERENCES city (postcode) ON UPDATE CASCADE,\n" +
                 "  dStartdate TIMESTAMP\n" +
                 ");\n" +
                 "\n" +
                 "\n" +
                 "CREATE TABLE workingSchedule (\n" +
                 "  id         SERIAL PRIMARY KEY,\n" +
-                "  dno        DNO_DOMAIN REFERENCES department (dno),\n" +
+                "  dno        DNO_DOMAIN REFERENCES department (dno) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  employecpr CPR_DOMAIN REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,\n" +
                 "  workingDay DATE,\n" +
                 "  startHours TIME,\n" +
                 "  endHours   TIME\n" +
                 ");\n" +
-                "-- CONSTRAINT check_date CHECK ( workingDay >= now())\n" +
+                "-- ALTER TABLE workingSchedule\n" +
+                "--   ADD CONSTRAINT check_date check(workingDay>=now());\n" +
                 "\n" +
                 "CREATE TABLE wagePerHour (\n" +
                 "  id          SERIAL PRIMARY KEY,\n" +
@@ -166,10 +164,11 @@ public class Database {
                 "BEGIN\n" +
                 "  IF (tg_op = 'INSERT')\n" +
                 "  THEN\n" +
-                "    INSERT INTO Employee (cpr, postcode) VALUES (new.cpr, '1234');\n" +
-                "    INSERT INTO communication (cpr) VALUES (new.cpr);\n" +
-                "    INSERT INTO bankInfoDK (cpr) VALUES (new.cpr);\n" +
-                "    INSERT INTO wagePerHour (employeeCPR) VALUES (new.cpr);\n" +
+                "    INSERT INTO Employee (picture, firstName, secondName, familyName, cpr, dateOfBirth, address, postcode, licencePlate, moreInfo)\n" +
+                "    VALUES ('', '', '', '', new.cpr, '01/01/0001', '', '1234', '', '');\n" +
+                "    INSERT INTO communication (cpr, mobile, landline, email) VALUES (new.cpr, '', '', '');\n" +
+                "    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '', '');\n" +
+                "    INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '');\n" +
                 "    RETURN new;\n" +
                 "  END IF;\n" +
                 "END;\n" +
@@ -235,6 +234,16 @@ public class Database {
                 "    Employee.cpr\n" +
                 "  FROM communication\n" +
                 "    INNER JOIN Employee ON communication.cpr = Employee.cpr;\n" +
+                "\n" +
+                "\n" +
+                "CREATE MATERIALIZED VIEW usersByDepartment AS\n" +
+                "  SELECT DISTINCT ON (cpr)\n" +
+                "    cpr,\n" +
+                "    firstname,\n" +
+                "    familyName,\n" +
+                "    dno\n" +
+                "  FROM employee\n" +
+                "    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;\n" +
                 "\n" +
                 "\n" +
                 "CREATE OR REPLACE FUNCTION historyAdd()\n" +

@@ -3,7 +3,7 @@ DROP SCHEMA sep2 CASCADE;
 CREATE SCHEMA sep2;
 DELETE FROM userlogin;
 SELECT *
-FROM userlogin where userrole = 'Admin  ';
+FROM userlogin;
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
 
 CREATE TABLE testing (
@@ -14,19 +14,26 @@ CREATE TABLE testing (
 
 REFRESH MATERIALIZED VIEW usersbydepartment;
 
-SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '8129047';
-
+SELECT
+  firstname,
+  familyname,
+  cpr,
+  dno
+FROM usersbydepartment;
 
 
 SELECT *
-FROM userlogin
-WHERE cpr = '3243302455';
+FROM userlogin;
 SELECT *
 FROM workingschedule
-WHERE workingday >= '04/12/2017' OR workingday <= '10/12/2017';
+WHERE  employecpr = '9515278176';
+
+
+
+
 INSERT INTO department (dno, dname, dmanager, dpostcode, dstartdate) VALUES ('1234', '', '2345678901', '1234', now());
 INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
-VALUES ('1234', '2345678901', to_date('20-1-2017', 'dd/mm/yyyy'),'08:00','09:00');
+VALUES ('1234', '2345678901', to_date('20-1-2017', 'dd/mm/yyyy'), '08:00', '09:00');
 DELETE FROM userlogin;
 INSERT INTO testing (that, number) VALUES ('1', '0');
 SELECT *
@@ -48,7 +55,7 @@ SELECT *
 FROM workingschedule;
 SELECT *
 FROM wageperhour;
-
+SET SEARCH_PATH = sep2;
 SELECT *
 FROM department;
 REFRESH MATERIALIZED VIEW allcolleagues;
@@ -69,10 +76,25 @@ FROM test
 WHERE cpr IS DISTINCT FROM '1234567890' AND dno = 'd001';
 
 REFRESH MATERIALIZED VIEW employeeinformation;
+
 SELECT *
-FROM EmployeeInformation;
+FROM EmployeeInformation
+WHERE cpr = '8701646897';
+SET SEARCH_PATH = sep2;
+REFRESH MATERIALIZED VIEW usersbydepartment;
+drop MATERIALIZED VIEW usersbydepartment;
+SELECT
+  cpr,
+  firstname,
+  familyname,
+  dno
+FROM usersbydepartment where cpr ='7213714538';
+SELECT *
+FROM workingschedule
+WHERE employecpr = '7213714538';
 
-
+INSERT INTO workingschedule (dno, employecpr, workingday, starthours, endhours)
+VALUES ('3115960', '7213714538', '07/12/2017', '08:00', '10:00');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('', 'Nikolay', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Nikolay3', 'Password123', 'Admin');

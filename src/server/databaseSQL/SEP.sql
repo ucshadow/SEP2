@@ -11,7 +11,7 @@ CREATE DOMAIN numberDomain CHAR(8) NOT NULL;
 CREATE TABLE UserLogIn (
   cpr      CPR_DOMAIN PRIMARY KEY,
   Username VARCHARDOMAIN UNIQUE CONSTRAINT username_minvalue CHECK (LENGTH(Username) > 4),
-  pass     VARCHAR(100) CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (
+  pass     VARCHARDOMAIN CONSTRAINT password_minValue CHECK (LENGTH(pass) >= 8) CONSTRAINT password_check CHECK (
     pass LIKE '%A%' OR pass LIKE '%B%' OR pass LIKE '%C%' OR pass LIKE '%D%' OR pass LIKE '%E%' OR
     pass LIKE '%F%' OR pass LIKE '%G%' OR pass LIKE '%H%' OR pass LIKE '%I%' OR pass LIKE '%J%'
     OR pass LIKE '%K%' OR pass LIKE '%L%' OR pass LIKE '%M%' OR pass LIKE '%N%' OR
@@ -62,7 +62,7 @@ CREATE TABLE department (
   dno        DNO_DOMAIN PRIMARY KEY,
   dname      VARCHARDOMAIN,
   dManager   CHAR(10) REFERENCES UserLogIn (cpr) ON DELETE CASCADE ON UPDATE CASCADE,
-  dPostcode  VARCHAR(10) REFERENCES city (postcode) on UPDATE CASCADE ,
+  dPostcode  VARCHAR(10) REFERENCES city (postcode) ON UPDATE CASCADE,
   dStartdate TIMESTAMP
 );
 
@@ -173,10 +173,10 @@ CREATE MATERIALIZED VIEW allColleagues AS
 
 
 CREATE MATERIALIZED VIEW usersByDepartment AS
-  SELECT
+  SELECT DISTINCT ON (cpr)
+    cpr,
     firstname,
     familyName,
-    cpr,
     dno
   FROM employee
     INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
