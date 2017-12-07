@@ -19,12 +19,12 @@ public class SetUp {
         System.out.println("Database is ready");
         System.out.println("Creating fake data");
         try {
-            Thread.sleep(500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         FakeUser fake = new FakeUser();
-        fake.setEverythingUp(200, 12);
+        fake.setEverythingUp(150, 3);
         fake.dumpToPostgreslocaly();
         System.out.println("Done");
         database.fixDate();
