@@ -7,9 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreateUserController {
@@ -17,6 +22,7 @@ public class CreateUserController {
     private Controller controller;
     ArrayList<User> userList;
     private User user;
+    private User selectedUser;
 
     @FXML
     private TextField userNameFieldCreate;
@@ -105,12 +111,14 @@ public class CreateUserController {
 
         String str = clientList.getFocusModel().getFocusedItem().toString();
         String[] parts = str.split(" ");
-        User m = getUserByCPR(parts[1]);
-        adminEditUserUsername.setText(m.getUsername());
-        adminEditUserCPR.setText(m.getCpr());
-        adminEditUserPassword.setText(m.getPassword());
-        adminEditUserRole.setText(m.getUserRole());
-        adminEditWage.setText(m.getWage());
+        selectedUser = getUserByCPR(parts[1]);
+
+
+        adminEditUserUsername.setText(selectedUser.getUsername());
+        adminEditUserCPR.setText(selectedUser.getCpr());
+        adminEditUserPassword.setText(selectedUser.getPassword());
+        adminEditUserRole.setText(selectedUser.getUserRole());
+        adminEditWage.setText(selectedUser.getWage());
     }
 
     private User getUserByCPR(String cpr){
@@ -120,6 +128,28 @@ public class CreateUserController {
             }
         }
         return null;
+    }
+
+
+
+    @FXML
+    private void createUserInfoWindow() {
+        Parent root;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("userInfo.fxml"));
+            root = fxmlLoader.load();
+            userInfoController controller = fxmlLoader.getController();
+            System.out.println("My user:" + selectedUser);
+            controller.displayUser(selectedUser);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setTitle("User Info");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

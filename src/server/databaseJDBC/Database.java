@@ -55,6 +55,7 @@ public class Database {
             e.printStackTrace();
         }
         String[] tables = {"bankinfodk", "communication", "department", "employee", "history", "userlogin", "wageperhour", "workingschedule"};
+
         for (String table : tables) {
             String sql = "delete from " + table + ";";
             executeStatements(sql);
