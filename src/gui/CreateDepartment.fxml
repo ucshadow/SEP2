@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<Tab text="Create Department"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateDepartmentController">
+<?import javafx.scene.layout.AnchorPane?>
+<Tab text="Create Department" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateDepartmentController">
     <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0"
-                    prefWidth="663.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
             <children>
-                <TextField fx:id="departmentNumberCreate" layoutX="50.0"
-                           layoutY="40.0" promptText="DeptNo"/>
-                <TextField fx:id="departmentNameCreate" layoutX="50.0"
-                           layoutY="73.0" promptText="DeptName"/>
-                <TextField fx:id="departmentLocationCreate" layoutX="50.0"
-                           layoutY="107.0" promptText="DeptLocation"/>
-                <TextField fx:id="departmentManagerCreate" layoutX="50.0"
-                           layoutY="143.0" promptText="DeptManager"/>
-                <Button fx:id="departmentCreateButton"
-                        onAction="#getAllDepartmentsEvent" layoutX="50.0"
-                        layoutY="188.0" mnemonicParsing="false" text="Create"/>
-                <Button fx:id="departmentSelectButton"
-                        onAction="#selectDepartment" layoutX="154.0"
-                        layoutY="188.0" mnemonicParsing="false" text="Select"/>
-                <Button fx:id="departmentEditButton" layoutX="50.0"
-                        layoutY="234.0" mnemonicParsing="false" text="Edit"/>
-                <Button fx:id="departmentRemoveButton" layoutX="151.0"
-                        layoutY="234.0" mnemonicParsing="false" text="Remove"/>
-                <ListView fx:id="departmentList" layoutX="248.0" layoutY="32.0"
-                          prefHeight="232.0" prefWidth="205.0"/>
+                <TextField fx:id="departmentNumberCreate" layoutX="50.0" layoutY="40.0" promptText="DeptNo"/>
+                <TextField fx:id="departmentNameCreate" layoutX="50.0" layoutY="73.0" promptText="DeptName"/>
+                <TextField fx:id="departmentLocationCreate" layoutX="50.0" layoutY="107.0" promptText="DeptLocation"/>
+                <TextField fx:id="departmentManagerCreate" layoutX="50.0" layoutY="143.0" promptText="DeptManager"/>
+                <Button fx:id="departmentCreateButton" layoutX="50.0" layoutY="188.0" mnemonicParsing="false"
+                        onAction="#createDept" text="Create"/>
+                <Button fx:id="departmentEditButton" layoutX="50.0" layoutY="234.0" mnemonicParsing="false"
+                        onAction="#editDept" text="Edit"/>
+                <Button fx:id="departmentRemoveButton" layoutX="46.0" layoutY="285.0" mnemonicParsing="false"
+                        onAction="#removeDept" text="Remove"/>
+                <Button fx:id="departmentLoadButton" layoutX="248.0" layoutY="369.0" mnemonicParsing="false"
+                        onAction="#getAllDepartmentsEvent" text="Load Departments"/>
+                <Button fx:id="listRefreshButton" layoutX="456.0" layoutY="369.0" mnemonicParsing="false"
+                        onAction="#refreshDepartment" text="Refresh"/>
+                <Button fx:id="departmentSelectButton" layoutX="248.0" layoutY="420.0" mnemonicParsing="false"
+                        onAction="#selectDept" text="Select Department"/>
+                <!--<Button fx:id="departmentEmployeeLoadButton" layoutX="654.0" layoutY="369.0" mnemonicParsing="false"-->
+                <!--onAction="#getAllUsersInDepartment" text="Load Employees"/>-->
+                <ListView fx:id="departmentList" layoutX="248.0" layoutY="32.0" prefHeight="300.0" prefWidth="270.0"/>
+                <ListView fx:id="workerList" layoutX="570.0" layoutY="32.0" prefHeight="300.0" prefWidth="270.0"/>
+                <Label layoutX="250.0" layoutY="10.0" prefHeight="17.0" prefWidth="270.0" text="Department information">
+                    <padding>
+                        <Insets left="75.0"/>
+                    </padding>
+                </Label>
+                <Label layoutX="570.0" layoutY="10.0" prefHeight="17.0" prefWidth="270.0" text="Department Employees">
+                    <padding>
+                        <Insets left="75.0"/>
+                    </padding>
+                </Label>
             </children>
         </AnchorPane>
     </content>
