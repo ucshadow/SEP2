@@ -463,8 +463,11 @@ CREATE MATERIALIZED VIEW usersByDepartment AS
 
 CREATE MATERIALIZED VIEW userswithoudschedule AS
   SELECT
-    cpr,
-    firstname,
-    familyname
+    employee.cpr,
+    employee.firstname,
+    employee.familyname
   FROM employee
-    LEFT JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;
+  WHERE NOT EXISTS(SELECT cpr
+                   FROM workingSchedule
+                   WHERE Employee.cpr = workingSchedule.employecpr);
+DROP MATERIALIZED VIEW userswithoudschedule;

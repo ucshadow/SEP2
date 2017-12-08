@@ -529,15 +529,17 @@ public class Database {
                 "    familyName,\n" +
                 "    dno\n" +
                 "  FROM employee\n" +
-                "    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;\n\n" + "\n" +
+                "    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;\n" +
                 "\n" +
                 "CREATE MATERIALIZED VIEW userswithoudschedule AS\n" +
                 "  SELECT\n" +
-                "    cpr,\n" +
-                "    firstname,\n" +
-                "    familyname\n" +
+                "    employee.cpr,\n" +
+                "    employee.firstname,\n" +
+                "    employee.familyname\n" +
                 "  FROM employee\n" +
-                "    LEFT JOIN workingSchedule ON Employee.cpr = workingSchedule.employecpr;";
+                "  WHERE NOT EXISTS(SELECT cpr\n" +
+                "                   FROM workingSchedule\n" +
+                "                   WHERE Employee.cpr = workingSchedule.employecpr);";
         executeStatements(sql);
     }
 

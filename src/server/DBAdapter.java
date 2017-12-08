@@ -211,7 +211,7 @@ public class DBAdapter implements IDBAdapter {
         String firstDayOfWeek = monday + "/" + month + "/" + year;
         String lastDayOfWeek = sunday + "/" + month + "/" + year;
         String sql = "SELECT * FROM workingschedule WHERE employecpr = '" + user.getCpr() +
-                "' AND workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy') ;";
+                "' AND workingday >=  to_date('" + firstDayOfWeek + "', 'dd/mm/yyyy')  AND workingday <=  to_date('" + lastDayOfWeek + "', 'dd/mm/yyyy');";
         System.out.println(sql);
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
 //        System.out.println("arrayList is empty + " + temp.size());
@@ -335,9 +335,8 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<User> getAllUsers() {
-        String sql = "REFRESH MATERIALIZED VIEW alluserswithwage;";
-        dbHandler.executeStatements(sql);
-        sql = "SELECT * from alluserswithwage;";
+
+        String sql = "select * from userlogin;";
         ArrayList<String[]> arrayList = dbHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : arrayList) {
@@ -346,7 +345,6 @@ public class DBAdapter implements IDBAdapter {
             newuser.setUsername(item[1]);
             newuser.setPassword(item[2]);
             newuser.setUserRole(item[3]);
-            newuser.setWage(item[4]);
             users.add(newuser);
         }
         return users;
@@ -375,13 +373,25 @@ public class DBAdapter implements IDBAdapter {
         return forReturn;
     }
 
+
     @Override
     public ArrayList<User> getAllUsersWithoutWorkingSchedule() {
         String sql = "REFRESH MATERIALIZED VIEW userswithoudschedule;";
         dbHandler.executeStatements(sql);
-        sql = "SELECT FROM userswithoudschedule;";
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+//         sql = " SELECT employee.cpr,employee.firstname,employee.familyname  FROM employee WHERE NOT EXISTS(SELECT cpr FROM workingSchedule WHERE Employee.cpr = workingSchedule.employecpr);";
+        sql = "select * from userswithoudschedule;";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
+        System.out.println(users.size());
+//        System.out.println(users.toArray());
+
+
         for (String[] item : users) {
             User user = new User();
             user.setCpr(item[0]);
