@@ -35,7 +35,7 @@ public class GUIController {
                 changeUserScheduleController.getUsersWithoutSchedule();
             }
             if(newValue.intValue() == 1) {
-//                createDepartmentController.onDepartmentTabFocus();
+                createDepartmentController.onDepartmentTabFocus();
             }
         });
 
@@ -51,7 +51,8 @@ public class GUIController {
         System.out.println(x.getRespnoseObject());
         User user = (User) x.getRespnoseObject();
         this.user = user;
-        if (user.getPicture() == null || user.getPicture().equals("null") || user.getPicture().equals("")) {
+        if (user.getPicture() == null || user.getPicture().equals("null") || user.getPicture().equals("")
+                || user.getPicture().equals("picture")) {
             user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
         }
 

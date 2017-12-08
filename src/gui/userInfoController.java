@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
-public class UserInfoController {
+ class UserInfoController {
 
     private Controller controller;
     private User user;

@@ -344,7 +344,7 @@ public class FakeUser {
 
         // update Departments
         for (Department d : departments) {
-            c.createDepartment(d.getdNumber(), d.getdName(), d.getdLocation(), d.getdManager());
+            c.createDepartment(d.getdNumber(), d.getdName(), d.getdLocation(),d.getdCity(), d.getdManager());
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {

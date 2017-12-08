@@ -59,7 +59,9 @@ public class WorkingSchedule implements Serializable {
 
     @Override
     public String toString() {
+        String s = getStartHours().length() > 4 ? getStartHours().substring(0, 5) : "";
+        String e = getEndHours().length() > 4 ? getEndHours().substring(0, 5) : "";
         return "CPR: " + getEmployeeCPR() + ", dep: " + getDepartmentNumber() + ", on: " + getWorkingDate() +
-                ", from: " + getStartHours().substring(0, 5) + ", to: " + getEndHours().substring(0, 5);
+                ", from: " + s + ", to: " + e;
     }
 }

@@ -90,13 +90,13 @@ public class CreateDepartmentController {
         String dPostcode = departmentPostcodeCreate.getText();
         String dCity = departmentCityCreate.getText();
         String dManager = departmentManagerCreate.getText();
-//        controller.createDepartment(dNumber, dName, dPostcode, dCity, dManager);
+        controller.createDepartment(dNumber, dName, dPostcode, dCity, dManager);
     }
 
     @FXML
     public void editDept(ActionEvent event) {
         ArrayList<String> newDepartment = readAllTextFields();
-        controller.editDepartment(newDepartment.get(0), newDepartment.get(1), newDepartment.get(2), newDepartment.get(3), newDepartment.get(0));
+        controller.editDepartment(newDepartment.get(0), newDepartment.get(1), newDepartment.get(2), newDepartment.get(3), newDepartment.get(4), newDepartment.get(0));
         for (String s : newDepartment) {
             System.out.println(s);
         }
