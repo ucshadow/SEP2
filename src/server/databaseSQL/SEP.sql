@@ -1,6 +1,5 @@
 CREATE SCHEMA sep2;
 SET SEARCH_PATH = sep2;
---CONSTRAINT emptyString CHECK (VALUE <> '' )
 CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL
   CONSTRAINT charLenght CHECK (length(value) = 10) CONSTRAINT emptyString CHECK (VALUE <> '' );
 CREATE DOMAIN dno_Domain CHAR(7) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
@@ -47,7 +46,7 @@ CREATE TABLE communication (
   mobile                 NUMBERDOMAIN,
   landline               NUMBERDOMAIN,
   email                  VARCHARDOMAIN,
-  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))
+  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Landline', 'Email'))
 );
 
 CREATE TABLE bankInfoDK (
@@ -102,12 +101,12 @@ BEGIN
   THEN
     INSERT INTO Employee (picture, firstName, secondName, familyName, cpr, dateOfBirth, address, postcode, licencePlate, moreInfo)
     VALUES
-      ('picture', 'firstname', 'secondname', 'lastname', new.cpr, current_date, 'address', 'postcode',
+      ('null', 'firstname', 'secondname', 'lastname', new.cpr, current_date, 'address', 'postcode',
        'licenceplate',
        'more info');
     INSERT INTO communication (cpr, mobile, landline, email)
     VALUES (new.cpr, '00000000', '00000000', 'email@email.com');
-    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '1234', '1234567890');
+    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '0000', '0000000000');
     INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '0');
     RETURN new;
   END IF;
@@ -453,13 +452,15 @@ CREATE MATERIALIZED VIEW allColleagues AS
 
 
 CREATE MATERIALIZED VIEW usersByDepartment AS
-  SELECT DISTINCT ON (cpr)
-    cpr,
-    firstname,
-    familyName,
-    dno
+  SELECT DISTINCT
+    (workingSchedule.employecpr),
+    employee.firstname,
+    employee.familyName,
+    workingSchedule.dno
   FROM employee
     INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
+DROP MATERIALIZED VIEW usersByDepartment;
+
 
 CREATE MATERIALIZED VIEW userswithoudschedule AS
   SELECT
@@ -470,4 +471,3 @@ CREATE MATERIALIZED VIEW userswithoudschedule AS
   WHERE NOT EXISTS(SELECT cpr
                    FROM workingSchedule
                    WHERE Employee.cpr = workingSchedule.employecpr);
-DROP MATERIALIZED VIEW userswithoudschedule;

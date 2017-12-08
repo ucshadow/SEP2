@@ -18,6 +18,12 @@ public class DBAdapter implements IDBAdapter {
         dbHandler = new DBHandler();
     }
 
+    private boolean checkForCity(String sql) {
+        String string = "select * from city where postcode = '" + sql + "';";
+        ArrayList arrayList = dbHandler.getResultSet(string);
+        return arrayList.size() > 0;
+    }
+
 
     @Override
     public void createAccount(User user) {
@@ -39,34 +45,36 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
     }
 
-    //    @Override
-    //    public boolean checkUsername(String username) {
-    //        ArrayList temp = dbHandler.getResultSet("SELECT username from UserLogIn where username='" + username + "'; ");
-    //        return temp.size() >= 1;
-    //    }
-
-    //    @Override
-    //    public String getUserPassword(String username) {
-    //        if (checkUsername(username)) {
-    //            String sql = "SELECT password from UserLogIn WHERE username = '" + username + "';";
-    //            ArrayList temp = dbHandler.getResultSet(sql);
-    //            return (String) temp.get(0);
-    //        }
-    //        return null;
-    //    }
-
     @Override
     public void changeUserInformation(User user) {
-        String sql = "Update userlogin set pass ='" + user.getPassword() + "' where cpr ='" + user.getCpr() + "';";
+        String sql;
+        sql = "REFRESH MATERIALIZED VIEW employeeinformation;";
         dbHandler.executeStatements(sql);
-        sql = "Update communication set mobile ='" + user.getMobile() + "',landline='" + user.getLandline() + "',email='" + user.getEmail() + "', preferredCommunication ='" + user.getPrefferedCommunication() + "' where cpr ='" + user.getCpr() + "';";
-        dbHandler.executeStatements(sql);
-        sql = "update bankinfodk set konto ='" + user.getKonto() + "', regnumber ='" + user.getRecnumber() + "' where cpr ='" + user.getCpr() + "';";
-        dbHandler.executeStatements(sql);
-        sql = "Insert into city values ('" + user.getPostcode() + "','" + user.getCity() + "');";
-        dbHandler.executeStatements(sql);
-        sql = "Update Employee set picture ='" + user.getPicture() + "',dateofbirth= to_date('" + user.getDob() + "', 'dd/mm/yyyy') ,address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenceplate='" +
-                user.getLicencePlate() + "',moreinfo ='" + user.getMoreInfo() + "',firstname ='" + user.getFirstName() + "',secondName ='" + user.getSecondName() + "',familyName='" + user.getLastName() + "' where cpr ='" + user.getCpr() + "';";
+        sql = "SELECT * from employeeinformation WHERE cpr = '" + user.getCpr() + "';";
+        ArrayList<String> arrayList = dbHandler.getSingleRow(sql);
+
+        if (!arrayList.get(2).equals(user.getPassword())) {
+            sql = "Update userlogin set pass ='" + user.getPassword() + "' where cpr ='" + user.getCpr() + "';";
+            dbHandler.executeStatements(sql);
+        }
+        if ((!arrayList.get(11).equals(user.getMobile()) || (!arrayList.get(12).equals(user.getLandline())) || (!arrayList.get(13).equals(user.getEmail())) || (!(
+                arrayList.get(17).equals(user.getPrefferedCommunication())
+        )))) {
+            sql = "Update communication set mobile ='" + user.getMobile() + "',landline='" + user.getLandline() + "',email='" + user.getEmail() + "', preferredCommunication ='" + user.getPrefferedCommunication() + "' where cpr ='" + user.getCpr() + "';";
+            dbHandler.executeStatements(sql);
+        }
+        if ((!arrayList.get(14).equals(user.getKonto())) || (!arrayList.get(15).equals(user.getRecnumber()))) {
+            sql = "update bankinfodk set konto ='" + user.getKonto() + "', regnumber ='" + user.getRecnumber() + "' where cpr ='" + user.getCpr() + "';";
+            dbHandler.executeStatements(sql);
+        }
+        if (!checkForCity(user.getPostcode())) {
+            sql = "Insert into city values ('" + user.getPostcode() + "','" + user.getCity() + "');";
+            dbHandler.executeStatements(sql);
+        }
+        if ((!arrayList.get(0).equals(user.getPicture())) || (!arrayList.get(7).equals(user.getDob())) || (!arrayList.get(8).equals(user.getAddress())) || (!arrayList.get(9).equals(user.getPostcode())) || (!arrayList.get(16).equals(user.getLicencePlate())) ||
+                (!arrayList.get(18).equals(user.getMoreInfo())) || (!arrayList.get(3).equals(user.getFirstName())) || (!arrayList.get(4).equals(user.getSecondName())) || (!arrayList.get(5).equals(user.getLastName())))
+            sql = "Update Employee set picture ='" + user.getPicture() + "',dateofbirth= to_date('" + user.getDob() + "', 'dd/mm/yyyy') ,address='" + user.getAddress() + "',postcode='" + user.getPostcode() + "',licenceplate='" +
+                    user.getLicencePlate() + "',moreinfo ='" + user.getMoreInfo() + "',firstname ='" + user.getFirstName() + "',secondName ='" + user.getSecondName() + "',familyName='" + user.getLastName() + "' where cpr ='" + user.getCpr() + "';";
         dbHandler.executeStatements(sql);
 
     }
@@ -102,31 +110,10 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql2);
         sql2 = "SELECT * from employeeinformation WHERE cpr = '" + temp.get(0) + "';";
         ArrayList<String> arrayList = dbHandler.getSingleRow(sql2);
-        int i = 0;
-        User user1 = new User(arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++));
-//        user1.setPicture(arrayList.get(i++));
-//        user1.setUsername(arrayList.get(i++));
-//        user1.setPassword(arrayList.get(i++));
-//        user1.setFirstName(arrayList.get(i++));
-//        user1.setSecondName(arrayList.get(i++));
-//        user1.setLastName(arrayList.get(i++));
-//        user1.setCpr(arrayList.get(i++));
-//        user1.setDob(arrayList.get(i++));
-//        user1.setAddress(arrayList.get(i++));
-//        user1.setPostcode(arrayList.get(i++));
-//        user1.setCity(arrayList.get(i++));
-//        user1.setMobile(arrayList.get(i++));
-//        user1.setLandline(arrayList.get(i++));
-//        user1.setEmail(arrayList.get(i++));
-//        user1.setKonto(arrayList.get(i++));
-//        user1.setRecnumber(arrayList.get(i++));
-//        user1.setLicencePlate(arrayList.get(i++));
-//        user1.setPrefferedCommunication(arrayList.get(i++));
-//        user1.setMoreInfo(arrayList.get(i++));
-//        user1.setWage(arrayList.get(i++));
-//        user1.setUserRole(arrayList.get(i++));
-        return user1;
+
+        return createUser(arrayList);
     }
+
 
     @Override
     public void addToWorkingSchedule(WorkingSchedule workingSchedule) {
@@ -140,23 +127,24 @@ public class DBAdapter implements IDBAdapter {
     }
 
     @Override
-    public ArrayList<User> getAllUsers(User user) {
-        return null;
-    }
-
-
-    //TODO d city
-    @Override
     public void createDepartment(Department department) {
-        String sql = "Insert into city values ('" + department.getdLocation() + "','" + null + "');";
-        dbHandler.executeStatements(sql);
+        String sql;
+        if (!checkForCity(department.getdLocation())) {
+            sql = "Insert into city values ('" + department.getdLocation() + "','" + department.getdCity() + "');";
+            dbHandler.executeStatements(sql);
+        }
         sql = "INSERT INTO department VALUES ('" + department.getdNumber().toLowerCase() + "','" + department.getdName() + "','" + department.getdManager() + "','" + department.getdLocation() + "','now()');";
         dbHandler.executeStatements(sql);
     }
 
     @Override
     public void editDepartment(Department department, Department oldDepartment) {
-        String sql = "Update department set dno ='" + department.getdNumber().toLowerCase() + "', dname ='" + department.getdName() + "',dpostcode = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
+        String sql;
+        if (!checkForCity(department.getdLocation())) {
+            sql = "Insert into city values ('" + department.getdLocation() + "','" + department.getdCity() + "');";
+            dbHandler.executeStatements(sql);
+        }
+        sql = "Update department set dno ='" + department.getdNumber().toLowerCase() + "', dname ='" + department.getdName() + "',dpostcode = '" + department.getdLocation() + "',dmanager ='" + department.getdManager() +
                 "' where dno = '" + oldDepartment.getdNumber().toLowerCase() + "';";
         dbHandler.executeStatements(sql);
     }
@@ -178,13 +166,6 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
     }
 
-//    private ArrayList getUserByCPR(String CPR) {
-//        String sql = "SELECT * from UserLogIn WHERE CPR = '" + CPR + "';";
-//        ArrayList temp = dbHandler.getSingleRow(sql);
-//        return temp;
-//    }
-
-    //TODO DStartDate
     @Override
     public ArrayList<Department> getAllDepartments() {
 
@@ -323,7 +304,6 @@ public class DBAdapter implements IDBAdapter {
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : temp) {
             User user1 = new User();
-            user1.setPicture(item[0]);
             user1.setFirstName(item[1]);
             user1.setLastName(item[2]);
             user1.setMobile(item[3]);
@@ -350,17 +330,12 @@ public class DBAdapter implements IDBAdapter {
         return users;
     }
 
-    @Override
-    public void wordCheck(String string) {
-        String sql = "INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '" + string + "', now());";
-        dbHandler.executeStatements(sql);
-    }
 
     @Override
     public ArrayList<User> getUsersByDepartment(Department department) {
         String sql = "REFRESH MATERIALIZED VIEW usersbydepartment;";
         dbHandler.executeStatements(sql);
-        sql = "SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
+        sql = "SELECT firstname,familyname, employecpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
         for (String[] item : users) {
@@ -404,10 +379,119 @@ public class DBAdapter implements IDBAdapter {
 
     }
 
-//    public static void main(String[] args) {
-//        User user = new User("9087654321", "3333.20");
-//        System.out.println(new DBAdapter().getWorkingColleagues(user));
-//    }
-    //TODO USER WAGE GUI
+    @Override
+    public User getUserInfOForAdmin(User user) {
+        String sql2 = "REFRESH MATERIALIZED VIEW employeeinformation;";
+        dbHandler.executeStatements(sql2);
+        sql2 = "SELECT * from employeeinformation WHERE cpr = '" + user.getCpr() + "';";
+        ArrayList<String> arrayList = dbHandler.getSingleRow(sql2);
+
+        return createUser(arrayList);
+    }
+
+    private User createUser(ArrayList<String> arrayList) {
+        int i = 0;
+//        User user1 = new User(arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++));
+        User user1 = new User();
+        user1.setPicture(arrayList.get(i++));
+        user1.setUsername(arrayList.get(i++));
+        user1.setPassword(arrayList.get(i++));
+        if (arrayList.get(i).equals("firstname")) {
+            user1.setFirstName("");
+            i++;
+        } else {
+            user1.setFirstName(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("secondname")) {
+            user1.setSecondName("");
+            i++;
+        } else {
+            user1.setSecondName(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("lastname")) {
+            user1.setLastName("");
+            i++;
+        } else {
+            user1.setLastName(arrayList.get(i++));
+        }
+        user1.setCpr(arrayList.get(i++));
+        int day = LocalDate.now().getDayOfMonth();
+        String currentDay = String.valueOf(day);
+        if (day < 10) {
+            currentDay = "0" + LocalDate.now().getDayOfMonth();
+        }
+        String date = LocalDate.now().getYear() + "-" + LocalDate.now().getMonthValue() + "-" + currentDay;
+        if (arrayList.get(i).equals(date)) {
+            user1.setDob("");
+            i++;
+        } else {
+            user1.setDob(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("address")) {
+            user1.setAddress("");
+            i++;
+        } else {
+            user1.setAddress(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("postcode")) {
+            user1.setPostcode("");
+            i++;
+        } else {
+            user1.setPostcode(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("City")) {
+            user1.setCity("");
+            i++;
+        } else {
+            user1.setCity(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("00000000")) {
+            user1.setMobile("");
+            i++;
+        } else {
+            user1.setMobile(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("00000000")) {
+            user1.setLandline("");
+            i++;
+        } else {
+            user1.setLandline(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("email@email.com")) {
+            user1.setEmail("");
+            i++;
+        } else {
+            user1.setEmail(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("0000")) {
+            user1.setKonto("");
+            i++;
+        } else {
+            user1.setKonto(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("0000000000")) {
+            user1.setRecnumber("");
+            i++;
+        } else {
+            user1.setRecnumber(arrayList.get(i++));
+        }
+        if (arrayList.get(i).equals("licenceplate")) {
+            user1.setLicencePlate("");
+            i++;
+        } else {
+            user1.setLicencePlate(arrayList.get(i++));
+        }
+        user1.setPrefferedCommunication(arrayList.get(i++));
+        if (arrayList.get(i).equals("more info")) {
+            user1.setMoreInfo("");
+            i++;
+        } else {
+            user1.setMoreInfo(arrayList.get(i++));
+        }
+        user1.setWage(arrayList.get(i++));
+        user1.setUserRole(arrayList.get(i++));
+        return user1;
+    }
+
 }
 

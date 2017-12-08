@@ -103,7 +103,7 @@ public class MyProfileController {
     public void displayUser(User user) {
 //        if (user.getPicture() == null || user.getPicture().equals("") || user.getPicture().equals("null") ) {
 
-            if (user.getPicture().equals("") || user.getPicture().equals("null") ) {
+        if (user.getPicture().equals("") || user.getPicture().equals("null")) {
             user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
         }
         Image i = new Image(user.getPicture());

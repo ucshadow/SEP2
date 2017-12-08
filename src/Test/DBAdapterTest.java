@@ -15,7 +15,9 @@ import server.DBAdapter;
 import server.IDBAdapter;
 import setup.Database;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DBAdapterTest {
 
@@ -435,11 +437,9 @@ public class DBAdapterTest {
     }
 
 
-    //TODO Maybe improvement
-
     @Test
     public void addWorkingSchedule() {
-        fakeUser.setEverythingUp(100, 3);
+        fakeUser.setEverythingUp(100, 12);
         fakeUsers = fakeUser.getWorkers();
         fakeDepartments = fakeUser.getDepartments();
         fakeWorkingSchedule = fakeUser.getWorkingHours();
@@ -449,23 +449,30 @@ public class DBAdapterTest {
         for (Department item : fakeDepartments) {
             idbAdapter.createDepartment(item);
         }
-        for (WorkingSchedule item : fakeWorkingSchedule) {
-            idbAdapter.addToWorkingSchedule(item);
-        }
-        wsFromDB = idbAdapter.workingSchedulePerWeek(fakeUsers.get(0));
-        ArrayList<WorkingSchedule> db = new ArrayList<>();
-        for (WorkingSchedule item : fakeWorkingSchedule) {
-            if (item.getEmployeeCPR().equalsIgnoreCase(fakeUsers.get(0).getCpr())) {
-                db.add(item);
-            }
-        }
-        assertEquals(db.size(), wsFromDB.size());
 
+        int day = LocalDate.now().getDayOfMonth();
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        String date = day + "/" + month + "/" + year;
+        ArrayList<WorkingSchedule> wsArray = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            WorkingSchedule ws = new WorkingSchedule(fakeDepartments.get(i).getdNumber(), fakeUsers.get(i).getCpr(), date, "08:00", "10:00");
+            idbAdapter.addToWorkingSchedule(ws);
+            wsArray.add(ws);
+        }
+        int s = 0;
+        for (int i = 0; i < 10; i++) {
+            wsFromDB = idbAdapter.workingSchedulePerWeek(fakeUsers.get(i));
+            assertEquals(1, wsFromDB.size());
+            s++;
+            assertEquals(wsFromDB.get(0).getDepartmentNumber(), fakeDepartments.get(i).getdNumber());
+            assertEquals(wsFromDB.get(0).getEmployeeCPR(), fakeUsers.get(i).getCpr());
+        }
+        assertEquals(s, wsArray.size());
 
         database.deleteFromtables();
     }
 
-    //TODO Maybe improvement
 
     @Test
     public void getWorkingSchedule() {
@@ -484,14 +491,24 @@ public class DBAdapterTest {
         }
         wsFromDB = idbAdapter.workingSchedulePerWeek(fakeUsers.get(0));
         ArrayList<WorkingSchedule> db = new ArrayList<>();
+        int currentDayInWeek = LocalDate.now().getDayOfWeek().getValue();
+        int day = LocalDate.now().getDayOfMonth();
+        int monday = day - currentDayInWeek;
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        int sunday = day + (7 - currentDayInWeek);
         for (WorkingSchedule item : fakeWorkingSchedule) {
-            if (item.getEmployeeCPR().equalsIgnoreCase(fakeUsers.get(0).getCpr())) {
+            String[] b = item.getWorkingDate().split("/");
+            int valueDay = Integer.parseInt(b[0]);
+            int valueMonth = Integer.parseInt(b[1]);
+            int valueYear = Integer.parseInt(b[2]);
+            if (item.getEmployeeCPR().equalsIgnoreCase(fakeUsers.get(0).getCpr()) && valueDay >= monday && valueMonth == month && valueYear == year && valueDay <= sunday) {
                 db.add(item);
             }
         }
-        System.out.println(wsFromDB);
-//        assertEquals(db.size(), wsFromDB.size());
-//        assertEquals(db.get(0).getDepartmentNumber(), wsFromDB.get(0).getDepartmentNumber());
+        assertEquals(db.size(), wsFromDB.size());
+        assertEquals(db.get(0).getDepartmentNumber(), wsFromDB.get(0).getDepartmentNumber());
+        assertEquals(db.get(0).getEmployeeCPR(), fakeUsers.get(0).getCpr());
 
 
         database.deleteFromtables();
@@ -528,19 +545,23 @@ public class DBAdapterTest {
             }
         }
         ArrayList<String> temp = idbAdapter.getWorkingDepartments(fakeUsers.get(0));
-        System.out.println(allD);
-        System.out.println(temp);
         assertEquals(allD.size(), temp.size());
-        for (int i = 0; i < temp.size(); i++) {
-            assertEquals(temp.get(i), allD.get(i));
+        long first = 0;
+        long second = 0;
+
+        for (int i = 0; i < allD.size(); i++) {
+            first += Integer.valueOf(allD.get(i));
+            second += Integer.valueOf(temp.get(i));
         }
+
+        assertEquals(first, second);
 
         database.deleteFromtables();
     }
 
     @Test
     public void getWorkingCol() {
-        fakeUser.setEverythingUp(100, 1);
+        fakeUser.setEverythingUp(20, 1);
         fakeUsers = fakeUser.getWorkers();
         fakeDepartments = fakeUser.getDepartments();
         fakeWorkingSchedule = fakeUser.getWorkingHours();
@@ -573,9 +594,16 @@ public class DBAdapterTest {
             assertEquals(temp.get(i), allD.get(i));
         }
 
+        idbAdapter.createAccount(user);
+        int day = LocalDate.now().getDayOfMonth();
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear();
+        String date = day + "/" + month + "/" + year;
+        WorkingSchedule ws = new WorkingSchedule(fakeDepartments.get(0).getdNumber(), user.getCpr(), date, "08:00", "10:00");
 
-        ArrayList<User> workingCol = idbAdapter.getWorkingColleagues(fakeUsers.get(0));
-        assertTrue(workingCol.size() == fakeUsers.size() - 1);
+        idbAdapter.addToWorkingSchedule(ws);
+        ArrayList<User> workingCol = idbAdapter.getWorkingColleagues(user);
+        assertEquals(workingCol.size(), fakeWorkingSchedule.size());
 
         database.deleteFromtables();
     }
@@ -600,5 +628,87 @@ public class DBAdapterTest {
         database.deleteFromtables();
     }
 
- 
+
+    @Test
+    public void getUsersByDepartment() {
+        fakeUser.setEverythingUp(15, 5);
+        fakeUsers = fakeUser.getWorkers();
+        fakeDepartments = fakeUser.getDepartments();
+        fakeWorkingSchedule = fakeUser.getWorkingHours();
+        for (User item : fakeUsers) {
+            idbAdapter.createAccount(item);
+        }
+        for (Department item : fakeDepartments) {
+            idbAdapter.createDepartment(item);
+        }
+        for (WorkingSchedule item : fakeWorkingSchedule) {
+            idbAdapter.addToWorkingSchedule(item);
+        }
+        ArrayList<String> allDdepartments = new ArrayList<>();
+        ArrayList<String> allDEmployees = new ArrayList<>();
+        for (WorkingSchedule itemForAllD :
+                fakeWorkingSchedule) {
+            if (!allDdepartments.contains(itemForAllD.getDepartmentNumber())) {
+                allDdepartments.add(itemForAllD.getDepartmentNumber());
+            }
+        }
+        for (Department item : fakeDepartments
+                ) {
+            ArrayList<User> dbResult = idbAdapter.getUsersByDepartment(item);
+            for (WorkingSchedule items : fakeWorkingSchedule) {
+                if (item.getdNumber().equals(items.getDepartmentNumber())) {
+                    if (!allDEmployees.contains(items.getEmployeeCPR())) {
+                        allDEmployees.add(items.getEmployeeCPR());
+                        System.out.println(items);
+                    }
+                }
+            }
+            dbResult.forEach(System.out::println);
+            System.out.println("NEW");
+            allDEmployees.forEach(System.out::println);
+
+            assertEquals(dbResult.size(), allDEmployees.size());
+            allDEmployees.clear();
+            for (String item2 : allDdepartments
+                    ) {
+                if (item2.equalsIgnoreCase(item.getdNumber())) {
+                    assertEquals(item2, item.getdNumber());
+                }
+            }
+
+        }
+
+    }
+
+    @Test
+    public void usersWithoutWOrkingSchedule() {
+        fakeUser.setEverythingUp(15, 5);
+        fakeUsers = fakeUser.getWorkers();
+        fakeDepartments = fakeUser.getDepartments();
+        fakeWorkingSchedule = fakeUser.getWorkingHours();
+        for (User item : fakeUsers) {
+            idbAdapter.createAccount(item);
+        }
+        idbAdapter.createAccount(user);
+        for (Department item : fakeDepartments) {
+            idbAdapter.createDepartment(item);
+        }
+        for (WorkingSchedule item : fakeWorkingSchedule) {
+            idbAdapter.addToWorkingSchedule(item);
+        }
+        fromDB = idbAdapter.getAllUsersWithoutWorkingSchedule();
+        assertEquals(fromDB.size(), 1);
+        fakeUser.setEverythingUp(20, 5);
+        fakeUsers = fakeUser.getWorkers();
+
+        for (User item : fakeUsers
+                ) {
+            idbAdapter.createAccount(item);
+        }
+        fromDB = idbAdapter.getAllUsersWithoutWorkingSchedule();
+        assertEquals(fromDB.size(), 21);
+
+    }
+
+
 }

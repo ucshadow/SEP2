@@ -4,7 +4,14 @@ CREATE SCHEMA sep2;
 DELETE FROM userlogin;
 SELECT *
 FROM userlogin;
+
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
+
+REFRESH MATERIALIZED VIEW userswithoudschedule;
+
+SELECT *
+FROM userswithoudschedule;
+
 
 CREATE TABLE testing (
   that   INTEGER,
@@ -20,11 +27,13 @@ REFRESH MATERIALIZED VIEW usersbydepartment;
 SELECT
   firstname,
   familyname,
-  cpr,
+  employecpr,
   dno
-FROM usersbydepartment;
-
-
+FROM usersbydepartment WHERE dno = '4229153';
+SELECT DISTINCT(employecpr)
+FROM workingschedule where dno = '4229153';
+SELECT *
+FROM city where postcode ='postcode';
 SELECT *
 FROM userlogin;
 SELECT *
@@ -84,6 +93,8 @@ SELECT *
 FROM EmployeeInformation
 WHERE cpr = '8701646897';
 SET SEARCH_PATH = sep2;
+SELECT *
+FROM employee;
 REFRESH MATERIALIZED VIEW usersbydepartment;
 drop MATERIALIZED VIEW usersbydepartment;
 SELECT

@@ -59,12 +59,7 @@ public class WorkingSchedule implements Serializable {
 
     @Override
     public String toString() {
-        return "WorkingSchedule{" +
-                "departmentNumber='" + departmentNumber + '\'' +
-                ", employeeCPR='" + employeeCPR + '\'' +
-                ", workingDate='" + workingDate + '\'' +
-                ", startHours='" + startHours + '\'' +
-                ", endHours='" + endHours + '\'' +
-                '}';
+        return "CPR: " + getEmployeeCPR() + ", dep: " + getDepartmentNumber() + ", on: " + getWorkingDate() +
+                ", from: " + getStartHours().substring(0, 5) + ", to: " + getEndHours().substring(0, 5);
     }
 }
