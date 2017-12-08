@@ -84,6 +84,7 @@ public class CreateUserController {
         task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
     }
 
+
     private void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getallusers")) {
@@ -91,8 +92,15 @@ public class CreateUserController {
                 userList = (ArrayList<User>) res.getRespnoseObject();
                 populateUserTable((ArrayList<User>) res.getRespnoseObject());
             }
+            if (res.getResponse().equals("getuserinfoforadmin")) {
+                System.out.println(res.toString());
+//                userList = (ArrayList<User>) res.getRespnoseObject();
+                createUserInfoWindow((User) res.getRespnoseObject());
+
+            }
         }
     }
+
 
     private void populateUserTable(ArrayList<User> users) {
         ObservableList<String> items = FXCollections.observableArrayList();
@@ -130,17 +138,46 @@ public class CreateUserController {
         return null;
     }
 
-
-
     @FXML
-    private void createUserInfoWindow() {
+    private void getSingleUserEvent() {
+
+        controller.getUserForAdmin(selectedUser.getCpr());
+        Task task = new Task<Response>() {
+            @Override
+            public Response call() {
+                int tries = 0;
+                while (tries < 10) {
+                    Response r = controller.getLastResponse();
+                    if (r != null) {
+                        return r;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tries++;
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+    }
+
+
+
+    private void createUserInfoWindow(User user) {
         Parent root;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserInfo.fxml"));
             root = fxmlLoader.load();
             UserInfoController controller = fxmlLoader.getController();
-            System.out.println("My user:" + selectedUser);
-            controller.displayUser(selectedUser);
+            controller.setController(this.controller);
+            System.out.println("My user:" + user);
+            controller.setUser(user);
+            controller.displayUser(user);
+
             Scene scene = new Scene(root);
             Stage stage = new Stage();
 

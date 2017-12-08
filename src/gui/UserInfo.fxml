@@ -276,6 +276,16 @@
                 <Font name="Calibri" size="14.0"/>
             </font>
         </TextField>
+        <Label layoutX="749.0" layoutY="114.0" text="Departments:">
+            <font>
+                <Font name="Calibri" size="19.0"/>
+            </font>
+        </Label>
+        <Label fx:id="userInfoDepartmentsLabel" layoutX="997.0" layoutY="114.0" text="Label">
+            <font>
+                <Font name="Calibri Italic" size="16.0"/>
+            </font>
+        </Label>
     </children>
 
 </AnchorPane>

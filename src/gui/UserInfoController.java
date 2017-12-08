@@ -1,7 +1,9 @@
 package gui;
 
 import client.Controller;
+import common.Response;
 import common.User;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,7 +14,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
- class UserInfoController {
+ public class UserInfoController {
 
     private Controller controller;
     private User user;
@@ -61,6 +63,10 @@ import java.util.ArrayList;
     private ImageView userInfoPicture;
     @FXML
     private TextField userInfoMoreInfo;
+
+    @FXML
+    private Label userInfoDepartmentsLabel;
+
     @FXML
     private Label userInfoCprLabel;
     @FXML
@@ -127,6 +133,7 @@ import java.util.ArrayList;
         userInfoUserRole.setText(user.getUserRole());
 
 
+
         System.out.println(user);
 
 
@@ -138,8 +145,66 @@ import java.util.ArrayList;
     }
 
 
-//    public Controller getController() {
-//        return controller;
-//    }
 
-}
+     private void getDepartmentsEvent() {
+         controller.getMyWorkingDepartments(user.getCpr());
+         Task task = new Task<Response>() {
+             @Override
+             public Response call() {
+                 int tries = 0;
+                 while (tries < 10) {
+                     Response r = controller.getLastResponse();
+                     if (r != null) {
+                         return r;
+                     }
+                     try {
+                         Thread.sleep(100);
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+                     }
+                     tries++;
+                 }
+                 return null;
+             }
+         };
+         new Thread(task).start();
+         task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+     }
+
+     private void responseReader(Response res) {
+
+         if (res != null) {
+             System.out.println("Herr 2");
+             if (res.getResponse().equals("getMyWorkingDepartments")) {
+                 System.out.println("Herr" +"3");
+                 System.out.println(res.toString());
+//                departments = (ArrayList<String>) res.getRespnoseObject();
+//                System.out.println("Departments:" + departments.toString());
+                 getWorkingDepartments((ArrayList<String>) res.getRespnoseObject());
+             }
+         }
+     }
+
+
+     public void getWorkingDepartments(ArrayList<String> strings){
+         System.out.println("Strings" + strings);
+
+         String str = "";
+
+         for (String string: strings){
+             str+= string + "  ";
+         }
+
+         userInfoDepartmentsLabel.setText(str);
+     }
+
+     public void setController(Controller controller) {
+         this.controller = controller;
+//         getDepartmentsEvent();
+     }
+
+     public void setUser(User user) {
+         this.user = user;
+         getDepartmentsEvent();
+     }
+ }

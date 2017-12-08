@@ -63,6 +63,7 @@ public class GUIController {
         weeklyScheduleController.setUser(user);
         changeUserScheduleController.setUser(user);
 
+
         setElevation();
     }
 

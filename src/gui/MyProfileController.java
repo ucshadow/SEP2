@@ -3,8 +3,10 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -12,11 +14,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MyProfileController {
 
     private Controller controller;
     private User user;
+    private ArrayList<String> departments;
 
 
     /**
@@ -67,6 +71,9 @@ public class MyProfileController {
     @FXML
     private Label profileWageLabel;
     @FXML
+    private Label profileDepartmentsLabel;
+
+    @FXML
     private TextField newPicture;
     @FXML
     private ListView clientList;
@@ -101,6 +108,10 @@ public class MyProfileController {
     }
 
     public void displayUser(User user) {
+//        if (user.getPicture() == null || user.getPicture().equals("") || user.getPicture().equals("null") ) {
+
+
+
         Image i = new Image(user.getPicture());
         profilePicture.setImage(i);
         profileUsernameLabel.setText(user.getUsername());
@@ -109,6 +120,7 @@ public class MyProfileController {
         profileSecondName.setText(user.getSecondName());
         profileLastName.setText(user.getLastName());
         profileCprLabel.setText(user.getCpr());
+//        getAllUsersEvent(user);
         profileDOB.setText(user.getDob());
         profileAddress.setText(user.getAddress());
         profilePostcode.setText(user.getPostcode());
@@ -124,11 +136,64 @@ public class MyProfileController {
         profileWageLabel.setText(user.getWage());
         profileUserRole.setText(user.getUserRole());
 
-
         System.out.println(user);
 
-
     }
+
+    private void getDepartmentsEvent(User user) {
+        System.out.println("cpr:" + user.getCpr());
+        controller.getMyWorkingDepartments(user.getCpr());
+        Task task = new Task<Response>() {
+            @Override
+            public Response call() {
+                int tries = 0;
+                while (tries < 10) {
+                    Response r = controller.getLastResponse();
+                    if (r != null) {
+                        return r;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tries++;
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+    }
+
+    private void responseReader(Response res) {
+        System.out.println("HEre 1");
+
+        if (res != null) {
+            System.out.println("HEre 2");
+            if (res.getResponse().equals("getMyWorkingDepartments")) {
+                System.out.println("HEre 3");
+                System.out.println(res.toString());
+//                departments = (ArrayList<String>) res.getRespnoseObject();
+//                System.out.println("Departments:" + departments.toString());
+                getWorkingDepartments((ArrayList<String>) res.getRespnoseObject());
+            }
+        }
+    }
+
+
+    public void getWorkingDepartments(ArrayList<String> strings){
+        System.out.println("Strings" + strings);
+
+        String str = "";
+
+        for (String string: strings){
+            str+= string + "  ";
+        }
+
+        profileDepartmentsLabel.setText(str);
+    }
+
 
     @FXML
     private void closePanel() {
@@ -142,6 +207,7 @@ public class MyProfileController {
 
     public void setController(Controller controller) {
         this.controller = controller;
+        getDepartmentsEvent(user);
     }
 
     public User getUser() {
