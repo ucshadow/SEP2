@@ -335,7 +335,7 @@ public class DBAdapter implements IDBAdapter {
     public ArrayList<User> getUsersByDepartment(Department department) {
         String sql = "REFRESH MATERIALIZED VIEW usersbydepartment;";
         dbHandler.executeStatements(sql);
-        sql = "SELECT firstname,familyname, employecpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
+        sql = "SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
         for (String[] item : users) {
