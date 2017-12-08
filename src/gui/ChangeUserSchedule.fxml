@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<Tab text="Change User Schedule" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ChangeUserScheduleController">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
+            <ListView fx:id="allSchedulesList" layoutX="39.0" layoutY="78.0" prefHeight="458.0" prefWidth="408.0" />
+            <ListView fx:id="usersWithoutSchedule" layoutX="486.0" layoutY="78.0" prefHeight="458.0" prefWidth="308.0" />
+            <Label layoutX="191.0" layoutY="42.0" text="All Schedules" />
+            <Label layoutX="611.0" layoutY="42.0" text="Empty Schedules" />
+            <TextField layoutX="42.0" layoutY="557.0" promptText="Filter By CPR" />
+            <TextField layoutX="486.0" layoutY="557.0" promptText="Filter By CPR" fx:id="usersWithoutScheduleFilter"
+            onKeyReleased="#filterUsersWithoutScheduleByCPR"/>
+            <ListView fx:id="selected" layoutX="826.0" layoutY="78.0" prefHeight="458.0" prefWidth="408.0" />
+            <Label layoutX="1008.0" layoutY="42.0" text="Selected User" />
+            <TextField layoutX="1016.0" layoutY="596.0"  fx:id="startDate"/>
+            <TextField layoutX="1016.0" layoutY="646.0"  fx:id="endDate"/>
+            <TextField layoutX="1016.0" layoutY="692.0"  fx:id="startTime"/>
+            <TextField layoutX="720.0" layoutY="650.0" fx:id="endTime"/>
+            <Label layoutX="912.0" layoutY="600.0" text="Add Start Date" fx:id="addStartDateLabel"/>
+            <Label layoutX="914.0" layoutY="650.0" text="Add End Date" fx:id="addEndDateLabel"/>
+            <Label layoutX="914.0" layoutY="696.0" text="Add Start Time" fx:id="addStartTimeLabel"/>
+            <Label layoutX="602.0" layoutY="650.0" text="Add End Time"  fx:id="addEndTimeLabel"/>
+            <Button layoutX="1196.0" layoutY="671.0" mnemonicParsing="false" text="Add" onAction="#addScheduleButt" />
+            <Button layoutX="196.0" layoutY="671.0" mnemonicParsing="false" text="Submit" onAction="#submitNewSchedule" />
+            <TextField layoutX="720.0" layoutY="596.0" fx:id="depNo"/>
+            <Label layoutX="602.0" layoutY="600.0" text="Add department no."  fx:id="addDepNoLabel"/>
+
+        </AnchorPane>
+    </content>
+</Tab>

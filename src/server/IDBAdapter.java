@@ -5,7 +5,6 @@ import common.Request;
 import common.User;
 import common.WorkingSchedule;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Map;
 

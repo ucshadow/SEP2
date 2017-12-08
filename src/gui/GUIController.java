@@ -3,8 +3,6 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -15,9 +13,11 @@ public class GUIController {
     @FXML private MyProfileController myProfileController;
     @FXML private CreateDepartmentController createDepartmentController;
     @FXML private WeeklySchedule weeklyScheduleController;
+    @FXML private ChangeUserScheduleController changeUserScheduleController;
 
     @FXML private Tab adminTab;
     @FXML private TabPane clientTab;
+    @FXML private TabPane adminTabPane;
 
     private User user;
 
@@ -27,8 +27,18 @@ public class GUIController {
             if(newValue.intValue() == 1) {
                 weeklyScheduleController.printSchedule();
             }
-            System.out.println(newValue);
         });
+
+        adminTabPane.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue.intValue() == 2) {
+                changeUserScheduleController.getAllWorkingSchedules();
+                changeUserScheduleController.getUsersWithoutSchedule();
+            }
+            if(newValue.intValue() == 1) {
+//                createDepartmentController.onDepartmentTabFocus();
+            }
+        });
+
     }
 
     private void setElevation() {
@@ -50,6 +60,7 @@ public class GUIController {
         myProfileController.displayUser(user);
         createDepartmentController.setUser(user);
         weeklyScheduleController.setUser(user);
+        changeUserScheduleController.setUser(user);
 
         setElevation();
     }
@@ -59,6 +70,11 @@ public class GUIController {
         myProfileController.setController(c);
         createDepartmentController.setController(c);
         weeklyScheduleController.setController(c);
+        changeUserScheduleController.setController(c);
+
+//        if(user.getUserRole().equals("Manager")) {
+//            changeUserScheduleController.getAllWorkingSchedules();
+//        }
     }
 
 }

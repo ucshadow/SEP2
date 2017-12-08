@@ -138,6 +138,16 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
+    public void getAllWorkingSchedules() {
+        Request submitEditRequest = new Request<>("getAllWorkingSchedule", null);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getUsersWithoutSchedule() {
+        Request submitEditRequest = new Request<>("getUsersWithoutSchedule", null);
+        client.sendRequest(submitEditRequest);
+    }
+
     //TODO Tested working
     public void getWagePerHour(String cpr) {
         User user = new User();

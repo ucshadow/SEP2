@@ -24,13 +24,6 @@
                                         <!--my weekly schedule-->
                                         <fx:include fx:id="weeklySchedule" source="WeeklySchedule.fxml"/>
 
-
-                                        <Tab text="Untitled Tab 2">
-                                            <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                            prefWidth="200.0"/>
-                                            </content>
-                                        </Tab>
                                     </tabs>
                                 </TabPane>
                             </children>
@@ -41,7 +34,7 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TabPane prefHeight="771.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE">
+                                <TabPane prefHeight="771.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" fx:id="adminTabPane">
                                     <tabs>
 
                                         <!--create user-->
@@ -51,6 +44,11 @@
 
                                         <!--create department-->
                                         <fx:include fx:id="createDepartment" source="CreateDepartment.fxml"/>
+
+
+                                        <!--change User Schedule-->
+                                        <fx:include fx:id="changeUserSchedule" source="ChangeUserSchedule.fxml"/>
+
 
                                     </tabs>
                                 </TabPane>

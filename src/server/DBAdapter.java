@@ -378,20 +378,9 @@ public class DBAdapter implements IDBAdapter {
     public ArrayList<User> getAllUsersWithoutWorkingSchedule() {
         String sql = "REFRESH MATERIALIZED VIEW userswithoudschedule;";
         dbHandler.executeStatements(sql);
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-//         sql = " SELECT employee.cpr,employee.firstname,employee.familyname  FROM employee WHERE NOT EXISTS(SELECT cpr FROM workingSchedule WHERE Employee.cpr = workingSchedule.employecpr);";
-        sql = "select * from userswithoudschedule;";
+        sql = "SELECT FROM userswithoudschedule;";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
-        System.out.println(users.size());
-//        System.out.println(users.toArray());
-
-
         for (String[] item : users) {
             User user = new User();
             user.setCpr(item[0]);
