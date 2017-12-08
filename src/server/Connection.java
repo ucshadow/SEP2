@@ -18,11 +18,7 @@ public class Connection implements Runnable, OurObserver {
     //TODO Server Connection reset
     @Override
 
-    /**
-     * Run method from runnable interface.
-     *
-     * Reads object and returns username  //ToDO -- unfinished.
-     */
+
     public void run() {
         while (true) {
             Request s;
@@ -53,7 +49,7 @@ public class Connection implements Runnable, OurObserver {
                         adapter.editDepartment((Department) s.getRequestObjects()[0], (Department) s.getRequestObjects()[1]);
                         break;
                     case "getdepartment":
-                        Department department = (Department) adapter.viewDepartment((Department) s.getRequestObject());
+                        Department department = adapter.viewDepartment((Department) s.getRequestObject());
                         getOutputStream().writeObject(new Response<>("viewDepartment", department));
                         break;
                     case "deletedepartment":
@@ -124,13 +120,7 @@ public class Connection implements Runnable, OurObserver {
         }
     }
 
-    /**
-     * Constructor.
-     * Instantiates streams.
-     *
-     * @param socket
-     * @param server
-     */
+
     public Connection(Socket socket, Server server, IDBAdapter adapter) {
         this.server = server;
         this.adapter = adapter;
@@ -151,11 +141,7 @@ public class Connection implements Runnable, OurObserver {
         return this;
     }
 
-    /**
-     * Abstract method for writing response to observer.
-     *
-     * @param response
-     */
+
     public void writeObject(Response response) {
         new Thread(() -> {
             try {
