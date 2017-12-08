@@ -106,6 +106,9 @@ public class Connection implements Runnable, OurObserver {
                         ArrayList<User> user2 = adapter.getUsersByDepartment((Department) s.getRequestObject());
                         getOutputStream().writeObject(new Response<>("getuserbydepartment", user2));
                         break;
+                    case "getuserinfoforadmin":
+                        User userForAdmin = adapter.getUserInfOForAdmin((User) s.getRequestObject());
+                        getOutputStream().writeObject(new Response<>("getuserinfoforadmin", userForAdmin));
                 }
 
             } catch (Exception e) {

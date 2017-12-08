@@ -1,12 +1,10 @@
 package server;
 
 import common.Department;
-import common.Request;
 import common.User;
 import common.WorkingSchedule;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public interface IDBAdapter {
 
@@ -40,7 +38,6 @@ public interface IDBAdapter {
 
     void addToWorkingSchedule(WorkingSchedule workingSchedule);
 
-
     ArrayList<WorkingSchedule> workingSchedulePerWeek(User user);
 
     ArrayList<String> getWorkingDepartments(User user);
@@ -51,14 +48,11 @@ public interface IDBAdapter {
 
     ArrayList<User> getWorkingColleagues(User user);
 
-
-    ArrayList<User> getAllUsers(User user);
-
-    void wordCheck(String string);
-
     ArrayList<User> getUsersByDepartment(Department department);
 
     ArrayList<User> getAllUsersWithoutWorkingSchedule();
+
+    User getUserInfOForAdmin(User user);
 }
 
 

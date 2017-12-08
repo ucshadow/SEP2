@@ -3,13 +3,21 @@ package common;
 import java.io.Serializable;
 
 public class Department implements Serializable {
-    private String dNumber, dName, dLocation, dManager;
+    private String dNumber, dName, dLocation, dManager, dCity;
 
     public Department(String dNumber, String dName, String dLocation, String dManager) {
         this.dNumber = dNumber;
         this.dName = dName;
         this.dLocation = dLocation;
         this.dManager = dManager;
+    }
+
+    public String getdCity() {
+        return dCity;
+    }
+
+    public void setdCity(String dCity) {
+        this.dCity = dCity;
     }
 
     public String getdNumber() {

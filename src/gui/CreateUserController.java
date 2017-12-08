@@ -136,9 +136,9 @@ public class CreateUserController {
     private void createUserInfoWindow() {
         Parent root;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("userInfo.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserInfo.fxml"));
             root = fxmlLoader.load();
-            userInfoController controller = fxmlLoader.getController();
+            UserInfoController controller = fxmlLoader.getController();
             System.out.println("My user:" + selectedUser);
             controller.displayUser(selectedUser);
             Scene scene = new Scene(root);

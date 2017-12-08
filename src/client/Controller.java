@@ -10,11 +10,10 @@ public class Controller {
     public Controller() {
 
 //        client = new Client("10.152.196.94", 6789);
-//        client = new Client("localhost", 6789);
-        client = new Client("10.152.192.102", 6789);
+//        client = new Client("10.152.192.102", 6789);
 //        client = new Client("10.152.196.96", 6789);
 
-//        client = new Client("localhost", 6789);
+        client = new Client("localhost", 6789);
 
 
     }
@@ -91,16 +90,18 @@ public class Controller {
     }
 
     //TODO Tested working
-    public void createDepartment(String dNumber, String dName, String dLocation, String dManager) {
+    public void createDepartment(String dNumber, String dName, String dLocation, String city, String dManager) {
         Department department = new Department(dNumber, dName, dLocation, dManager);
+        department.setdCity(city);
         Request<Department> submitEditRequest = new Request<>("createDepartment", department);
         client.sendRequest(submitEditRequest);
 
     }
 
     //TODO working case sensitive!!!!
-    public void editDepartment(String dNumber, String dName, String dLocation, String dManager, String oldDNumber) {
+    public void editDepartment(String dNumber, String dName, String dLocation, String city, String dManager, String oldDNumber) {
         Department department = new Department(dNumber, dName, dLocation, dManager);
+        department.setdCity(city);
         Department departmentold = new Department(oldDNumber, null, null, null);
         Department[] departments = {department, departmentold};
         Request<Department> submitEditRequest = new Request<>("editdepartment", departments);
@@ -217,6 +218,13 @@ public class Controller {
     public void getUserByDepartment(String dno) {
         Department d = new Department(dno, null, null, null);
         Request submitEditRequest = new Request<>("getuserbydepartment", d);
+        client.sendRequest(submitEditRequest);
+    }
+
+    public void getUserForAdmin(String cpr) {
+        User user = new User();
+        user.setCpr(cpr);
+        Request submitEditRequest = new Request<>("getuserinfoforadmin", user);
         client.sendRequest(submitEditRequest);
     }
 }
