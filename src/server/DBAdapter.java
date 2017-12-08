@@ -172,6 +172,7 @@ public class DBAdapter implements IDBAdapter {
         String sql = "Select * from department;";
         ArrayList<String[]> temp = dbHandler.getAllRows(sql);
         ArrayList<Department> departments = new ArrayList<>();
+
         for (String[] item : temp) {
             Department department = new Department(item[0], item[1], item[3], item[2]);
             departments.add(department);
@@ -335,7 +336,7 @@ public class DBAdapter implements IDBAdapter {
     public ArrayList<User> getUsersByDepartment(Department department) {
         String sql = "REFRESH MATERIALIZED VIEW usersbydepartment;";
         dbHandler.executeStatements(sql);
-        sql = "SELECT firstname,familyname, cpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
+        sql = "SELECT firstname,familyname, employecpr, dno from usersbydepartment where dno = '" + department.getdNumber() + "';";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
         for (String[] item : users) {
@@ -351,9 +352,7 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<User> getAllUsersWithoutWorkingSchedule() {
-        String sql = "REFRESH MATERIALIZED VIEW userswithoudschedule;";
-        dbHandler.executeStatements(sql);
-        sql = "SELECT FROM userswithoudschedule;";
+       String sql = "SELECT employee.cpr, employee.firstname, employee.familyname FROM employee WHERE NOT EXISTS(SELECT cpr  FROM workingSchedule  WHERE Employee.cpr = workingSchedule.employecpr);";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
         for (String[] item : users) {

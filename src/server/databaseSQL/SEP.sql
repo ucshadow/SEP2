@@ -384,6 +384,10 @@ EXECUTE PROCEDURE historyAdd();
 
 
 INSERT INTO city (postcode, city) VALUES ('postcode', 'City');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Radu1234', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');
 
 CREATE MATERIALIZED VIEW EmployeeInformation AS
   SELECT
@@ -459,15 +463,14 @@ CREATE MATERIALIZED VIEW usersByDepartment AS
     workingSchedule.dno
   FROM employee
     INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
-DROP MATERIALIZED VIEW usersByDepartment;
 
-
-CREATE MATERIALIZED VIEW userswithoudschedule AS
-  SELECT
-    employee.cpr,
-    employee.firstname,
-    employee.familyname
-  FROM employee
-  WHERE NOT EXISTS(SELECT cpr
-                   FROM workingSchedule
-                   WHERE Employee.cpr = workingSchedule.employecpr);
+--
+-- CREATE MATERIALIZED VIEW userswithoudschedule AS
+--   SELECT
+--     employee.cpr,
+--     employee.firstname,
+--     employee.familyname
+--   FROM employee
+--   WHERE NOT EXISTS(SELECT cpr
+--                    FROM workingSchedule
+--                    WHERE Employee.cpr = workingSchedule.employecpr);
