@@ -4,10 +4,9 @@ import client.Controller;
 import common.Department;
 import common.Response;
 import common.User;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,12 +26,20 @@ public class CreateDepartmentController {
      * <p>
      * Create user functionality for admin for creating departments.
      */
-//    lists
+
+    private ArrayList<Department> arrayListDepartments = new ArrayList<>();
+    private ArrayList<User> arrayListUsers = new ArrayList<>();
+
+    //    lists
+    protected ListProperty<Department> departmentListProperty = new SimpleListProperty<>();
+    protected ListProperty<User> userListProperty = new SimpleListProperty<>();
+
     @FXML
     private ListView departmentList;
     @FXML
-    private ListView workerList;
-
+    private ListView userList;
+//    @FXML
+//    private ListView selected;
 
     //    text fields
     @FXML
@@ -40,10 +47,11 @@ public class CreateDepartmentController {
     @FXML
     private TextField departmentNameCreate;
     @FXML
-    private TextField departmentLocationCreate;
+    private TextField departmentPostcodeCreate;
+    @FXML
+    private TextField departmentCityCreate;
     @FXML
     private TextField departmentManagerCreate;
-
 
     //    buttons
     @FXML
@@ -54,53 +62,35 @@ public class CreateDepartmentController {
     private Button departmentEditButton;
     @FXML
     private Button departmentRemoveButton;
-    @FXML
-    private Button departmentLoadButton;
-    @FXML
-    private Button listRefreshButton;
-    @FXML
-    private Button departmentEmployeeLoadButton;
-
-    private ArrayList<Department> arrayListDepartments;
-    private ObservableList<Department> observableListDepartments;
-
-    private ArrayList<User> arrayListWorkers;
-    private ObservableList<String> observableListWorkers;
 
     private Department selectedDepartment;
 
-    //    initialize method is called automatically
+    @FXML
     public void initialize() {
-        arrayListDepartments = new ArrayList<>();
-        observableListDepartments = FXCollections.observableArrayList();
-
-        arrayListWorkers = new ArrayList<>();
-        observableListWorkers = FXCollections.observableArrayList();
-        departmentList.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                        if (newValue != null) {
-                            Department department = (Department) departmentList.getSelectionModel().getSelectedItem();
-                            selectedDepartment = (Department) departmentList.getSelectionModel().getSelectedItem();
-                            departmentNumberCreate.setText(department.getdNumber());
-                            departmentNameCreate.setText(department.getdName());
-                            departmentManagerCreate.setText(department.getdManager());
-                            departmentLocationCreate.setText(department.getdLocation());
-                        }
-                    }
-                }
-        );
+        departmentList.setOnMouseClicked(event -> addToSelected(departmentList.getSelectionModel().getSelectedItem()));
     }
 
+    public void onDepartmentTabFocus() {
+        getAllDepartmentsEvent();
+    }
+
+    private void addToSelected(Object sel) {
+        getAllDepartmentsEvent();
+        userList.getItems().clear();
+        selectedDepartment = (Department) sel;
+        getAllUsersInDepartment();
+        populateUsersInDepartment();
+        arrayListUsers.forEach(userList.getItems()::add);
+    }
 
     @FXML
     public void createDept(ActionEvent event) {
         String dNumber = departmentNumberCreate.getText();
         String dName = departmentNameCreate.getText();
-        String dLocation = departmentLocationCreate.getText();
+        String dPostcode = departmentPostcodeCreate.getText();
+        String dCity = departmentCityCreate.getText();
         String dManager = departmentManagerCreate.getText();
-        controller.createDepartment(dNumber, dName, dLocation, dManager);
+//        controller.createDepartment(dNumber, dName, dPostcode, dCity, dManager);
     }
 
     @FXML
@@ -119,73 +109,108 @@ public class CreateDepartmentController {
     }
 
     private ArrayList<String> readAllTextFields() {
+//        dNumber, dName, dPostcode, dCity, dManager
         ArrayList<String> departmentDetails = new ArrayList<>();
         departmentDetails.add(departmentNumberCreate.getText());
         departmentDetails.add(departmentNameCreate.getText());
-        departmentDetails.add(departmentLocationCreate.getText());
+        departmentDetails.add(departmentPostcodeCreate.getText());
+        departmentDetails.add(departmentCityCreate.getText());
         departmentDetails.add(departmentManagerCreate.getText());
         return departmentDetails;
     }
 
     @FXML
-    public void refreshDepartment() {
-        departmentList.getItems().clear();
-        departmentList.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    public void refreshWorkers() {
-        workerList.getItems().clear();
-        workerList.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    public void getAllDepartmentsEvent(ActionEvent event) {
-        controller.getAllDepartments();
-        Task task = new Task<Response>() {
-            @Override
-            public Response call() {
-                int tries = 0;
-                while (tries < 10) {
-                    Response r = controller.getLastResponse();
-                    if (r != null) {
-                        return r;
+    public void getAllDepartmentsEvent() {
+        if (departmentListProperty.isEmpty()) {
+            controller.getAllDepartments();
+            Task task = new Task<Response>() {
+                @Override
+                public Response call() {
+                    int tries = 0;
+                    while (tries < 10) {
+                        Response r = controller.getLastResponse();
+                        if (r != null) {
+                            return r;
+                        }
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        tries++;
                     }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    tries++;
+                    return null;
                 }
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+        }
     }
 
-    private void populateDepartments(ArrayList<Department> departments) {
-        for (Department d : departments) {
-            observableListDepartments.add(d);
+    @FXML
+    public void getAllUsersInDepartment() {
+        if (userListProperty.isEmpty()) {
+            controller.getUserByDepartment(selectedDepartment.getdNumber());
+            Task task = new Task<Response>() {
+                @Override
+                public Response call() {
+                    int tries = 0;
+                    while (tries < 10) {
+                        Response r = controller.getLastResponse();
+                        if (r != null) {
+                            return r;
+                        }
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        tries++;
+
+                    }
+                    return null;
+                }
+            };
+            new Thread(task).start();
+            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
         }
-        departmentList.setItems(observableListDepartments);
-        arrayListDepartments.addAll(departments);
     }
 
     private void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getAllDepartments")) {
+                arrayListDepartments = (ArrayList) res.getRespnoseObject();
                 System.out.println(res.toString());
-                populateDepartments((ArrayList<Department>) res.getRespnoseObject());
+                selectedDepartment = arrayListDepartments.get(0);
+                populateDepartments();
             }
             if (res.getResponse().equals("getuserbydepartment")) {
+                arrayListUsers = (ArrayList) res.getRespnoseObject();
                 System.out.println(res.toString());
-                populateWorkersInDepartment((ArrayList<User>) res.getRespnoseObject());
+                populateUsersInDepartment();
 
             }
         }
     }
+
+    @FXML
+    private void populateDepartments() {
+        departmentList.itemsProperty().bind(departmentListProperty);
+        departmentListProperty.set(FXCollections.observableArrayList(arrayListDepartments));
+    }
+
+    @FXML
+    private void populateUsersInDepartment() {
+        userList.itemsProperty().bind(userListProperty);
+        userListProperty.set(FXCollections.observableArrayList(arrayListUsers));
+    }
+
+//    ToDo: finish remove worker from department
+//    @FXML
+//    public void removeWorkerFromDepartment() {
+//        selectedUser = (User) userList.getSelectionModel().getSelectedItem();
+//        controller.removeUser(selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getCpr(), selectedUser.getUserRole());
+//    }
 
     public Controller getController() {
         return controller;
@@ -203,39 +228,4 @@ public class CreateDepartmentController {
         this.user = user;
     }
 
-    @FXML
-    public void getAllUsersInDepartment(ActionEvent event) {
-        controller.getUserByDepartment(selectedDepartment.getdNumber());
-        Task task = new Task<Response>() {
-            @Override
-            public Response call() {
-                int tries = 0;
-                while (tries < 10) {
-                    Response r = controller.getLastResponse();
-                    if (r != null) {
-                        return r;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    tries++;
-
-                }
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
-    }
-
-    private void populateWorkersInDepartment(ArrayList<User> workers) {
-        arrayListWorkers.addAll(workers);
-        for (User u : workers) {
-            observableListWorkers.add(u.getFirstName() + " " + u.getLastName() + " CPR: " + u.getCpr());
-            System.out.println(u);
-        }
-        workerList.setItems(observableListWorkers);
-    }
 }
