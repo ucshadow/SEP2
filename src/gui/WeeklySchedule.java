@@ -4,6 +4,8 @@ import client.Controller;
 import common.Response;
 import common.User;
 import common.WorkingSchedule;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -14,7 +16,7 @@ import javafx.scene.layout.Region;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class WeeklySchedule {
+public class WeeklySchedule implements ResponseReader {
 
     private Controller controller;
     private User user;
@@ -28,32 +30,10 @@ public class WeeklySchedule {
 
     public void getWorkingSchedule() {
         controller.getWorkingSchedule(user.getCpr());
-        Task task = new Task<Response>() {
-            @Override
-            public Response call() {
-                int tries = 0;
-                while (tries < 10) {
-                    Response r = controller.getLastResponse();
-                    if (r != null) {
-                        System.out.println("that null");
-
-                        return r;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    tries++;
-                }
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+        Helpers.getLastResponse(controller, this);
     }
 
-    private void responseReader(Response res) {
+    public void responseReader(Response res) {
         if (res != null) {
             System.out.println("Schedule.");
             ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();

@@ -3,6 +3,8 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +16,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
- public class UserInfoController {
+ public class UserInfoController implements ResponseReader {
 
     private Controller controller;
     private User user;
@@ -148,30 +150,10 @@ import java.util.ArrayList;
 
      private void getDepartmentsEvent() {
          controller.getMyWorkingDepartments(user.getCpr());
-         Task task = new Task<Response>() {
-             @Override
-             public Response call() {
-                 int tries = 0;
-                 while (tries < 10) {
-                     Response r = controller.getLastResponse();
-                     if (r != null) {
-                         return r;
-                     }
-                     try {
-                         Thread.sleep(100);
-                     } catch (InterruptedException e) {
-                         e.printStackTrace();
-                     }
-                     tries++;
-                 }
-                 return null;
-             }
-         };
-         new Thread(task).start();
-         task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+         Helpers.getLastResponse(controller, this);
      }
 
-     private void responseReader(Response res) {
+     public void responseReader(Response res) {
 
          if (res != null) {
              System.out.println("Herr 2");

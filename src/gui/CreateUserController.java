@@ -3,6 +3,8 @@ package gui;
 import client.Controller;
 import common.Response;
 import common.User;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -17,7 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CreateUserController {
+public class CreateUserController implements ResponseReader {
 
     private Controller controller;
     ArrayList<User> userList;
@@ -61,31 +63,11 @@ public class CreateUserController {
     @FXML
     private void getAllUsersEvent() {
         controller.getAllUsers(user);
-        Task task = new Task<Response>() {
-            @Override
-            public Response call() {
-                int tries = 0;
-                while (tries < 10) {
-                    Response r = controller.getLastResponse();
-                    if (r != null) {
-                        return r;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    tries++;
-                }
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+        Helpers.getLastResponse(controller, this);
     }
 
 
-    private void responseReader(Response res) {
+    public void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getallusers")) {
                 System.out.println(res.toString());
@@ -140,29 +122,8 @@ public class CreateUserController {
 
     @FXML
     private void getSingleUserEvent() {
-
         controller.getUserForAdmin(selectedUser.getCpr());
-        Task task = new Task<Response>() {
-            @Override
-            public Response call() {
-                int tries = 0;
-                while (tries < 10) {
-                    Response r = controller.getLastResponse();
-                    if (r != null) {
-                        return r;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    tries++;
-                }
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+        Helpers.getLastResponse(controller, this);
     }
 
 

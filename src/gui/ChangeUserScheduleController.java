@@ -4,6 +4,8 @@ import client.Controller;
 import common.Response;
 import common.User;
 import common.WorkingSchedule;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -20,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeUserScheduleController {
+public class ChangeUserScheduleController implements ResponseReader {
 
     protected ListProperty<WorkingSchedule> scheduleList = new SimpleListProperty<>();
     protected ListProperty<User> usersWithoutScheduleList = new SimpleListProperty<>();
@@ -76,60 +78,18 @@ public class ChangeUserScheduleController {
     public void getAllWorkingSchedules() {
         if (allSchedules.isEmpty()) {
             controller.getAllWorkingSchedules();
-            Task task = new Task<Response>() {
-                @Override
-                public Response call() {
-                    int tries = 0;
-                    while (tries < 10) {
-                        Response r = controller.getLastResponse();
-                        if (r != null) {
-                            return r;
-                        }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        tries++;
-                    }
-                    return null;
-                }
-            };
-            new Thread(task).start();
-            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+            Helpers.getLastResponse(controller, this);
         }
-        System.out.println("Hello");
     }
 
     public void getUsersWithoutSchedule() {
         if (usersWithoutScheduleList.isEmpty()) {
             controller.getUsersWithoutSchedule();
-            Task task = new Task<Response>() {
-                @Override
-                public Response call() {
-                    int tries = 0;
-                    while (tries < 10) {
-                        Response r = controller.getLastResponse();
-                        if (r != null) {
-                            return r;
-                        }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        tries++;
-                    }
-                    return null;
-                }
-            };
-            new Thread(task).start();
-            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+            Helpers.getLastResponse(controller, this);
         }
-        System.out.println("Hello");
     }
 
-    private void responseReader(Response res) {
+    public void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getAllWorkingSchedule")) {
                 allSchedules = (ArrayList) res.getRespnoseObject();

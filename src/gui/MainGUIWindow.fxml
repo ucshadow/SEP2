@@ -24,6 +24,10 @@
                                         <!--my weekly schedule-->
                                         <fx:include fx:id="weeklySchedule" source="WeeklySchedule.fxml"/>
 
+
+                                        <!--my department colleagues -->
+                                        <fx:include fx:id="allDepartmentWorkers" source="AllDepartmentWorkers.fxml"/>
+
                                     </tabs>
                                 </TabPane>
                             </children>
