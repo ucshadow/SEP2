@@ -27,7 +27,9 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
     }
 
+    w
     @Override
+
     public void editAccount(User user) {
         String sql = "update userlogin set username = '" + user.getUsername() + "', pass = '" + user.getPassword() + "', userRole = '" + user.getUserRole() + "' where cpr = '" + user.getCpr() + "';";
         dbHandler.executeStatements(sql);
@@ -290,7 +292,14 @@ public class DBAdapter implements IDBAdapter {
     @Override
     public ArrayList<User> getAllUsers() {
 
-        String sql = "select * from userlogin;";
+        String sql = "SELECT\n" +
+                "  userlogin.cpr,\n" +
+                "  userlogin.username,\n" +
+                "  userlogin.pass,\n" +
+                "  userlogin.userrole,\n" +
+                "  wageperhour.wage\n" +
+                "FROM userlogin\n" +
+                "  INNER JOIN wageperhour ON userlogin.cpr = wageperhour.employeecpr;";
         ArrayList<String[]> arrayList = dbHandler.getAllRows(sql);
         ArrayList<User> users = new ArrayList<>();
         for (String[] item : arrayList) {
@@ -299,6 +308,7 @@ public class DBAdapter implements IDBAdapter {
             newuser.setUsername(item[1]);
             newuser.setPassword(item[2]);
             newuser.setUserRole(item[3]);
+            newuser.setWage(item[4]);
             users.add(newuser);
         }
         return users;

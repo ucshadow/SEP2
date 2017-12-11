@@ -146,9 +146,10 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    public void changeWagePerHours(String cpr) {
+    public void changeWagePerHours(String cpr,String wage) {
         User user = new User();
         user.setCpr(cpr);
+        user.setWage(wage);
         Request submitEditRequest = new Request<>("changeWagePerHour", user);
         client.sendRequest(submitEditRequest);
     }
@@ -198,10 +199,10 @@ public class Controller {
 
     }
 
-    public void getAllUsers(User user) {
-        Request submitEditRequest = new Request<>("getallusers", user);
-        client.sendRequest(submitEditRequest);
-    }
+//    public void getAllUsers(User user) {
+//        Request submitEditRequest = new Request<>("getallusers", user);
+//        client.sendRequest(submitEditRequest);
+//    }
 
     public void getUserByDepartment(String dno) {
         Department d = new Department(dno, null, null, null);
