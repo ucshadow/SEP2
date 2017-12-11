@@ -62,7 +62,7 @@ public class CreateUserController implements ResponseReader {
 
     @FXML
     private void getAllUsersEvent() {
-        controller.getAllUsers();
+        controller.getAllUsers(user);
         Helpers.getLastResponse(controller, this);
     }
 
@@ -87,7 +87,7 @@ public class CreateUserController implements ResponseReader {
     private void populateUserTable(ArrayList<User> users) {
         ObservableList<String> items = FXCollections.observableArrayList();
 
-        for (User user : users) {
+        for (User user: users){
             items.add(user.getUsername() + " " + user.getCpr());
         }
 
@@ -97,7 +97,7 @@ public class CreateUserController implements ResponseReader {
     }
 
     @FXML
-    private void getListText() {
+    private void getListText(){
 
         String str = clientList.getFocusModel().getFocusedItem().toString();
         String[] parts = str.split(" ");
@@ -111,9 +111,9 @@ public class CreateUserController implements ResponseReader {
         adminEditWage.setText(selectedUser.getWage());
     }
 
-    private User getUserByCPR(String cpr) {
-        for (User user : userList) {
-            if (user.getCpr().equals(cpr)) {
+    private User getUserByCPR(String cpr){
+        for (User user : userList){
+            if ( user.getCpr().equals(cpr)){
                 return user;
             }
         }
@@ -125,6 +125,7 @@ public class CreateUserController implements ResponseReader {
         controller.getUserForAdmin(selectedUser.getCpr());
         Helpers.getLastResponse(controller, this);
     }
+
 
 
     private void createUserInfoWindow(User user) {
@@ -150,15 +151,13 @@ public class CreateUserController implements ResponseReader {
     }
 
     @FXML
-    private void removeUser() {
-        controller.removeUser(adminEditUserUsername.getText(), adminEditUserPassword.getText(), adminEditUserCPR.getText(), adminEditUserRole.getText());
+    private void removeUser(){
+        controller.removeUser(adminEditUserUsername.getText(),adminEditUserPassword.getText(),adminEditUserCPR.getText(),adminEditUserRole.getText());
     }
 
     @FXML
-    private void submitEdit() {
-
-        controller.submitEdit(adminEditUserUsername.getText(), adminEditUserPassword.getText(), adminEditUserCPR.getText(), adminEditUserRole.getText());
-        controller.changeWagePerHours(adminEditUserCPR.getText(), adminEditWage.getText());
+    private void submitEdit(){
+        controller.submitEdit(adminEditUserUsername.getText(),adminEditUserPassword.getText(),adminEditUserCPR.getText(),adminEditUserRole.getText());
     }
 
     @FXML
