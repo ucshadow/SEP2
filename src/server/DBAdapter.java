@@ -357,6 +357,17 @@ public class DBAdapter implements IDBAdapter {
 
         return createUser(arrayList);
     }
+    @Override
+    public ArrayList<WorkingSchedule> getHistoryWorkingSchedule(User user) {
+        String sql = "SELECT * FROM workingschedule where employecpr ='" + user.getCpr() + "';";
+        ArrayList<WorkingSchedule> workingSchedules = new ArrayList<>();
+        ArrayList<String[]> temp = dbHandler.getAllRows(sql);
+        for (String[] item : temp) {
+            WorkingSchedule workingSchedule = new WorkingSchedule(item[1], item[2], item[3], item[4], item[5]);
+            workingSchedules.add(workingSchedule);
+        }
+        return workingSchedules;
+    }
 
     private User createUser(ArrayList<String> arrayList) {
         int i = 0;
@@ -512,6 +523,7 @@ public class DBAdapter implements IDBAdapter {
         }
         return users;
     }
+
 
 }
 

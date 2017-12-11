@@ -53,6 +53,8 @@ public interface IDBAdapter {
     ArrayList<User> getAllUsersWithoutWorkingSchedule();
 
     User getUserInfOForAdmin(User user);
+
+    ArrayList<WorkingSchedule> getHistoryWorkingSchedule(User user);
 }
 
 

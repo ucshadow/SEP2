@@ -105,6 +105,9 @@ public class Connection implements Runnable, OurObserver {
                     case "getuserinfoforadmin":
                         User userForAdmin = adapter.getUserInfOForAdmin((User) s.getRequestObject());
                         getOutputStream().writeObject(new Response<>("getuserinfoforadmin", userForAdmin));
+                    case "workinghistory":
+                        ArrayList<WorkingSchedule> workingSchedules1 = adapter.getHistoryWorkingSchedule((User) s.getRequestObject());
+                        getOutputStream().writeObject(new Response<>("workinghistory", workingSchedules1));
                 }
 
             } catch (Exception e) {

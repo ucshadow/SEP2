@@ -216,4 +216,11 @@ public class Controller {
         Request submitEditRequest = new Request<>("getuserinfoforadmin", user);
         client.sendRequest(submitEditRequest);
     }
+    public void getWorkingHistory(String cpr) {
+
+        User user = new User();
+        user.setCpr(cpr);
+        Request submitEditRequest = new Request<>("workinghistory", user);
+        client.sendRequest(submitEditRequest);
+    }
 }
