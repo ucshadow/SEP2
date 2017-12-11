@@ -14,6 +14,7 @@ public class GUIController {
     @FXML private CreateDepartmentController createDepartmentController;
     @FXML private WeeklySchedule weeklyScheduleController;
     @FXML private ChangeUserScheduleController changeUserScheduleController;
+    @FXML private AllDepartmentWorkersController allDepartmentWorkersController;
 
     @FXML private Tab adminTab;
     @FXML private TabPane clientTab;
@@ -26,6 +27,9 @@ public class GUIController {
         clientTab.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
             if(newValue.intValue() == 1) {
                 weeklyScheduleController.printSchedule();
+            }
+            if(newValue.intValue() == 2) {
+                allDepartmentWorkersController.getMyDepartments();
             }
         });
 
@@ -62,6 +66,7 @@ public class GUIController {
         createDepartmentController.setUser(user);
         weeklyScheduleController.setUser(user);
         changeUserScheduleController.setUser(user);
+        allDepartmentWorkersController.setUser(user);
 
         setElevation();
     }
@@ -72,9 +77,11 @@ public class GUIController {
         createDepartmentController.setController(c);
         weeklyScheduleController.setController(c);
         changeUserScheduleController.setController(c);
+        allDepartmentWorkersController.setController(c);
 
 //        if(user.getUserRole().equals("Manager")) {
 //            changeUserScheduleController.getAllWorkingSchedules();
+//            changeUserScheduleController.getUsersWithoutSchedule();
 //        }
     }
 

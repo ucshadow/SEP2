@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab text="Department Colleagues"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AllDepartmentWorkersController">
+
+    <ScrollPane prefHeight="700.0" prefWidth="1200.0" fx:id="scrollableContainer">
+        <Pane  prefWidth="1270.0" fx:id="mainPane" maxHeight="-Infinity">
+        </Pane>
+    </ScrollPane>
+
+</Tab>

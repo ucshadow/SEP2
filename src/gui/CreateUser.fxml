@@ -153,7 +153,7 @@
                 <Font size="19.0"/>
             </font>
         </Button>
-        <Button layoutX="664.0" layoutY="555.0" mnemonicParsing="false" onAction="#createUserInfoWindow"
+        <Button layoutX="664.0" layoutY="555.0" mnemonicParsing="false" onAction="#getSingleUserEvent"
                 text="Full Info">
             <font>
                 <Font size="19.0"/>

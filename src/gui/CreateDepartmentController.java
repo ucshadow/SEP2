@@ -4,6 +4,8 @@ import client.Controller;
 import common.Department;
 import common.Response;
 import common.User;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -16,7 +18,7 @@ import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
 
-public class CreateDepartmentController {
+public class CreateDepartmentController implements ResponseReader {
 
     private Controller controller;
     private User user;
@@ -123,27 +125,7 @@ public class CreateDepartmentController {
     public void getAllDepartmentsEvent() {
         if (departmentListProperty.isEmpty()) {
             controller.getAllDepartments();
-            Task task = new Task<Response>() {
-                @Override
-                public Response call() {
-                    int tries = 0;
-                    while (tries < 10) {
-                        Response r = controller.getLastResponse();
-                        if (r != null) {
-                            return r;
-                        }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        tries++;
-                    }
-                    return null;
-                }
-            };
-            new Thread(task).start();
-            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+            Helpers.getLastResponse(controller, this);
         }
     }
 
@@ -151,32 +133,11 @@ public class CreateDepartmentController {
     public void getAllUsersInDepartment() {
         if (userListProperty.isEmpty()) {
             controller.getUserByDepartment(selectedDepartment.getdNumber());
-            Task task = new Task<Response>() {
-                @Override
-                public Response call() {
-                    int tries = 0;
-                    while (tries < 10) {
-                        Response r = controller.getLastResponse();
-                        if (r != null) {
-                            return r;
-                        }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        tries++;
-
-                    }
-                    return null;
-                }
-            };
-            new Thread(task).start();
-            task.setOnSucceeded(t -> responseReader((Response) task.getValue()));
+            Helpers.getLastResponse(controller, this);
         }
     }
 
-    private void responseReader(Response res) {
+    public void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getAllDepartments")) {
                 arrayListDepartments = (ArrayList) res.getRespnoseObject();
