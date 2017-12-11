@@ -9,7 +9,14 @@
 <Tab text="Department Colleagues"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AllDepartmentWorkersController">
 
     <ScrollPane prefHeight="700.0" prefWidth="1200.0" fx:id="scrollableContainer">
-        <Pane  prefWidth="1270.0" fx:id="mainPane" maxHeight="-Infinity">
+        <Pane prefWidth="1270.0" layoutY="10.0">
+            <TextField layoutX="300.0" layoutY="10.0" editable="false" text="Loading, please wait..." fx:id="warnings"
+                       style="-fx-text-fill: red; -fx-background-color: none;"/>
+            <Button layoutX="10.0" layoutY="10.0" text="Department" onAction="#toggle"/>
+
+            <Pane layoutY="100.0"  prefWidth="1270.0" fx:id="mainPane" maxHeight="-Infinity">
+
+            </Pane>
         </Pane>
     </ScrollPane>
 

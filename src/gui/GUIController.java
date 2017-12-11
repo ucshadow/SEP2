@@ -29,7 +29,8 @@ public class GUIController {
                 weeklyScheduleController.printSchedule();
             }
             if(newValue.intValue() == 2) {
-                allDepartmentWorkersController.getMyDepartments();
+                allDepartmentWorkersController.getAllDepartmentWorkers();
+//                allDepartmentWorkersController.getMyDepartments();
             }
         });
 

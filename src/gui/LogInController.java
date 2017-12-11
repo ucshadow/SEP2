@@ -6,6 +6,7 @@ import common.Response;
 import common.User;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,9 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class LogInController {
 
@@ -33,8 +34,6 @@ public class LogInController {
     private void handleLogIn(ActionEvent event) {
 
         c.logIn(username.getText(), password.getText());
-
-        final Response[] res = {null};
 
 
         Task task = new Task<Response>() {
@@ -88,6 +87,7 @@ public class LogInController {
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
+            stage.setOnCloseRequest(e -> System.exit(0));
             stage.setTitle("Manager");
             stage.setScene(scene);
             stage.show();
