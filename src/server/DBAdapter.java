@@ -18,12 +18,6 @@ public class DBAdapter implements IDBAdapter {
         dbHandler = new DBHandler();
     }
 
-    private boolean checkForCity(String sql) {
-        String string = "select * from city where postcode = '" + sql + "';";
-        ArrayList arrayList = dbHandler.getResultSet(string);
-        return arrayList.size() > 0;
-    }
-
 
     @Override
     public void createAccount(User user) {
@@ -113,7 +107,6 @@ public class DBAdapter implements IDBAdapter {
 
         return createUser(arrayList);
     }
-
 
     @Override
     public void addToWorkingSchedule(WorkingSchedule workingSchedule) {
@@ -263,29 +256,9 @@ public class DBAdapter implements IDBAdapter {
 
     @Override
     public ArrayList<User> getWorkingColleagues(User user) {
-
-        String sql = "SELECT  DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
-        ArrayList<String> forReturn = dbHandler.getResultSet(sql);
-        ArrayList<User> users = null;
-        for (String item2 : forReturn) {
-            sql = "REFRESH MATERIALIZED VIEW workingcolleagues;";
-            dbHandler.executeStatements(sql);
-            sql = "SELECT * from workingcolleagues " +
-                    "WHERE cpr IS DISTINCT FROM'"
-                    + user.getCpr() + "' AND dno = '" + item2 + "';";
-            ArrayList<String[]> temp = dbHandler.getAllRows(sql);
-            users = new ArrayList<>();
-            for (String[] item : temp) {
-                User user1 = new User();
-                user1.setPicture(item[0]);
-                user1.setFirstName(item[1]);
-                user1.setLastName(item[2]);
-                user1.setMobile(item[3]);
-                user1.setEmail(item[4]);
-                users.add(user1);
-            }
-        }
-        return users;
+        if (user != null) {
+            return getwWorkColl(user);
+        } else return getAllColl();
     }
 
     @Override
@@ -331,7 +304,6 @@ public class DBAdapter implements IDBAdapter {
         return users;
     }
 
-
     @Override
     public ArrayList<User> getUsersByDepartment(Department department) {
         String sql = "REFRESH MATERIALIZED VIEW usersbydepartment;";
@@ -349,10 +321,9 @@ public class DBAdapter implements IDBAdapter {
         return forReturn;
     }
 
-
     @Override
     public ArrayList<User> getAllUsersWithoutWorkingSchedule() {
-       String sql = "SELECT employee.cpr, employee.firstname, employee.familyname FROM employee WHERE NOT EXISTS(SELECT cpr  FROM workingSchedule  WHERE Employee.cpr = workingSchedule.employecpr);";
+        String sql = "SELECT employee.cpr, employee.firstname, employee.familyname FROM employee WHERE NOT EXISTS(SELECT cpr  FROM workingSchedule  WHERE Employee.cpr = workingSchedule.employecpr);";
         ArrayList<User> forReturn = new ArrayList<>();
         ArrayList<String[]> users = dbHandler.getAllRows(sql);
         for (String[] item : users) {
@@ -379,7 +350,6 @@ public class DBAdapter implements IDBAdapter {
 
     private User createUser(ArrayList<String> arrayList) {
         int i = 0;
-//        User user1 = new User(arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++), arrayList.get(i++));
         User user1 = new User();
         user1.setPicture(arrayList.get(i++));
         user1.setUsername(arrayList.get(i++));
@@ -479,6 +449,58 @@ public class DBAdapter implements IDBAdapter {
         user1.setWage(arrayList.get(i++));
         user1.setUserRole(arrayList.get(i++));
         return user1;
+    }
+
+    private boolean checkForCity(String sql) {
+        String string = "select * from city where postcode = '" + sql + "';";
+        ArrayList arrayList = dbHandler.getResultSet(string);
+        return arrayList.size() > 0;
+    }
+
+    private ArrayList<User> getwWorkColl(User user) {
+        ArrayList<String[]> temp = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
+
+        String sql = "SELECT  DISTINCT dno FROM workingSchedule where employecpr ='" + user.getCpr() + "';";
+        ArrayList<String> forReturn = dbHandler.getResultSet(sql);
+        for (String item2 : forReturn) {
+            sql = "REFRESH MATERIALIZED VIEW workingcolleagues;";
+            dbHandler.executeStatements(sql);
+            sql = "SELECT DISTINCT (cpr),picture , firstname,familyname,mobile,email from workingcolleagues " +
+                    "WHERE  dno = '" + item2 + "';";
+            temp = dbHandler.getAllRows(sql);
+
+            for (String[] item : temp) {
+                User user1 = new User();
+                user1.setPicture(item[1]);
+                user1.setFirstName(item[2]);
+                user1.setLastName(item[3]);
+                user1.setMobile(item[4]);
+                user1.setEmail(item[5]);
+                users.add(user1);
+            }
+        }
+        return users;
+    }
+
+    private ArrayList<User> getAllColl() {
+        ArrayList<String[]> temp = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
+        String sql = "REFRESH MATERIALIZED VIEW workingcolleagues;";
+        dbHandler.executeStatements(sql);
+        sql = "SELECT DISTINCT (cpr),picture , firstname,familyname,mobile,email from workingcolleagues;";
+        temp = dbHandler.getAllRows(sql);
+
+        for (String[] item : temp) {
+            User user1 = new User();
+            user1.setPicture(item[1]);
+            user1.setFirstName(item[2]);
+            user1.setLastName(item[3]);
+            user1.setMobile(item[4]);
+            user1.setEmail(item[5]);
+            users.add(user1);
+        }
+        return users;
     }
 
 }

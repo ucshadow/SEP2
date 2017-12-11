@@ -26,7 +26,7 @@ public class DBHandler {
         }
     }
 
-    public void executeStatements(String sql) {
+    public synchronized void executeStatements(String sql) {
 
         try {
             statement = connection.createStatement();
@@ -55,7 +55,7 @@ public class DBHandler {
 
     }
 
-    public ArrayList getResultSet(String sql) {
+    public synchronized ArrayList getResultSet(String sql) {
         ArrayList<String> temp = new ArrayList<>();
 
         try {
@@ -75,7 +75,7 @@ public class DBHandler {
 
     }
 
-    public ArrayList getSingleRow(String sql) {
+    public synchronized ArrayList getSingleRow(String sql) {
         ArrayList<String> temp = new ArrayList<>();
 
         try {
@@ -95,7 +95,7 @@ public class DBHandler {
 
     }
 
-    public ArrayList<String[]> getAllRows(String sql) {
+    public synchronized ArrayList<String[]> getAllRows(String sql) {
         ArrayList<String[]> temp = new ArrayList<>();
         String[] temp2 = null;
 

@@ -25,7 +25,6 @@ public class Controller {
         return client.getLastResponse();
     }
 
-    //TODO Tested working
     public void createUser(String username, String password, String cpr, String userRole, String wage) {
         User user = new User();
         user.setUsername(username);
@@ -38,7 +37,6 @@ public class Controller {
         client.sendRequest(createUserRequest);
     }
 
-    //TODO Tested working
     public void removeUser(String username, String password, String cpr, String userRole) {
         User user = new User();
         user.setUsername(username);
@@ -49,7 +47,6 @@ public class Controller {
         client.sendRequest(removeUserRequest);
     }
 
-    //TODO Tested working
     public void submitEdit(String username, String password, String cpr, String userRole) {
         User user = new User();
         user.setUsername(username);
@@ -60,7 +57,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Cannot test
     public void changeUserInformation(ArrayList<String> arrayList) {
         User user = new User();
         int i = 0;
@@ -89,7 +85,6 @@ public class Controller {
         client.sendRequest(changeUserInformation);
     }
 
-    //TODO Tested working
     public void createDepartment(String dNumber, String dName, String dLocation, String city, String dManager) {
         Department department = new Department(dNumber, dName, dLocation, dManager);
         department.setdCity(city);
@@ -98,7 +93,6 @@ public class Controller {
 
     }
 
-    //TODO working case sensitive!!!!
     public void editDepartment(String dNumber, String dName, String dLocation, String city, String dManager, String oldDNumber) {
         Department department = new Department(dNumber, dName, dLocation, dManager);
         department.setdCity(city);
@@ -108,7 +102,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void viewDepartment(String dNumber) {
         Department department = new Department(dNumber, null, null, null);
 
@@ -116,7 +109,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void deleteDepartment(String dNumber) {
         Department department = new Department(dNumber, null, null, null);
 
@@ -124,14 +116,12 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void getAllDepartments() {
         Request submitEditRequest = new Request<>("getAllDepartments", null);
         client.sendRequest(submitEditRequest);
         System.out.println("sended");
     }
 
-    //TODO Tested working
     public void getWorkingSchedule(String cpr) {
         User user = new User();
         user.setCpr(cpr);
@@ -149,7 +139,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void getWagePerHour(String cpr) {
         User user = new User();
         user.setCpr(cpr);
@@ -157,7 +146,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void changeWagePerHours(String cpr) {
         User user = new User();
         user.setCpr(cpr);
@@ -165,15 +153,19 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Maybe working cannot properly test at that time
     public void getWorkingColleagues(String cpr) {
-        User user = new User();
-        user.setCpr(cpr);
-        Request submitEditRequest = new Request<>("getWorkingColleagues", user);
-        client.sendRequest(submitEditRequest);
+        if (cpr == null) {
+            Request submitEditRequest = new Request<>("getWorkingColleagues", null);
+            client.sendRequest(submitEditRequest);
+        } else {
+
+            User user = new User();
+            user.setCpr(cpr);
+            Request submitEditRequest = new Request<>("getWorkingColleagues", null);
+            client.sendRequest(submitEditRequest);
+        }
     }
 
-    //TODO Tested working
     public void getMyWorkingDepartments(String cpr) {
         User user = new User();
         user.setCpr(cpr);
@@ -181,7 +173,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working based on GUI TESTING CATALIN
     public void logIn(String username, String password) {
         User user = new User();
         user.setUsername(username);
@@ -190,10 +181,7 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    //TODO Tested working
     public void getAllColleagues() {
-//        User user = new User();
-//        user.setCpr(cpr);
         Request submitEditRequest = new Request<>("getAllColleagues", null);
         client.sendRequest(submitEditRequest);
     }
