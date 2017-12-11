@@ -474,3 +474,5 @@ CREATE MATERIALIZED VIEW usersByDepartment AS
 --   WHERE NOT EXISTS(SELECT cpr
 --                    FROM workingSchedule
 --                    WHERE Employee.cpr = workingSchedule.employecpr);
+
+select * from userlogin;

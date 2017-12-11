@@ -22,11 +22,6 @@ import java.util.ArrayList;
     private User user;
 
 
-    /**
-     * Author: Yusuf Farah
-     * <p>
-     * My userInfo implementation.
-     */
     @FXML
     private Label userInfoUsernameLabel;
     @FXML

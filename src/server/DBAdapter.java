@@ -27,7 +27,7 @@ public class DBAdapter implements IDBAdapter {
         dbHandler.executeStatements(sql);
     }
 
-    w
+
     @Override
 
     public void editAccount(User user) {
