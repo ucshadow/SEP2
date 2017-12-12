@@ -21,9 +21,6 @@ public class AllDepartmentWorkersController implements ResponseReader {
     private int curX = 20;
     private int curY = 80;
     private int count = 0;
-    private boolean showingAll = false;
-
-    private ArrayList<User> departmentUsers = new ArrayList<>();
     private ArrayList<User> allUsers = new ArrayList<>();
 
     @FXML
@@ -33,10 +30,7 @@ public class AllDepartmentWorkersController implements ResponseReader {
 
 
     public void getAllDepartmentWorkers() {
-        if(departmentUsers.isEmpty()) {
-            controller.getWorkingColleagues(user.getCpr());
-        }
-        if(allUsers.isEmpty()) {
+        if (allUsers.isEmpty()) {
             controller.getWorkingColleagues(null); // this will get all colleagues
         }
         Helpers.getLastResponse(controller, this);
@@ -44,36 +38,9 @@ public class AllDepartmentWorkersController implements ResponseReader {
 
     @Override
     public void responseReader(Response res) {
-        ArrayList<User> users = (ArrayList<User>) res.getRespnoseObject();
-        if(departmentUsers.isEmpty()) {
-            departmentUsers = users;
-            warnings.setText("Loading, please wait...");
-            departmentUsers.forEach(this::createUserProfilePane);
-            warnings.setText("Department colleagues");
-        }
-
-        if(allUsers.isEmpty() && !departmentUsers.isEmpty()) {
-            allUsers = users;
-        }
-    }
-
-    @FXML
-    public void toggle() {
-        System.out.println(departmentUsers.size());
-        System.out.println(allUsers.size());
-        if(showingAll) {
-            mainPane.getChildren().removeAll();
-            warnings.setText("Loading, please wait...");
-            departmentUsers.forEach(this::createUserProfilePane);
-            warnings.setText("Department colleagues");
-            showingAll = false;
-        } else {
-            mainPane.getChildren().removeAll();
-            warnings.setText("Loading, please wait...");
-            allUsers.forEach(this::createUserProfilePane);
-            warnings.setText("All colleagues");
-            showingAll = true;
-        }
+        allUsers = (ArrayList<User>) res.getRespnoseObject();
+        allUsers.forEach(this::createUserProfilePane);
+        warnings.setText("All employees");
     }
 
     private void createUserProfilePane(User user) {
@@ -98,7 +65,7 @@ public class AllDepartmentWorkersController implements ResponseReader {
 
 
         // prepare image
-        try{
+        try {
             i = new Image(user.getPicture(), true);
         } catch (Exception e) {
             i = new Image("https://i.imgur.com/gsTfiBr.png", true);

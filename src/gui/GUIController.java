@@ -19,6 +19,7 @@ public class GUIController {
     @FXML private Tab adminTab;
     @FXML private TabPane clientTab;
     @FXML private TabPane adminTabPane;
+    @FXML private TabPane mainTabPane;
 
     private User user;
 
@@ -41,6 +42,12 @@ public class GUIController {
             }
             if(newValue.intValue() == 1) {
                 createDepartmentController.onDepartmentTabFocus();
+            }
+        });
+
+        mainTabPane.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue.intValue() == 1) {
+                createUserController.asd();
             }
         });
 

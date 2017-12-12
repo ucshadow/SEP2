@@ -71,12 +71,7 @@
                 <Font name="Calibri" size="16.0"/>
             </font>
         </Label>
-        <Button layoutX="918.0" layoutY="577.0" mnemonicParsing="false" onAction="#getAllUsersEvent" text="Get All">
-            <font>
-                <Font size="19.0"/>
-            </font>
-        </Button>
-        <Button layoutX="1190.0" layoutY="677.0" mnemonicParsing="false" onAction="#closePanel" text="Quit">
+        <Button layoutX="1190.0" layoutY="647.0" mnemonicParsing="false" onAction="#workingHistory" text="Working history">
             <font>
                 <Font size="16.0"/>
             </font>

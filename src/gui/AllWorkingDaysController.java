@@ -1,16 +1,21 @@
 package gui;
 
 import client.Controller;
+import common.Response;
 import common.User;
+import common.WorkingSchedule;
+import helpers.Helpers;
+import helpers.ResponseReader;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.stream.IntStream;
 
-public class AllWorkingDaysController {
+public class AllWorkingDaysController implements ResponseReader {
 
     private Controller controller;
     private User user;
@@ -23,7 +28,13 @@ public class AllWorkingDaysController {
 
     @FXML private Pane mainPane;
 
-    public void init() {
+    public void init(User user) {
+        System.out.println("Selected user");
+        System.out.println(user);
+
+        controller.getWorkingSchedule(user.getCpr());
+        Helpers.getLastResponse(controller, this);
+
         drawMonths();
     }
 
@@ -42,16 +53,17 @@ public class AllWorkingDaysController {
             TextField monthName = new TextField();
             monthName.setEditable(false);
             monthName.setPrefWidth(300);
-            monthName.setPrefHeight(19);
+            monthName.setPrefHeight(11);
             monthName.setLayoutX(0);
             monthName.setLayoutY(0);
+            monthName.setStyle(" -fx-background-color: none; -fx-text-fill: red;");
             monthName.setText(months[i]);
             monthName.setAlignment(Pos.CENTER);
             monthPane.getChildren().add(monthName);
 
             monthPane.setLayoutX(curX);
             monthPane.setLayoutY(curY);
-            monthPane.setStyle("-fx-border-color: green;");
+            monthPane.setStyle("-fx-border-color: green; -fx-font-size: 10px;");
 
             // add day rows
 //            addDayRows(i, monthPane);
@@ -78,6 +90,29 @@ public class AllWorkingDaysController {
 //        });
 //    }
 
+    @Override
+    public void responseReader(Response res) {
+        System.out.println("Schedule:");
+        ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();
+        for(int i = 0; i < arr.size(); i++) {
+            LocalDate l = LocalDate.parse(arr.get(i).getWorkingDate());
+            System.out.println(l.getMonthValue() - 1);
+            Pane selectedMonth = (Pane) mainPane.getChildren().get(l.getMonthValue() - 1);
+            addDays(selectedMonth, String.valueOf(l.getDayOfMonth()),
+                    arr.get(i).getStartHours(), arr.get(i).getEndHours(), i);
+        }
+    }
+
+    public void addDays(Pane pane, String day, String start, String end, int position) {
+       TextField dayField = new TextField();
+       dayField.setEditable(false);
+       dayField.setPrefHeight(11);
+       dayField.setPrefWidth(300);
+       dayField.setLayoutY(11 * (position + 1));
+       dayField.setText(day + ": " + start  + " to " + end);
+       dayField.setStyle("-fx-background-color: none; -fx-font-size: 10px;");
+       pane.getChildren().add(dayField);
+    }
 
     public Controller getController() {
         return controller;
