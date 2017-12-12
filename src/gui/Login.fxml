@@ -13,19 +13,19 @@
     <children>
         <AnchorPane prefHeight="375.0" prefWidth="587.0">
             <children>
-                <Label layoutX="117.0" layoutY="177.0" text="Password">
-                    <font>
-                        <Font name="Calibri" size="19.0" />
-                    </font>
-                </Label>
                 <Label layoutX="117.0" layoutY="112.0" text="Username">
                     <font>
                         <Font name="Calibri" size="19.0" />
                     </font>
                 </Label>
-                <Button layoutX="355.0" layoutY="228.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />
-                <TextField fx:id="password" layoutX="255.0" layoutY="175.0" />
+                <Label layoutX="117.0" layoutY="177.0" text="Password">
+                    <font>
+                        <Font name="Calibri" size="19.0" />
+                    </font>
+                </Label>
                 <TextField fx:id="username" layoutX="255.0" layoutY="110.0" />
+                <TextField fx:id="password" layoutX="255.0" layoutY="175.0" />
+                <Button layoutX="355.0" layoutY="228.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />
                 <Label layoutX="180.0" layoutY="33.0" text="Welcome Back">
                     <font>
                         <Font size="27.0" />

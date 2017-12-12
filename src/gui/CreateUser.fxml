@@ -9,6 +9,11 @@
 <?import javafx.scene.text.Font?>
 <Tab text="Create User" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateUserController">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="767.0" prefWidth="1513.0">
+        <Label layoutX="153.0" layoutY="55.0" text="Create New User">
+            <font>
+                <Font name="Calibri" size="27.0"/>
+            </font>
+        </Label>
         <TextField fx:id="userNameFieldCreate" layoutX="246.0" layoutY="128.0" promptText="Username">
             <font>
                 <Font size="15.0"/>
@@ -41,11 +46,6 @@
             </font>
         </Button>
         <Separator layoutX="462.0" layoutY="32.0" orientation="VERTICAL" prefHeight="696.0" prefWidth="0.0"/>
-        <Label layoutX="153.0" layoutY="55.0" text="Create New User">
-            <font>
-                <Font name="Calibri" size="27.0"/>
-            </font>
-        </Label>
         <Label layoutX="143.0" layoutY="135.0" text="Username:">
             <font>
                 <Font name="Calibri" size="16.0"/>
@@ -76,8 +76,6 @@
                 <Font size="16.0"/>
             </font>
         </Button>
-        <ListView fx:id="clientList" layoutX="887.0" layoutY="127.0" prefHeight="428.0" prefWidth="310.0">
-        </ListView>
         <Label layoutX="514.0" layoutY="55.0" text="Edit Or Delete User">
             <font>
                 <Font name="Calibri" size="27.0"/>
@@ -108,6 +106,7 @@
                 <Font size="15.0"/>
             </font>
         </TextField>
+        <ListView fx:id="clientList" layoutX="887.0" layoutY="127.0" prefHeight="428.0" prefWidth="310.0"></ListView>
         <Label layoutX="514.0" layoutY="134.0" text="Username:">
             <font>
                 <Font name="Calibri" size="16.0"/>
@@ -138,13 +137,13 @@
                 <Font size="19.0"/>
             </font>
         </Button>
-        <Button layoutX="664.0" layoutY="614.0" mnemonicParsing="false" onAction="#removeUser" text="Remove">
+        <Button layoutX="664.0" layoutY="555.0" mnemonicParsing="false" onAction="#getSingleUserEvent"
+                text="Full Info">
             <font>
                 <Font size="19.0"/>
             </font>
         </Button>
-        <Button layoutX="664.0" layoutY="555.0" mnemonicParsing="false" onAction="#getSingleUserEvent"
-                text="Full Info">
+        <Button layoutX="664.0" layoutY="614.0" mnemonicParsing="false" onAction="#removeUser" text="Remove">
             <font>
                 <Font size="19.0"/>
             </font>
