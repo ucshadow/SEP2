@@ -9,7 +9,6 @@ import helpers.ResponseReader;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,17 +30,17 @@ public class CreateDepartmentController implements ResponseReader {
 
     private ArrayList<Department> arrayListDepartments = new ArrayList<>();
     private ArrayList<User> arrayListUsers = new ArrayList<>();
+    private ArrayList<String> arrayListDepartmentStrings = new ArrayList<>();
+
 
     //    lists
     protected ListProperty<Department> departmentListProperty = new SimpleListProperty<>();
-    protected ListProperty<User> userListProperty = new SimpleListProperty<>();
+    protected ListProperty<String> userListProperty = new SimpleListProperty<>();
 
     @FXML
     private ListView departmentList;
     @FXML
     private ListView userList;
-//    @FXML
-//    private ListView selected;
 
     //    text fields
     @FXML
@@ -81,8 +80,6 @@ public class CreateDepartmentController implements ResponseReader {
         userList.getItems().clear();
         selectedDepartment = (Department) sel;
         getAllUsersInDepartment();
-        populateUsersInDepartment();
-        arrayListUsers.forEach(userList.getItems()::add);
     }
 
     @FXML
@@ -141,15 +138,18 @@ public class CreateDepartmentController implements ResponseReader {
         if (res != null) {
             if (res.getResponse().equals("getAllDepartments")) {
                 arrayListDepartments = (ArrayList) res.getRespnoseObject();
-                System.out.println(res.toString());
-                selectedDepartment = arrayListDepartments.get(0);
+                for (Department dept : arrayListDepartments) {
+                    arrayListDepartmentStrings.add(dept.getdNumber() + " " + dept.getdName() + " " + dept.getdManager() + " " + dept.getdLocation());
+                }
                 populateDepartments();
             }
             if (res.getResponse().equals("getuserbydepartment")) {
                 arrayListUsers = (ArrayList) res.getRespnoseObject();
-                System.out.println(res.toString());
-                populateUsersInDepartment();
-
+                ArrayList<String> arrayListUserStrings = new ArrayList<>();
+                for (User a : arrayListUsers) {
+                    arrayListUserStrings.add(a.getFirstName() + " " + a.getLastName() + " " + a.getCpr());
+                }
+                populateUsersInDepartment(arrayListUserStrings);
             }
         }
     }
@@ -161,17 +161,10 @@ public class CreateDepartmentController implements ResponseReader {
     }
 
     @FXML
-    private void populateUsersInDepartment() {
+    private void populateUsersInDepartment(ArrayList<String> users) {
         userList.itemsProperty().bind(userListProperty);
-        userListProperty.set(FXCollections.observableArrayList(arrayListUsers));
+        userListProperty.set(FXCollections.observableArrayList(users));
     }
-
-//    ToDo: finish remove worker from department
-//    @FXML
-//    public void removeWorkerFromDepartment() {
-//        selectedUser = (User) userList.getSelectionModel().getSelectedItem();
-//        controller.removeUser(selectedUser.getUsername(), selectedUser.getPassword(), selectedUser.getCpr(), selectedUser.getUserRole());
-//    }
 
     public Controller getController() {
         return controller;
