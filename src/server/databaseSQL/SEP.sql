@@ -1,5 +1,7 @@
 CREATE SCHEMA sep2;
+
 SET SEARCH_PATH = sep2;
+
 CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL
   CONSTRAINT charLenght CHECK (length(value) = 10) CONSTRAINT emptyString CHECK (VALUE <> '' );
 CREATE DOMAIN dno_Domain CHAR(7) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );
@@ -91,10 +93,12 @@ CREATE TABLE history (
   details   VARCHAR,
   TIMESTAMP TIMESTAMP
 );
+
+
 --Functions
 -- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER
 -- Trigger function that deletes employee data one employee is deleted
-CREATE OR REPLACE FUNCTION newUserCreatedOrRemoved()
+CREATE OR REPLACE FUNCTION newUserCreated()
   RETURNS TRIGGER AS $$
 BEGIN
   IF (tg_op = 'INSERT')
@@ -116,7 +120,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER newUserAdded
 AFTER INSERT ON userlogin
 FOR EACH ROW
-EXECUTE PROCEDURE newUserCreatedOrRemoved();
+EXECUTE PROCEDURE newUserCreated();
 
 
 CREATE OR REPLACE FUNCTION historyAdd()
@@ -463,14 +467,3 @@ CREATE MATERIALIZED VIEW usersByDepartment AS
     workingSchedule.dno
   FROM employee
     INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;
-
---
--- CREATE MATERIALIZED VIEW userswithoudschedule AS
---   SELECT
---     employee.cpr,
---     employee.firstname,
---     employee.familyname
---   FROM employee
---   WHERE NOT EXISTS(SELECT cpr
---                    FROM workingSchedule
---                    WHERE Employee.cpr = workingSchedule.employecpr);

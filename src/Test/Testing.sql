@@ -2,15 +2,16 @@ SET SEARCH_PATH = sep2;
 DROP SCHEMA sep2 CASCADE;
 CREATE SCHEMA sep2;
 DELETE FROM userlogin;
+DELETE FROM workingschedule;
+SELECT *
+FROM workingschedule;
 SELECT *
 FROM userlogin;
 
 INSERT INTO history (tablename, operation, details, timestamp) VALUES ('WordCHECK', 'False words', '', now());
 
-REFRESH MATERIALIZED VIEW userswithoudschedule;
+REFRESH MATERIALIZED VIEW employeeinformation;
 
-SELECT *
-FROM userswithoudschedule;
 
 
 CREATE TABLE testing (
@@ -37,8 +38,7 @@ FROM city where postcode ='postcode';
 SELECT *
 FROM userlogin;
 SELECT *
-FROM workingschedule
-WHERE  employecpr = '9515278176';
+FROM workingschedule;
 
 
 

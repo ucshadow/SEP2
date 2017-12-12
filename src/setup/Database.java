@@ -1,10 +1,11 @@
 package setup;
 
+
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 public class Database {
     private Connection connection = null;
@@ -15,8 +16,11 @@ public class Database {
 
     private String username;
     private String password;
+    private String filename = "postgresUsernameAndPass.txt";
 
     public Database(String username, String password) {
+        deleteFile(filename);
+        writeToFile(username, password, filename);
         this.username = username;
         this.password = password;
     }
@@ -65,8 +69,8 @@ public class Database {
 
     private void everything() {
         String sql = "\n" +
-                "CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL  CONSTRAINT charLenght CHECK (length(value) =\n" +
-                "                                                                         10)CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
+                "CREATE DOMAIN cpr_Domain CHAR(10) NOT NULL\n" +
+                "  CONSTRAINT charLenght CHECK (length(value) = 10) CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
                 "CREATE DOMAIN dno_Domain CHAR(7) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
                 "CREATE DOMAIN postcode_Domain VARCHAR(10) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
                 "CREATE DOMAIN varcharDomain VARCHAR(100) NOT NULL CONSTRAINT emptyString CHECK (VALUE <> '' );\n" +
@@ -111,7 +115,7 @@ public class Database {
                 "  mobile                 NUMBERDOMAIN,\n" +
                 "  landline               NUMBERDOMAIN,\n" +
                 "  email                  VARCHARDOMAIN,\n" +
-                "  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Home', 'Email'))\n" +
+                "  preferredCommunication VARCHAR DEFAULT 'Mobile' CHECK (preferredCommunication IN ('Mobile', 'Landline', 'Email'))\n" +
                 ");\n" +
                 "\n" +
                 "CREATE TABLE bankInfoDK (\n" +
@@ -156,22 +160,24 @@ public class Database {
                 "  details   VARCHAR,\n" +
                 "  TIMESTAMP TIMESTAMP\n" +
                 ");\n" +
+                "\n" +
+                "\n" +
                 "--Functions\n" +
                 "-- Trigger function create to automatically insert cpr,username and pass once employee is created as a USER\n" +
                 "-- Trigger function that deletes employee data one employee is deleted\n" +
-                "CREATE OR REPLACE FUNCTION newUserCreatedOrRemoved()\n" +
+                "CREATE OR REPLACE FUNCTION newUserCreated()\n" +
                 "  RETURNS TRIGGER AS $$\n" +
                 "BEGIN\n" +
                 "  IF (tg_op = 'INSERT')\n" +
                 "  THEN\n" +
                 "    INSERT INTO Employee (picture, firstName, secondName, familyName, cpr, dateOfBirth, address, postcode, licencePlate, moreInfo)\n" +
                 "    VALUES\n" +
-                "      ('picture', 'firstname', 'secondname', 'lastname', new.cpr, current_date, 'address', 'postcode',\n" +
+                "      ('null', 'firstname', 'secondname', 'lastname', new.cpr, current_date, 'address', 'postcode',\n" +
                 "       'licenceplate',\n" +
                 "       'more info');\n" +
                 "    INSERT INTO communication (cpr, mobile, landline, email)\n" +
                 "    VALUES (new.cpr, '00000000', '00000000', 'email@email.com');\n" +
-                "    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '1234', '1234567890');\n" +
+                "    INSERT INTO bankInfoDK (cpr, konto, regNumber) VALUES (new.cpr, '0000', '0000000000');\n" +
                 "    INSERT INTO wagePerHour (employeeCPR, wage) VALUES (new.cpr, '0');\n" +
                 "    RETURN new;\n" +
                 "  END IF;\n" +
@@ -181,7 +187,7 @@ public class Database {
                 "CREATE TRIGGER newUserAdded\n" +
                 "AFTER INSERT ON userlogin\n" +
                 "FOR EACH ROW\n" +
-                "EXECUTE PROCEDURE newUserCreatedOrRemoved();\n" +
+                "EXECUTE PROCEDURE newUserCreated();\n" +
                 "\n" +
                 "\n" +
                 "CREATE OR REPLACE FUNCTION historyAdd()\n" +
@@ -448,7 +454,11 @@ public class Database {
                 "EXECUTE PROCEDURE historyAdd();\n" +
                 "\n" +
                 "\n" +
-                "INSERT INTO city (postcode, city) VALUES ('postcode', 'City');";
+                "INSERT INTO city (postcode, city) VALUES ('postcode', 'City');\n" +
+                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');\n" +
+                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Radu1234', 'Password123', 'Admin');\n" +
+                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');\n" +
+                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');";
         executeStatements(sql);
         try {
             Thread.sleep(1000);
@@ -523,23 +533,13 @@ public class Database {
                 "\n" +
                 "\n" +
                 "CREATE MATERIALIZED VIEW usersByDepartment AS\n" +
-                "  SELECT DISTINCT ON (cpr)\n" +
-                "    cpr,\n" +
-                "    firstname,\n" +
-                "    familyName,\n" +
-                "    dno\n" +
-                "  FROM employee\n" +
-                "    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;\n" +
-                "\n" +
-                "CREATE MATERIALIZED VIEW userswithoudschedule AS\n" +
-                "  SELECT\n" +
-                "    employee.cpr,\n" +
+                "  SELECT DISTINCT\n" +
+                "    (workingSchedule.employecpr),\n" +
                 "    employee.firstname,\n" +
-                "    employee.familyname\n" +
+                "    employee.familyName,\n" +
+                "    workingSchedule.dno\n" +
                 "  FROM employee\n" +
-                "  WHERE NOT EXISTS(SELECT cpr\n" +
-                "                   FROM workingSchedule\n" +
-                "                   WHERE Employee.cpr = workingSchedule.employecpr);";
+                "    INNER JOIN workingschedule ON Employee.cpr = workingSchedule.employecpr;\n";
         executeStatements(sql);
     }
 
@@ -590,4 +590,36 @@ public class Database {
         }
     }
 
+    private void writeToFile(String username, String pass, String fileName) {
+
+        ObjectOutputStream writeToFile = null;
+        try {
+            FileOutputStream fileOutStream = new FileOutputStream(fileName);
+            writeToFile = new ObjectOutputStream(fileOutStream);
+
+            writeToFile.writeObject(username);
+            writeToFile.writeObject(pass);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writeToFile != null) {
+                try {
+                    writeToFile.close();
+                } catch (IOException e) {
+                    System.out.println("IO Error closing file " + fileName);
+                }
+            }
+        }
+
+    }
+
+    private void deleteFile(String filename) {
+        File f = new File(filename);
+        if (f.exists()) {
+            f.delete();
+        }
+        System.gc();
+    }
 }

@@ -8,10 +8,8 @@ public class FakeUserTest {
 
     public static void main(String[] args) {
         FakeUser f = new FakeUser();
-        f.setEverythingUp(10    , 3);
-        System.out.println(f);
+        f.setEverythingUp(20    , 2);
         f.dumpToPostgreslocaly();
-//        System.out.println(f);
 
     }
 }

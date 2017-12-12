@@ -50,17 +50,6 @@ public class DBAdapterTest {
         fakeNull.setUserRole(null);
         fakeNull.setCpr(null);
         fakeNull.setWage(null);
-
-//
-//        user2 = new User();
-//        user2.setUsername("ForTesting2");
-//        user2.setPassword("123456789B");
-//        user2.setUserRole("Admin");
-//        user2.setCpr("2345678901");
-//        user2.setWage("1234.2");
-//        dataFormat = DateTimeFormatter.ofPattern("dd/LL/yyyy");
-//        department = new Department("12345", "DepartmentForTesting", "1234", "1234567890");
-//        workingSchedule = new WorkingSchedule("12345", "2345678901", LocalDate.now().format(dataFormat), "08:00", "16:00");
         database = new Database("postgres", "1q2w3e");
         database.deleteFromtables();
         fakeUser = new FakeUser();
@@ -376,7 +365,6 @@ public class DBAdapterTest {
 
 
         fakeUsers.get(0).setSecondName("TryAndCatch");
-        System.out.println(fakeUsers.get(0).toString());
         idbAdapter.changeUserInformation(fakeUsers.get(0));
         User user = idbAdapter.logIn(fakeUsers.get(0));
         assertEquals(fakeUsers.get(0).getSecondName(), user.getSecondName());
@@ -436,6 +424,25 @@ public class DBAdapterTest {
         database.deleteFromtables();
     }
 
+    @Test
+    public void logIn() {
+        database.deleteFromtables();
+        fakeUser.setEverythingUp(2, 1);
+        fakeUsers = fakeUser.getWorkers();
+        for (User item : fakeUsers) {
+            idbAdapter.createAccount(item);
+        }
+        fromDB = idbAdapter.getAllUsers();
+        assertEquals(fakeUsers.size(), fromDB.size());
+        User user = idbAdapter.logIn(fakeUsers.get(0));
+        assertEquals(fakeUsers.get(0).getUserRole(), user.getUserRole());
+        assertEquals(fakeUsers.get(0).getUsername(), user.getUsername());
+        assertEquals(fakeUsers.get(0).getPassword(), user.getPassword());
+        assertEquals(fakeUsers.get(0).getWage().trim(), user.getWage().trim());
+
+
+        database.deleteFromtables();
+    }
 
     @Test
     public void addWorkingSchedule() {
@@ -603,27 +610,7 @@ public class DBAdapterTest {
 
         idbAdapter.addToWorkingSchedule(ws);
         ArrayList<User> workingCol = idbAdapter.getWorkingColleagues(user);
-        assertEquals(workingCol.size(), fakeWorkingSchedule.size());
-
-        database.deleteFromtables();
-    }
-
-    @Test
-    public void logIn() {
-
-        fakeUser.setEverythingUp(2, 1);
-        fakeUsers = fakeUser.getWorkers();
-        for (User item : fakeUsers) {
-            idbAdapter.createAccount(item);
-        }
-        fromDB = idbAdapter.getAllUsers();
-        assertEquals(fakeUsers.size(), fromDB.size());
-        User user = idbAdapter.logIn(fakeUsers.get(0));
-        assertEquals(fakeUsers.get(0).getUserRole(), user.getUserRole());
-        assertEquals(fakeUsers.get(0).getUsername(), user.getUsername());
-        assertEquals(fakeUsers.get(0).getPassword(), user.getPassword());
-        assertEquals(fakeUsers.get(0).getWage().trim(), user.getWage().trim());
-
+        assertEquals(workingCol.size(), fakeUsers.size() + 1);
 
         database.deleteFromtables();
     }
@@ -663,10 +650,6 @@ public class DBAdapterTest {
                     }
                 }
             }
-            dbResult.forEach(System.out::println);
-            System.out.println("NEW");
-            allDEmployees.forEach(System.out::println);
-
             assertEquals(dbResult.size(), allDEmployees.size());
             allDEmployees.clear();
             for (String item2 : allDdepartments
@@ -710,5 +693,78 @@ public class DBAdapterTest {
 
     }
 
+    @Test
+    public void getUserForAdmin() {
+        fakeUser.setEverythingUp(15, 5);
+        fakeUsers = fakeUser.getWorkers();
+        fakeDepartments = fakeUser.getDepartments();
+        fakeWorkingSchedule = fakeUser.getWorkingHours();
+        for (User item : fakeUsers) {
+            idbAdapter.createAccount(item);
+        }
+        for (User item : fakeUsers) {
+            idbAdapter.changeUserInformation(item);
+        }
+        for (User item : fakeUsers) {
+            User u = idbAdapter.getUserInfOForAdmin(item);
+            assertEquals(item.getCpr(), u.getCpr());
+            assertEquals(item.getUsername(), u.getUsername());
+            assertEquals(item.getUserRole(), u.getUserRole());
+            assertEquals(item.getPassword(), u.getPassword());
+            assertEquals(item.getFirstName(), u.getFirstName());
+            assertEquals(item.getLastName(), u.getLastName());
+            assertEquals(item.getMoreInfo(), u.getMoreInfo());
+        }
+    }
+
+    @Test
+    public void getHistoryWorkingSchedule() {
+        fakeUser.setEverythingUp(10, 1);
+        fakeUsers = fakeUser.getWorkers();
+        fakeDepartments = fakeUser.getDepartments();
+        fakeWorkingSchedule = fakeUser.getWorkingHours();
+        for (User item : fakeUsers) {
+            idbAdapter.createAccount(item);
+        }
+        idbAdapter.createAccount(user);
+        for (Department item : fakeDepartments) {
+            idbAdapter.createDepartment(item);
+        }
+        for (WorkingSchedule item : fakeWorkingSchedule) {
+            idbAdapter.addToWorkingSchedule(item);
+        }
+        for (User item : fakeUsers) {
+            idbAdapter.changeUserInformation(item);
+        }
+        ArrayList<WorkingSchedule> wsTEST = new ArrayList<>();
+        for (User item : fakeUsers) {
+            wsFromDB = idbAdapter.getHistoryWorkingSchedule(item);
+            for (WorkingSchedule item2 : fakeWorkingSchedule) {
+                if (item.getCpr().equals(item2.getEmployeeCPR())) {
+                    wsTEST.add(item2);
+                }
+            }
+            assertEquals(wsFromDB.size(), wsTEST.size());
+            for (int i = 0; i < wsTEST.size(); i++) {
+                assertEquals(wsFromDB.get(i).getDepartmentNumber(), wsTEST.get(i).getDepartmentNumber());
+                assertEquals(wsFromDB.get(i).getEmployeeCPR(), wsTEST.get(i).getEmployeeCPR());
+                String[] b = wsFromDB.get(i).getWorkingDate().split("-");
+                int valueYear = Integer.parseInt(b[0]);
+                int valueMonth = Integer.parseInt(b[1]);
+                int valueDay = Integer.parseInt(b[2]);
+                String forTest;
+                if (valueDay < 10) {
+                    forTest = "0" + valueDay + "/" + valueMonth + "/" + valueYear;
+                } else {
+                    forTest = valueDay + "/" + valueMonth + "/" + valueYear;
+                }
+                assertEquals(forTest, wsTEST.get(i).getWorkingDate());
+                assertEquals(wsFromDB.get(i).getStartHours(), wsTEST.get(i).getStartHours() + ":00");
+                assertEquals(wsFromDB.get(i).getEndHours(), wsTEST.get(i).getEndHours() + ":00");
+            }
+
+            wsTEST.clear();
+        }
+    }
 
 }
