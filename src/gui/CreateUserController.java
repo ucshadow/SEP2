@@ -62,7 +62,7 @@ public class CreateUserController implements ResponseReader {
 
     @FXML
     private void getAllUsersEvent() {
-        controller.getAllUsers(user);
+        controller.getAllUsers();
         Helpers.getLastResponse(controller, this);
     }
 
@@ -150,6 +150,27 @@ public class CreateUserController implements ResponseReader {
         }
     }
 
+    private void viewAllWorkingDays() {
+        Parent root;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AllWorkingDays.fxml"));
+            root = fxmlLoader.load();
+            AllWorkingDaysController controller = fxmlLoader.getController();
+            controller.setController(this.controller);
+            controller.setUser(user);
+            controller.init();
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+
+            stage.setTitle("Working days");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void removeUser(){
         controller.removeUser(adminEditUserUsername.getText(),adminEditUserPassword.getText(),adminEditUserCPR.getText(),adminEditUserRole.getText());
@@ -162,7 +183,7 @@ public class CreateUserController implements ResponseReader {
 
     @FXML
     private void closePanel() {
-        System.exit(0);
+        viewAllWorkingDays();
     }
 
     public Controller getController() {
