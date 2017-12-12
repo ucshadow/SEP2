@@ -91,17 +91,22 @@ public class CreateUserController implements ResponseReader {
 
         clientList.setItems(items);
 
+        clientList.setOnMouseClicked(event -> getListText(clientList.getSelectionModel().getSelectedItem()));
+
         System.out.println(userList.toString());
     }
 
-    @FXML
-    private void getListText() {
+    private void getListText(Object selected) {
 
-        String str = clientList.getFocusModel().getFocusedItem().toString();
+        System.out.println(selected);
+        System.out.println(selected.getClass().getName());
+
+        String str = selected.toString();
         String[] parts = str.split(" ");
         selectedUser = getUserByCPR(parts[1]);
 
 
+        assert selectedUser != null;
         adminEditUserUsername.setText(selectedUser.getUsername());
         adminEditUserCPR.setText(selectedUser.getCpr());
         adminEditUserPassword.setText(selectedUser.getPassword());

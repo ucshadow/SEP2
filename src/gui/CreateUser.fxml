@@ -71,7 +71,7 @@
                 <Font name="Calibri" size="16.0"/>
             </font>
         </Label>
-        <Button layoutX="1190.0" layoutY="647.0" mnemonicParsing="false" onAction="#workingHistory" text="Working history">
+        <Button layoutX="1000.0" layoutY="630.0" mnemonicParsing="false" onAction="#workingHistory" text="Working history">
             <font>
                 <Font size="16.0"/>
             </font>
@@ -83,11 +83,6 @@
                 <Font name="Calibri" size="27.0"/>
             </font>
         </Label>
-        <Button layoutX="1059.0" layoutY="577.0" mnemonicParsing="false" onAction="#getListText" text="Select">
-            <font>
-                <Font size="19.0"/>
-            </font>
-        </Button>
         <TextField fx:id="adminEditUserUsername" layoutX="617.0" layoutY="127.0" promptText="Username">
             <font>
                 <Font size="15.0"/>
