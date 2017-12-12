@@ -13,5 +13,8 @@ public class DeleteEverything {
         System.out.println("Database will be deleted in just a minute");
         Database database = new Database(username, pass);
         database.dropAll();
+        database.deleteFile("postgresUsernameAndPass.txt");
+        System.gc();
+
     }
 }

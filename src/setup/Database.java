@@ -615,7 +615,7 @@ public class Database {
 
     }
 
-    private void deleteFile(String filename) {
+    public void deleteFile(String filename) {
         File f = new File(filename);
         if (f.exists()) {
             f.delete();
