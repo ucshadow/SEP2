@@ -111,7 +111,7 @@ public class CreateUserController implements ResponseReader {
         adminEditUserCPR.setText(selectedUser.getCpr());
         adminEditUserPassword.setText(selectedUser.getPassword());
         adminEditUserRole.setText(selectedUser.getUserRole());
-        adminEditWage.setText(selectedUser.getWage());
+        adminEditWage.setText(selectedUser.getWage().trim());
     }
 
     private User getUserByCPR(String cpr) {
@@ -183,6 +183,7 @@ public class CreateUserController implements ResponseReader {
     @FXML
     private void submitEdit() {
         controller.submitEdit(adminEditUserUsername.getText(), adminEditUserPassword.getText(), adminEditUserCPR.getText(), adminEditUserRole.getText());
+        controller.changeWagePerHours(adminEditUserCPR.getText(), adminEditWage.getText());
     }
 
     @FXML
