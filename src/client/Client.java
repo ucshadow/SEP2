@@ -55,7 +55,6 @@ public class Client {
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
-                    System.exit(1);
                 }
             }).start();
         }

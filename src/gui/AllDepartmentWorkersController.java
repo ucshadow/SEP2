@@ -38,9 +38,13 @@ public class AllDepartmentWorkersController implements ResponseReader {
 
     @Override
     public void responseReader(Response res) {
-        allUsers = (ArrayList<User>) res.getRespnoseObject();
-        allUsers.forEach(this::createUserProfilePane);
-        warnings.setText("Department employees");
+        if(res != null) {
+            allUsers = (ArrayList<User>) res.getRespnoseObject();
+            allUsers.forEach(this::createUserProfilePane);
+            warnings.setText("Department employees");
+        } else {
+            warnings.setText("You are all alone here");
+        }
     }
 
     private void createUserProfilePane(User user) {
