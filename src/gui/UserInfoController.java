@@ -130,10 +130,6 @@ import java.util.ArrayList;
         userInfoUserRole.setText(user.getUserRole());
     }
 
-    @FXML
-    private void closePanel() {
-        System.exit(0);
-    }
 
 
 

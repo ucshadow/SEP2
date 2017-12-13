@@ -219,12 +219,7 @@
                 <Font name="Dubai Regular" size="15.0"/>
             </font>
         </Button>
-        <Button layoutX="1161.0" layoutY="670.0" mnemonicParsing="false"
-                onAction="#closePanel" text="Close">
-            <font>
-                <Font name="Dubai Regular" size="15.0"/>
-            </font>
-        </Button>
+
         <Label layoutX="833.0" layoutY="562.0" text="Wage:">
             <font>
                 <Font name="System Bold" size="31.0"/>

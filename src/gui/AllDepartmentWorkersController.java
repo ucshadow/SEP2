@@ -40,7 +40,7 @@ public class AllDepartmentWorkersController implements ResponseReader {
     public void responseReader(Response res) {
         allUsers = (ArrayList<User>) res.getRespnoseObject();
         allUsers.forEach(this::createUserProfilePane);
-        warnings.setText("All employees");
+        warnings.setText("Department employees");
     }
 
     private void createUserProfilePane(User user) {
