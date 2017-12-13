@@ -18,13 +18,9 @@ public interface IDBAdapter {
 
     void editDepartment(Department department, Department oldDepartment);
 
-    Department viewDepartment(Department department);
-
     void deleteDepartment(Department department);
 
     ArrayList<Department> getAllDepartments();
-
-    String getWagePerHour(User user);
 
     void changeWagePerHours(User user);
 

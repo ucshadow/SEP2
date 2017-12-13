@@ -2,8 +2,6 @@ package server;
 
 
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.sql.*;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -19,8 +17,6 @@ public class DBHandler {
     public DBHandler() {
         try {
             read("postgresUsernameAndPass.txt");
-            System.out.println(username);
-            System.out.println(pass);
             connection = DriverManager.getConnection(url, username, pass);
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
@@ -48,7 +44,6 @@ public class DBHandler {
                 }
             }
         } catch (EOFException e) {
-            System.out.println("I think the file " + fileName + " was empty");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -58,7 +53,6 @@ public class DBHandler {
                 try {
                     readFromFile.close();
                 } catch (IOException e) {
-                    System.out.println("IO Error closing file " + fileName);
                 }
             }
         }
@@ -87,7 +81,6 @@ public class DBHandler {
             if (e.getSQLState().toString().equals("23505")) {
                 //Do nothing
             } else {
-                System.out.println(e.getMessage());
             }
         }
 
@@ -108,7 +101,6 @@ public class DBHandler {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         return temp;
 
@@ -128,7 +120,6 @@ public class DBHandler {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         return temp;
 
@@ -151,7 +142,6 @@ public class DBHandler {
                 temp.add(temp2);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         return temp;
 

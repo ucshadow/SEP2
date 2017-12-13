@@ -48,10 +48,6 @@ public class Connection implements Runnable, OurObserver {
                     case "editdepartment":
                         adapter.editDepartment((Department) s.getRequestObjects()[0], (Department) s.getRequestObjects()[1]);
                         break;
-                    case "getdepartment":
-                        Department department = adapter.viewDepartment((Department) s.getRequestObject());
-                        getOutputStream().writeObject(new Response<>("viewDepartment", department));
-                        break;
                     case "deletedepartment":
                         adapter.deleteDepartment((Department) s.getRequestObject());
                         break;
@@ -70,10 +66,6 @@ public class Connection implements Runnable, OurObserver {
                     case "getuserswithoutschedule":
                         ArrayList<User> usersWithoutSchedules = adapter.getAllUsersWithoutWorkingSchedule();
                         getOutputStream().writeObject(new Response<>("getUsersWithoutSchedule", usersWithoutSchedules));
-                        break;
-                    case "getwageperhours":
-                        String wage = adapter.getWagePerHour((User) s.getRequestObject());
-                        getOutputStream().writeObject(new Response<>("getWagePerHours", wage));
                         break;
                     case "getworkingcolleagues":
                         ArrayList<User> workingCollegues = adapter.getWorkingColleagues((User) s.getRequestObject());

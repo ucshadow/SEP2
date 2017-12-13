@@ -128,12 +128,6 @@ import java.util.ArrayList;
         userInfoMoreInfo.setText(user.getMoreInfo());
         userInfoWageLabel.setText(user.getWage());
         userInfoUserRole.setText(user.getUserRole());
-
-
-
-        System.out.println(user);
-
-
     }
 
     @FXML
@@ -151,12 +145,7 @@ import java.util.ArrayList;
      public void responseReader(Response res) {
 
          if (res != null) {
-             System.out.println("Herr 2");
              if (res.getResponse().equals("getMyWorkingDepartments")) {
-                 System.out.println("Herr" +"3");
-                 System.out.println(res.toString());
-//                departments = (ArrayList<String>) res.getRespnoseObject();
-//                System.out.println("Departments:" + departments.toString());
                  getWorkingDepartments((ArrayList<String>) res.getRespnoseObject());
              }
          }
@@ -164,7 +153,6 @@ import java.util.ArrayList;
 
 
      public void getWorkingDepartments(ArrayList<String> strings){
-         System.out.println("Strings" + strings);
 
          String str = "";
 
@@ -177,7 +165,6 @@ import java.util.ArrayList;
 
      public void setController(Controller controller) {
          this.controller = controller;
-//         getDepartmentsEvent();
      }
 
      public void setUser(User user) {

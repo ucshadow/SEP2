@@ -70,7 +70,6 @@ public class AllWorkingDaysController implements ResponseReader {
         ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();
         for(int i = 0; i < arr.size(); i++) {
             LocalDate l = LocalDate.parse(arr.get(i).getWorkingDate());
-            System.out.println(l.getMonthValue() - 1);
             Pane selectedMonth = (Pane) mainPane.getChildren().get(l.getMonthValue() - 1);
             addDays(selectedMonth, String.valueOf(l.getDayOfMonth()),
                     arr.get(i).getStartHours(), arr.get(i).getEndHours(), i);

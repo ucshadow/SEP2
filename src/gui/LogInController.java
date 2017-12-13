@@ -48,7 +48,6 @@ public class LogInController {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("Max retries exceeded");
                 return null;
             }
         };

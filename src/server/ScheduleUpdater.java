@@ -25,9 +25,6 @@ public class ScheduleUpdater {
                 LocalDateTime l = LocalDateTime.now();
                 ArrayList<String> times = readFile();
 
-                System.out.println("current times: ");
-                System.out.println(times);
-
                 long updateInterval = Long.valueOf(times.get(0));
                 long lastUpdated = Long.valueOf(times.get(1));
                 long currentTime = l.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
@@ -48,7 +45,6 @@ public class ScheduleUpdater {
                         }
                     });
 
-                    System.out.println("Updating...");
                     times.set(1, String.valueOf(currentTime));
 
                     try {

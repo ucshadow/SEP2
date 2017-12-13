@@ -564,10 +564,7 @@ public class Database {
 
         } catch (SQLException e) {
             if (e.getSQLState().toString().equals("23505")) {
-                System.out.println("CPR exists");
             } else {
-                System.out.println(e.getSQLState());
-                System.out.println(e.getMessage());
             }
         }
 
@@ -608,7 +605,6 @@ public class Database {
                 try {
                     writeToFile.close();
                 } catch (IOException e) {
-                    System.out.println("IO Error closing file " + fileName);
                 }
             }
         }

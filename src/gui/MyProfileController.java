@@ -16,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MyProfileController implements ResponseReader {
 
@@ -133,26 +132,18 @@ public class MyProfileController implements ResponseReader {
         profileWageLabel.setText(user.getWage());
         profileUserRole.setText(user.getUserRole());
 
-        System.out.println(user);
 
     }
 
     private void getDepartmentsEvent(User user) {
-        System.out.println("cpr:" + user.getCpr());
         controller.getMyWorkingDepartments(user.getCpr());
         Helpers.getLastResponse(controller, this);
     }
 
     public void responseReader(Response res) {
-        System.out.println("HEre 1");
 
         if (res != null) {
-            System.out.println("HEre 2");
             if (res.getResponse().equals("getMyWorkingDepartments")) {
-                System.out.println("HEre 3");
-                System.out.println(res.toString());
-//                departments = (ArrayList<String>) res.getRespnoseObject();
-//                System.out.println("Departments:" + departments.toString());
                 getWorkingDepartments((ArrayList<String>) res.getRespnoseObject());
             }
         }
@@ -160,7 +151,6 @@ public class MyProfileController implements ResponseReader {
 
 
     public void getWorkingDepartments(ArrayList<String> strings){
-        System.out.println("Strings" + strings);
 
         String str = "";
 

@@ -32,13 +32,10 @@ public class Client {
 
     public void sendRequest(Request request) {
         try {
-//            System.out.println("Sending...." + request);
             if (out == null) {
                 out = new ObjectOutputStream(clientSocket.getOutputStream());
             }
-
             out.writeObject(request);
-            System.out.println("Sent");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,14 +50,7 @@ public class Client {
                     while (true) {
                         Response response;
                         response = (Response) in.readObject();
-
-                        System.out.println("response from server: " + response.toString());
                         responses.push(response);
-
-//                        if (response.getResponse().toLowerCase().equals("update reservation")) {
-//                            model.updateReservation(response.getAllParameters());
-//                        }
-
                         Thread.sleep(10);
                     }
                 } catch (Exception e) {

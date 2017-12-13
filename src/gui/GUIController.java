@@ -59,7 +59,6 @@ public class GUIController {
     }
 
     public void setUser(Response x) {
-        System.out.println(x.getRespnoseObject());
         User user = (User) x.getRespnoseObject();
         this.user = user;
         if (user.getPicture() == null || user.getPicture().equals("null") || user.getPicture().equals("")

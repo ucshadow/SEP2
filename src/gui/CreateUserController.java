@@ -69,12 +69,10 @@ public class CreateUserController implements ResponseReader {
     public void responseReader(Response res) {
         if (res != null) {
             if (res.getResponse().equals("getallusers")) {
-                System.out.println(res.toString());
                 userList = (ArrayList<User>) res.getRespnoseObject();
                 populateUserTable((ArrayList<User>) res.getRespnoseObject());
             }
             if (res.getResponse().equals("getuserinfoforadmin")) {
-                System.out.println(res.toString());
                 createUserInfoWindow((User) res.getRespnoseObject());
 
             }
@@ -93,19 +91,12 @@ public class CreateUserController implements ResponseReader {
 
         clientList.setOnMouseClicked(event -> getListText(clientList.getSelectionModel().getSelectedItem()));
 
-        System.out.println(userList.toString());
     }
 
     private void getListText(Object selected) {
-
-        System.out.println(selected);
-        System.out.println(selected.getClass().getName());
-
         String str = selected.toString();
         String[] parts = str.split(" ");
         selectedUser = getUserByCPR(parts[1]);
-
-
         assert selectedUser != null;
         adminEditUserUsername.setText(selectedUser.getUsername());
         adminEditUserCPR.setText(selectedUser.getCpr());
@@ -137,7 +128,6 @@ public class CreateUserController implements ResponseReader {
             root = fxmlLoader.load();
             UserInfoController controller = fxmlLoader.getController();
             controller.setController(this.controller);
-            System.out.println("My user:" + user);
             controller.setUser(user);
             controller.displayUser(user);
 

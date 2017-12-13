@@ -1,7 +1,6 @@
 package common;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class Request<T> implements Serializable {
     private T requestObject;

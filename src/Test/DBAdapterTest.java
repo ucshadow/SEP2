@@ -65,9 +65,7 @@ public class DBAdapterTest {
     public void createUser() {
         idbAdapter.createAccount(user);
         fromDB = idbAdapter.getAllUsers();
-        String wage = idbAdapter.getWagePerHour(user);
         assertEquals(1, fromDB.size());
-        assertEquals(user.getWage(), wage);
         assertEquals(user.getCpr(), fromDB.get(0).getCpr());
         assertEquals(user.getUsername(), fromDB.get(0).getUsername());
         assertEquals(user.getUserRole(), fromDB.get(0).getUserRole());
@@ -195,7 +193,13 @@ public class DBAdapterTest {
         Department temp = new Department(fakeDepartments.get(0).getdNumber(), "Ice", "1234", fakeUsers.get(0).getCpr());
 
         idbAdapter.editDepartment(temp, fakeDepartments.get(0));
-        Department temp2 = idbAdapter.viewDepartment(fakeDepartments.get(0));
+        ArrayList<Department> temp3 = idbAdapter.getAllDepartments();
+        Department temp2 = null;
+        for (Department item : temp3) {
+            if (item.getdNumber().equals(fakeDepartments.get(0).getdNumber())) {
+                temp2 = new Department(item.getdNumber(), item.getdName(), item.getdLocation(), item.getdManager());
+            }
+        }
         assertEquals(temp.getdNumber(), temp2.getdNumber());
         assertEquals(temp.getdName(), temp2.getdName());
         assertEquals(temp.getdLocation(), temp2.getdLocation());
@@ -203,30 +207,6 @@ public class DBAdapterTest {
         database.deleteFromtables();
     }
 
-    @Test
-    public void viewDepartment() {
-        fakeUser.setEverythingUp(15, 5);
-        fakeDepartments = fakeUser.getDepartments();
-        fakeUsers = fakeUser.getWorkers();
-        for (User item : fakeUsers) {
-            idbAdapter.createAccount(item);
-        }
-        for (Department item : fakeDepartments
-                ) {
-            idbAdapter.createDepartment(item);
-        }
-        dFromDB = idbAdapter.getAllDepartments();
-        assertEquals(dFromDB.size(), fakeDepartments.size());
-        Department test = new Department(fakeDepartments.get(0).getdNumber(), null, null, null);
-        Department d = idbAdapter.viewDepartment(test);
-        assertEquals(d.getdNumber(), fakeDepartments.get(0).getdNumber());
-        assertEquals(d.getdLocation(), fakeDepartments.get(0).getdLocation());
-        assertEquals(d.getdName(), fakeDepartments.get(0).getdName());
-        assertEquals(d.getdManager(), fakeDepartments.get(0).getdManager());
-
-        database.deleteFromtables();
-
-    }
 
     @Test
     public void deleteDepartments() {
@@ -282,23 +262,6 @@ public class DBAdapterTest {
         database.deleteFromtables();
     }
 
-    @Test
-    public void getWage() {
-        fakeUser.setEverythingUp(3, 1);
-        fakeUsers = fakeUser.getWorkers();
-        for (User item : fakeUsers) {
-            idbAdapter.createAccount(item);
-        }
-        String test = idbAdapter.getWagePerHour(fakeUsers.get(0));
-        String test2 = idbAdapter.getWagePerHour(fakeUsers.get(1));
-        String test3 = idbAdapter.getWagePerHour(fakeUsers.get(2));
-        assertEquals(fakeUsers.get(0).getWage(), test);
-        assertEquals(fakeUsers.get(1).getWage(), test2);
-        assertEquals(fakeUsers.get(2).getWage(), test3);
-
-        database.deleteFromtables();
-
-    }
 
     @Test
     public void changeWage() {
@@ -307,24 +270,24 @@ public class DBAdapterTest {
         for (User item : fakeUsers) {
             idbAdapter.createAccount(item);
         }
-        String test = idbAdapter.getWagePerHour(fakeUsers.get(0));
-        String test2 = idbAdapter.getWagePerHour(fakeUsers.get(1));
-        String test3 = idbAdapter.getWagePerHour(fakeUsers.get(2));
-        assertEquals(fakeUsers.get(0).getWage(), test);
-        assertEquals(fakeUsers.get(1).getWage(), test2);
-        assertEquals(fakeUsers.get(2).getWage(), test3);
+        User test = idbAdapter.getUserInfOForAdmin(fakeUsers.get(0));
+        User test2 = idbAdapter.getUserInfOForAdmin(fakeUsers.get(1));
+        User test3 = idbAdapter.getUserInfOForAdmin(fakeUsers.get(2));
+        assertEquals(fakeUsers.get(0).getWage(), test.getWage().trim());
+        assertEquals(fakeUsers.get(1).getWage(), test2.getWage().trim());
+        assertEquals(fakeUsers.get(2).getWage(), test3.getWage().trim());
         fakeUsers.get(0).setWage("12345");
         fakeUsers.get(1).setWage("2345");
         fakeUsers.get(2).setWage("345");
         idbAdapter.changeWagePerHours(fakeUsers.get(0));
         idbAdapter.changeWagePerHours(fakeUsers.get(1));
         idbAdapter.changeWagePerHours(fakeUsers.get(2));
-        String tes = idbAdapter.getWagePerHour(fakeUsers.get(0));
-        String tes2 = idbAdapter.getWagePerHour(fakeUsers.get(1));
-        String tes3 = idbAdapter.getWagePerHour(fakeUsers.get(2));
-        assertEquals(fakeUsers.get(0).getWage(), tes);
-        assertEquals(fakeUsers.get(1).getWage(), tes2);
-        assertEquals(fakeUsers.get(2).getWage(), tes3);
+        User tes = idbAdapter.getUserInfOForAdmin(fakeUsers.get(0));
+        User tes2 = idbAdapter.getUserInfOForAdmin(fakeUsers.get(1));
+        User tes3 = idbAdapter.getUserInfOForAdmin(fakeUsers.get(2));
+        assertEquals(fakeUsers.get(0).getWage(), tes.getWage().trim());
+        assertEquals(fakeUsers.get(1).getWage(), tes2.getWage().trim());
+        assertEquals(fakeUsers.get(2).getWage(), tes3.getWage().trim());
 
         database.deleteFromtables();
     }

@@ -96,9 +96,7 @@ public class CreateDepartmentController implements ResponseReader {
     public void editDept(ActionEvent event) {
         ArrayList<String> newDepartment = readAllTextFields();
         controller.editDepartment(newDepartment.get(0), newDepartment.get(1), newDepartment.get(2), newDepartment.get(3), newDepartment.get(4), newDepartment.get(0));
-        for (String s : newDepartment) {
-            System.out.println(s);
-        }
+
     }
 
     @FXML
@@ -108,7 +106,6 @@ public class CreateDepartmentController implements ResponseReader {
     }
 
     private ArrayList<String> readAllTextFields() {
-//        dNumber, dName, dPostcode, dCity, dManager
         ArrayList<String> departmentDetails = new ArrayList<>();
         departmentDetails.add(departmentNumberCreate.getText());
         departmentDetails.add(departmentNameCreate.getText());

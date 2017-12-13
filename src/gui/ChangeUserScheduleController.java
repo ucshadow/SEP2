@@ -246,7 +246,6 @@ public class ChangeUserScheduleController implements ResponseReader {
                         s.getEndHours());
             });
         } else {
-            System.out.println("cannot submit right now, invalid data");
         }
     }
 

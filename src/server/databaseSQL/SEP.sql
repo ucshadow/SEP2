@@ -76,8 +76,8 @@ CREATE TABLE workingSchedule (
   startHours TIME,
   endHours   TIME
 );
--- ALTER TABLE workingSchedule
---   ADD CONSTRAINT check_date check(workingDay>=now());
+ALTER TABLE workingSchedule
+  ADD CONSTRAINT check_date check(workingDay>=now());
 
 CREATE TABLE wagePerHour (
   id          SERIAL PRIMARY KEY,
@@ -392,6 +392,7 @@ INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'Mom
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Radu1234', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');
+
 
 CREATE MATERIALIZED VIEW EmployeeInformation AS
   SELECT

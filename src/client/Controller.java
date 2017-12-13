@@ -8,12 +8,8 @@ public class Controller {
     private Client client;
 
     public Controller() {
-
-//        client = new Client("10.152.196.94", 6789);
-        client = new Client("10.152.192.102", 6789);
-//        client = new Client("10.152.196.96", 6789);
-
-//        client = new Client("localhost", 6789);
+//        client = new Client("10.152.192.102", 6789);
+        client = new Client("localhost", 6789);
 
 
     }
@@ -32,7 +28,6 @@ public class Controller {
         user.setCpr(cpr);
         user.setUserRole(userRole);
         user.setWage(wage);
-
         Request<User> createUserRequest = new Request<>("createAccount", user);
         client.sendRequest(createUserRequest);
     }
@@ -102,13 +97,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    public void viewDepartment(String dNumber) {
-        Department department = new Department(dNumber, null, null, null);
-
-        Request<Department> submitEditRequest = new Request<>("getDepartment", department);
-        client.sendRequest(submitEditRequest);
-    }
-
     public void deleteDepartment(String dNumber) {
         Department department = new Department(dNumber, null, null, null);
 
@@ -119,7 +107,6 @@ public class Controller {
     public void getAllDepartments() {
         Request submitEditRequest = new Request<>("getAllDepartments", null);
         client.sendRequest(submitEditRequest);
-        System.out.println("sended");
     }
 
     public void getWorkingSchedule(String cpr) {
@@ -139,13 +126,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
 
-    public void getWagePerHour(String cpr) {
-        User user = new User();
-        user.setCpr(cpr);
-        Request submitEditRequest = new Request<>("getWagePerHours", user);
-        client.sendRequest(submitEditRequest);
-    }
-
     public void changeWagePerHours(String cpr,String wage) {
         User user = new User();
         user.setCpr(cpr);
@@ -159,7 +139,6 @@ public class Controller {
             Request submitEditRequest = new Request<>("getWorkingColleagues", null);
             client.sendRequest(submitEditRequest);
         } else {
-
             User user = new User();
             user.setCpr(cpr);
             Request submitEditRequest = new Request<>("getWorkingColleagues", null);
@@ -199,11 +178,6 @@ public class Controller {
 
     }
 
-//    public void getAllUsers(User user) {
-//        Request submitEditRequest = new Request<>("getallusers", user);
-//        client.sendRequest(submitEditRequest);
-//    }
-
     public void getUserByDepartment(String dno) {
         Department d = new Department(dno, null, null, null);
         Request submitEditRequest = new Request<>("getuserbydepartment", d);
@@ -217,7 +191,6 @@ public class Controller {
         client.sendRequest(submitEditRequest);
     }
     public void getWorkingHistory(String cpr) {
-
         User user = new User();
         user.setCpr(cpr);
         Request submitEditRequest = new Request<>("workinghistory", user);

@@ -19,7 +19,7 @@ public class SetUp {
         System.out.println("Database is ready");
         System.out.println("Creating fake data");
         try {
-            Thread.sleep(2000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
