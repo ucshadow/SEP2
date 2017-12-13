@@ -456,6 +456,7 @@ public class DBAdapter implements IDBAdapter {
                 users.add(user1);
             }
         }
+        users.forEach(System.out::println);
         return users;
     }
 

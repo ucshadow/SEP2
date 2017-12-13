@@ -141,7 +141,7 @@ public class Controller {
         } else {
             User user = new User();
             user.setCpr(cpr);
-            Request submitEditRequest = new Request<>("getWorkingColleagues", null);
+            Request submitEditRequest = new Request<>("getWorkingColleagues", user.getCpr());
             client.sendRequest(submitEditRequest);
         }
     }

@@ -31,7 +31,7 @@ public class AllDepartmentWorkersController implements ResponseReader {
 
     public void getAllDepartmentWorkers() {
         if (allUsers.isEmpty()) {
-            controller.getWorkingColleagues(null); // this will get all colleagues
+            controller.getWorkingColleagues(user.getCpr()); // this will get all colleagues
         }
         Helpers.getLastResponse(controller, this);
     }
