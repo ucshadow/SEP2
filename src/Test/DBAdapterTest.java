@@ -609,7 +609,6 @@ public class DBAdapterTest {
                 if (item.getdNumber().equals(items.getDepartmentNumber())) {
                     if (!allDEmployees.contains(items.getEmployeeCPR())) {
                         allDEmployees.add(items.getEmployeeCPR());
-                        System.out.println(items);
                     }
                 }
             }

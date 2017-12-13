@@ -168,7 +168,7 @@ public class ChangeUserScheduleController implements ResponseReader {
             warning(addEndTimeLabel, "time format");
             return 1;
         }
-        if(isLesserOrEquals(start, end)) {
+        if(!isLesserOrEquals(start, end)) {
             warning(addEndTimeLabel, "time interval");
             return 1;
         }
@@ -239,6 +239,7 @@ public class ChangeUserScheduleController implements ResponseReader {
 
     @FXML
     private void submitNewSchedule() {
+        System.out.println(canBeSubmitted);
         if(canBeSubmitted) {
             selected.getItems().forEach(e -> {
                 WorkingSchedule s = (WorkingSchedule) e;
