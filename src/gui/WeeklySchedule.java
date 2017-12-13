@@ -6,10 +6,7 @@ import common.User;
 import common.WorkingSchedule;
 import helpers.Helpers;
 import helpers.ResponseReader;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 
@@ -35,15 +32,12 @@ public class WeeklySchedule implements ResponseReader {
 
     public void responseReader(Response res) {
         if (res != null) {
-            System.out.println("Schedule.");
             ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();
             arr.forEach(this::populateView);
         }
     }
 
     private void populateView(WorkingSchedule w) {
-        System.out.println("Working schedule is: ");
-        System.out.println(w);
         String[] params = w.getWorkingDate().split("-");
         int year = Integer.valueOf(params[0]);
         int month = Integer.valueOf(params[1]);
@@ -54,19 +48,11 @@ public class WeeklySchedule implements ResponseReader {
 
         int weekDay = LocalDate.of(year, month, day).getDayOfWeek().getValue();
 
-//        System.out.println(LocalDate.of(year, month, day).getDayOfWeek().getValue());
-
         for(int i = start; i < end; i++) {
             Region r = new Region();
             r.setStyle("-fx-background-color: green; -fx-border-style: solid;");
             parent.add(r, weekDay, i + 1);
         }
-
-
-
-        //Gets the list of children of this Parent.
-//        ObservableList<Node> ch = parent.getChildren();
-
     }
 
     public Controller getController() {

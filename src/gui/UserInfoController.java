@@ -106,7 +106,7 @@ import java.util.ArrayList;
         if (user.getPicture() == null || user.getPicture().equals("") || user.getPicture().equals("null") ) {
             user.setPicture("https://supercharge.info/images/avatar-placeholder.png");
         }
-        Image i = new Image(user.getPicture());
+        Image i = new Image(user.getPicture(), true);
         userInfoPicture.setImage(i);
         userInfoUsernameLabel.setText(user.getUsername());
         userInfoPassword.setText(user.getPassword());

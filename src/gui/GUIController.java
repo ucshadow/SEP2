@@ -31,7 +31,6 @@ public class GUIController {
             }
             if(newValue.intValue() == 2) {
                 allDepartmentWorkersController.getAllDepartmentWorkers();
-//                allDepartmentWorkersController.getMyDepartments();
             }
         });
 
@@ -86,11 +85,6 @@ public class GUIController {
         weeklyScheduleController.setController(c);
         changeUserScheduleController.setController(c);
         allDepartmentWorkersController.setController(c);
-
-//        if(user.getUserRole().equals("Manager")) {
-//            changeUserScheduleController.getAllWorkingSchedules();
-//            changeUserScheduleController.getUsersWithoutSchedule();
-//        }
     }
 
 }

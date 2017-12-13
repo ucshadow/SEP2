@@ -110,11 +110,7 @@ public class MyProfileController implements ResponseReader {
     }
 
     public void displayUser(User user) {
-//        if (user.getPicture() == null || user.getPicture().equals("") || user.getPicture().equals("null") ) {
-
-
-
-        Image i = new Image(user.getPicture());
+        Image i = new Image(user.getPicture(), true);
         profilePicture.setImage(i);
         profileUsernameLabel.setText(user.getUsername());
         profilePassword.setText(user.getPassword());
@@ -122,7 +118,6 @@ public class MyProfileController implements ResponseReader {
         profileSecondName.setText(user.getSecondName());
         profileLastName.setText(user.getLastName());
         profileCprLabel.setText(user.getCpr());
-//        getAllUsersEvent(user);
         profileDOB.setText(user.getDob());
         profileAddress.setText(user.getAddress());
         profilePostcode.setText(user.getPostcode());
@@ -174,12 +169,6 @@ public class MyProfileController implements ResponseReader {
         }
 
         profileDepartmentsLabel.setText(str);
-    }
-
-
-    @FXML
-    private void closePanel() {
-        System.exit(0);
     }
 
 

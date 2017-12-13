@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 public class AllWorkingDaysController implements ResponseReader {
 
@@ -29,12 +28,8 @@ public class AllWorkingDaysController implements ResponseReader {
     @FXML private Pane mainPane;
 
     public void init(User user) {
-        System.out.println("Selected user");
-        System.out.println(user);
-
         controller.getWorkingSchedule(user.getCpr());
         Helpers.getLastResponse(controller, this);
-
         drawMonths();
     }
 
@@ -65,34 +60,13 @@ public class AllWorkingDaysController implements ResponseReader {
             monthPane.setLayoutY(curY);
             monthPane.setStyle("-fx-border-color: green; -fx-font-size: 10px;");
 
-            // add day rows
-//            addDayRows(i, monthPane);
-
             mainPane.getChildren().add(monthPane);
-
             curX += 305;
         }
     }
 
-//    private void addDayRows(int month, Pane monthPane) {
-//        LocalDate date = LocalDate.of(2017, month + 1, 1);
-//        IntStream.range(0, date.lengthOfMonth()).forEach(i -> {
-//            TextField day = new TextField();
-//            day.setEditable(false);
-//            day.setAlignment(Pos.BASELINE_LEFT);
-//            day.setStyle("-fx-background-color: none;");
-//            day.setStyle("-fx-font-size: 10px;");
-//            day.setLayoutY(11 * i + 1);
-//            day.setPrefWidth(300);
-//            day.setPrefHeight(11);
-//            day.setText(String.valueOf(i + 1));
-//            monthPane.getChildren().add(day);
-//        });
-//    }
-
     @Override
     public void responseReader(Response res) {
-        System.out.println("Schedule:");
         ArrayList<WorkingSchedule> arr = (ArrayList) res.getRespnoseObject();
         for(int i = 0; i < arr.size(); i++) {
             LocalDate l = LocalDate.parse(arr.get(i).getWorkingDate());

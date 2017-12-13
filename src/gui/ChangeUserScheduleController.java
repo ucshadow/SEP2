@@ -6,30 +6,27 @@ import common.User;
 import common.WorkingSchedule;
 import helpers.Helpers;
 import helpers.ResponseReader;
-import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeUserScheduleController implements ResponseReader {
 
-    protected ListProperty<WorkingSchedule> scheduleList = new SimpleListProperty<>();
-    protected ListProperty<User> usersWithoutScheduleList = new SimpleListProperty<>();
+    private ListProperty<WorkingSchedule> scheduleList = new SimpleListProperty<>();
+    private ListProperty<User> usersWithoutScheduleList = new SimpleListProperty<>();
     private Controller controller;
     private User user;
     private List<WorkingSchedule> allSchedules = new ArrayList<>();
     private List<User> usersWithoutSchedules = new ArrayList<>();
+    private ArrayList<String> depNumbers = new ArrayList<>();
+    private boolean canBeSubmitted = false;
 
     @FXML
     private ListView allSchedulesList;
@@ -39,14 +36,13 @@ public class ChangeUserScheduleController implements ResponseReader {
     private ListView usersWithoutSchedule;
 
     @FXML private TextField startDate;
-    @FXML private TextField endDate;
     @FXML private TextField startTime;
     @FXML private TextField endTime;
     @FXML private TextField depNo;
     @FXML private TextField usersWithoutScheduleFilter;
+    @FXML private TextField allSchedulesFilter;
 
     @FXML private Label addStartDateLabel;
-    @FXML private Label addEndDateLabel;
     @FXML private Label addStartTimeLabel;
     @FXML private Label addEndTimeLabel;
     @FXML private Label addDepNoLabel;
@@ -100,6 +96,11 @@ public class ChangeUserScheduleController implements ResponseReader {
                 fillUpUsersWithoutSchedule();
             }
         }
+        allSchedules.forEach(e -> {
+            if(!depNumbers.contains(e.getDepartmentNumber())) {
+                depNumbers.add(e.getDepartmentNumber());
+            }
+        });
     }
 
     @FXML
@@ -117,12 +118,11 @@ public class ChangeUserScheduleController implements ResponseReader {
     @FXML
     private void addScheduleButt() {
         String startDate_ = startDate.getText();
-        String endDate_ = endDate.getText();
         String startTime_ = startTime.getText();
         String endTime_ = endTime.getText();
         String depNo_ = depNo.getText();
 
-
+        canBeSubmitted = false;
 
         int check = 0;
 
@@ -132,6 +132,7 @@ public class ChangeUserScheduleController implements ResponseReader {
 
         if(check == 0) {
             updateSelected(startDate_, startTime_, endTime_, depNo_);
+            canBeSubmitted = true;
         }
     }
 
@@ -163,12 +164,46 @@ public class ChangeUserScheduleController implements ResponseReader {
             warning(addEndTimeLabel, "time");
             return 1;
         }
+        if(!isValidTimeFormat(start) || !isValidTimeFormat(end)) {
+            warning(addEndTimeLabel, "time format");
+            return 1;
+        }
+        if(isLesserOrEquals(start, end)) {
+            warning(addEndTimeLabel, "time interval");
+            return 1;
+        }
         return 0;
+    }
+
+    private boolean isLesserOrEquals(String start, String end) {
+        String[] arr = start.split(":");
+        String[] arr2 = end.split(":");
+        return Integer.parseInt(arr[0]) <= Integer.parseInt(arr2[0]);
+    }
+
+    private boolean isValidTimeFormat(String time) {
+        String[] arr = time.split(":");
+        int i;
+        int j;
+        if (arr.length != 2) {
+            return false;
+        }
+        try {
+            i = Integer.parseInt(arr[0]);
+            j = Integer.parseInt(arr[1]);
+        } catch (Exception e) {
+            return false;
+        }
+        return i >= 0 && i < 24 && j >= 0 && j < 60;
     }
 
     private int checkDepNo(String dep) {
         if(dep.isEmpty()) {
             warning(addDepNoLabel, "department");
+            return 1;
+        }
+        if(!depNumbers.contains(dep)){
+            warning(addDepNoLabel, "dep number");
             return 1;
         }
         return 0;
@@ -180,7 +215,6 @@ public class ChangeUserScheduleController implements ResponseReader {
 
     @FXML
     private void filterUsersWithoutScheduleByCPR() {
-        System.out.println(usersWithoutScheduleFilter.getText());
         ArrayList<User> filtered = new ArrayList<>();
         usersWithoutSchedules.forEach(e -> {
             if(e.getCpr().contains(usersWithoutScheduleFilter.getText())) {
@@ -192,12 +226,28 @@ public class ChangeUserScheduleController implements ResponseReader {
     }
 
     @FXML
-    private void submitNewSchedule() {
-        selected.getItems().forEach(e -> {
-            WorkingSchedule s = (WorkingSchedule) e;
-            controller.addWorkingSchedule(s.getDepartmentNumber(), s.getEmployeeCPR(), s.getWorkingDate(), s.getStartHours(),
-            s.getEndHours());
+    private void filterByCPR() {
+        ArrayList<WorkingSchedule> filtered = new ArrayList<>();
+        allSchedules.forEach(e -> {
+            if(e.getEmployeeCPR().contains(allSchedulesFilter.getText())) {
+                filtered.add(e);
+            }
         });
+        allSchedulesList.getItems().clear();
+        allSchedulesList.getItems().addAll(filtered);
+    }
+
+    @FXML
+    private void submitNewSchedule() {
+        if(canBeSubmitted) {
+            selected.getItems().forEach(e -> {
+                WorkingSchedule s = (WorkingSchedule) e;
+                controller.addWorkingSchedule(s.getDepartmentNumber(), s.getEmployeeCPR(), s.getWorkingDate(), s.getStartHours(),
+                        s.getEndHours());
+            });
+        } else {
+            System.out.println("cannot submit right now, invalid data");
+        }
     }
 
     public Controller getController() {

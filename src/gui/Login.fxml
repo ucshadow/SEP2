@@ -24,8 +24,8 @@
                     </font>
                 </Label>
                 <TextField fx:id="username" layoutX="255.0" layoutY="110.0" />
-                <TextField fx:id="password" layoutX="255.0" layoutY="175.0" />
-                <Button layoutX="355.0" layoutY="228.0" mnemonicParsing="false" onAction="#handleLogIn" text="Log in" />
+                <TextField fx:id="password" onAction="#handleLogIn" layoutX="255.0" layoutY="175.0" />
+                <Button layoutX="355.0" layoutY="228.0" onAction="#handleLogIn" text="Log in" />
                 <Label layoutX="180.0" layoutY="33.0" text="Welcome Back">
                     <font>
                         <Font size="27.0" />
