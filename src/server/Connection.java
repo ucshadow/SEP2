@@ -103,11 +103,14 @@ public class Connection implements Runnable, OurObserver {
                 }
 
             } catch (Exception e) {
+
+                e.printStackTrace();
                 try {
                     outToClient.close();
                     inFromClient.close();
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    e.printStackTrace();
+
                 }
                 server.removeObserver(this);
                 break;
@@ -123,7 +126,7 @@ public class Connection implements Runnable, OurObserver {
             inFromClient = new ObjectInputStream(socket.getInputStream());
             outToClient = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
