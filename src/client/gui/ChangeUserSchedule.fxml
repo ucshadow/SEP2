@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<Tab text="Change User Schedule" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ChangeUserScheduleController">
+<Tab text="Change User Schedule" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.ChangeUserScheduleController">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
             <ListView fx:id="allSchedulesList" layoutX="39.0" layoutY="78.0" prefHeight="458.0" prefWidth="408.0" />

@@ -4,7 +4,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
       prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="gui.GUIController">
+      fx:controller="client.gui.GUIController">
     <children>
         <TabPane prefHeight="794.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" fx:id="mainTabPane">
             <tabs>

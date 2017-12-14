@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
-<Tab text="Create User" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateUserController">
+<Tab text="Create User" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.CreateUserController">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="767.0" prefWidth="1513.0">
         <Label layoutX="153.0" layoutY="55.0" text="Create New User">
             <font>

@@ -12,6 +12,5 @@ public class FakeUserTest {
         FakeUser f = new FakeUser();
         f.setEverythingUp(20    , 2);
         f.dumpToPostgreslocaly();
-
     }
 }

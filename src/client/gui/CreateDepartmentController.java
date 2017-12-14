@@ -1,4 +1,4 @@
-package gui;
+package client.gui;
 
 import client.Controller;
 import common.Department;

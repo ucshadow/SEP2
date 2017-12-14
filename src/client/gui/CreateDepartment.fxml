@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<Tab text="Create Department" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CreateDepartmentController">
+<Tab text="Create Department" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.CreateDepartmentController">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
             <children>

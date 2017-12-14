@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.ImageView?>
-<Tab xmlns:fx="http://javafx.com/fxml/1" text="My Profile" fx:controller="gui.MyProfileController">
+<Tab xmlns:fx="http://javafx.com/fxml/1" text="My Profile" fx:controller="client.gui.MyProfileController">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="656.0" prefWidth="800.0">
             <children>
