@@ -6,7 +6,7 @@
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="663.0">
             <ListView fx:id="allSchedulesList" layoutX="39.0" layoutY="78.0" prefHeight="458.0" prefWidth="408.0" />
-            <ListView fx:id="usersWithoutSchedule" layoutX="486.0" layoutY="78.0" prefHeight="458.0" prefWidth="308.0" />
+            <ListView fx:id="usersWithoutScheduleActualListView" layoutX="486.0" layoutY="78.0" prefHeight="458.0" prefWidth="308.0" />
             <Label layoutX="191.0" layoutY="42.0" text="All Schedules" />
             <Label layoutX="611.0" layoutY="42.0" text="Empty Schedules" />
             <TextField layoutX="42.0" layoutY="557.0" promptText="Filter By CPR" onKeyReleased="#filterByCPR" fx:id="allSchedulesFilter"/>

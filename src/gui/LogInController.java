@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class LogInController {
 
-    private Controller c = new Controller();
+    private Controller controller = new Controller();
 
     @FXML
     private TextField username;
@@ -30,7 +30,7 @@ public class LogInController {
     @FXML
     private void handleLogIn(ActionEvent event) {
 
-        c.logIn(username.getText(), password.getText());
+        controller.logIn(username.getText(), password.getText());
 
 
         Task task = new Task<Response>() {
@@ -38,7 +38,7 @@ public class LogInController {
             public Response call() {
                 int max = 10;
                 for (int i = 1; i <= max; i++) {
-                    Response r = c.getLastResponse();
+                    Response r = controller.getLastResponse();
                     if (r != null) {
                         return r;
                     }
@@ -79,7 +79,7 @@ public class LogInController {
             root = fxmlLoader.load();
             GUIController controller = fxmlLoader.getController();
             controller.setUser(r);
-            controller.setClientController(c);
+            controller.setClientController(this.controller);
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();

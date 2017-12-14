@@ -1,4 +1,6 @@
-package common;
+package Test;
+
+import common.FakeUser;
 
 import java.time.Instant;
 import java.time.ZoneId;

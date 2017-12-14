@@ -1,4 +1,4 @@
-package helpers;
+package common.helpers;
 
 import common.Response;
 
