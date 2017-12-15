@@ -77,7 +77,7 @@ CREATE TABLE workingSchedule (
   endHours   TIME
 );
 ALTER TABLE workingSchedule
-  ADD CONSTRAINT check_date check(workingDay>=now());
+  ADD CONSTRAINT check_date CHECK (workingDay >= current_date);
 
 CREATE TABLE wagePerHour (
   id          SERIAL PRIMARY KEY,
@@ -390,8 +390,21 @@ EXECUTE PROCEDURE historyAdd();
 INSERT INTO city (postcode, city) VALUES ('postcode', 'City');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Radu1234', 'Password123', 'Admin');
-INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');
+INSERT INTO userlogin (cpr, username, pass, userrole)
+VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');
 INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');
+INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('0011223344', 'AdminTroels', 'Password123', 'Admin');
+INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('9988776655', 'AdminJens', 'Password123', 'Admin');
+INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('5566778899', 'UserJens', 'Password123', 'User');
+INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('4433221100', 'UserTroels', 'Password123', 'User');
+INSERT INTO department (dno, dname, dManager, dPostcode, dStartdate)
+VALUES ('12313', 'Horsens', '0011223344', 'postcode', now());
+INSERT INTO department (dno, dname, dManager, dPostcode, dStartdate)
+VALUES ('001212', 'Horsens', '9988776655', 'postcode', now());
+INSERT INTO workingSchedule (dno, employecpr, workingDay, startHours, endHours)
+VALUES ('001212', '5566778899', current_date, '08:00', '16:00');
+INSERT INTO workingSchedule (dno, employecpr, workingDay, startHours, endHours)
+VALUES ('12313', '4433221100', current_date, '08:00', '16:00');
 
 
 CREATE MATERIALIZED VIEW EmployeeInformation AS

@@ -143,8 +143,8 @@ public class Database {
                 "  startHours TIME,\n" +
                 "  endHours   TIME\n" +
                 ");\n" +
-                "-- ALTER TABLE workingSchedule\n" +
-                "--   ADD CONSTRAINT check_date check(workingDay>=now());\n" +
+                "ALTER TABLE workingSchedule\n" +
+                "  ADD CONSTRAINT check_date CHECK (workingDay >= current_date);\n" +
                 "\n" +
                 "CREATE TABLE wagePerHour (\n" +
                 "  id          SERIAL PRIMARY KEY,\n" +
@@ -457,8 +457,21 @@ public class Database {
                 "INSERT INTO city (postcode, city) VALUES ('postcode', 'City');\n" +
                 "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('2345678901', 'MomoLina', 'Password123', 'Admin');\n" +
                 "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('3456789012', 'Radu1234', 'Password123', 'Admin');\n" +
-                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');\n" +
-                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');";
+                "INSERT INTO userlogin (cpr, username, pass, userrole)\n" +
+                "VALUES ('4567890123', 'ChocolateHercules', 'Password123', 'Admin');\n" +
+                "INSERT INTO userlogin (cpr, username, pass, userrole) VALUES ('5678901234', 'Nikolay', 'Password123', 'Admin');\n" +
+                "INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('0011223344', 'AdminTroels', 'Password123', 'Admin');\n" +
+                "INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('9988776655', 'AdminJens', 'Password123', 'Admin');\n" +
+                "INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('5566778899', 'UserJens', 'Password123', 'User');\n" +
+                "INSERT INTO UserLogIn (cpr, Username, pass, userRole) VALUES ('4433221100', 'UserTroels', 'Password123', 'User');\n" +
+                "INSERT INTO department (dno, dname, dManager, dPostcode, dStartdate)\n" +
+                "VALUES ('12313', 'Horsens', '0011223344', 'postcode', now());\n" +
+                "INSERT INTO department (dno, dname, dManager, dPostcode, dStartdate)\n" +
+                "VALUES ('001212', 'Horsens', '9988776655', 'postcode', now());\n" +
+                "INSERT INTO workingSchedule (dno, employecpr, workingDay, startHours, endHours)\n" +
+                "VALUES ('001212', '5566778899', current_date, '08:00', '16:00');\n" +
+                "INSERT INTO workingSchedule (dno, employecpr, workingDay, startHours, endHours)\n" +
+                "VALUES ('12313', '4433221100', current_date, '08:00', '16:00');\n";
         executeStatements(sql);
         try {
             Thread.sleep(1000);
@@ -553,7 +566,7 @@ public class Database {
 
     public void fixDate() {
         executeStatements("ALTER TABLE workingSchedule\n" +
-                "  ADD CONSTRAINT check_date check(workingDay>=now());");
+                "  ADD CONSTRAINT check_date check(workingDay>=current_date);");
     }
 
     private void executeStatements(String sql) {

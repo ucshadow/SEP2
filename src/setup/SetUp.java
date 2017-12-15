@@ -29,6 +29,15 @@ public class SetUp {
         System.out.println("Done");
         database.fixDate();
         System.out.println("Thank you for your time");
+        System.out.println("Now you can log in respectively :\n\n\n");
+        System.out.println("                    Troels Mortensen");
+        System.out.println("             Admin username : AdminTroels");
+        System.out.println("             User username : UserTroels");
+        System.out.println("             Password : Password123\n\n\n");
+        System.out.println("                    Jens Cramer Alkjærsig");
+        System.out.println("                  Admin username : AdminJens");
+        System.out.println("                  User username : UserJens");
+        System.out.println("                  Password : Password123\n\n\n");
         System.out.println("Auto closing");
     }
 
